@@ -1,0 +1,176 @@
+"""
+This script gets info about the human annotation data
+
+This script looks directly at human annotation data
+to find the types of annotations available and get
+an estimate of how much total data was annotated
+
+It outputs a json file
+
+Example output:
+
+{
+  "name": "vanuatu",
+  "sets": [
+    {
+      "name": "eaf_2023/AD",
+      "columns": [
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "OCH",
+            "FEM",
+            "MAL"
+          ],
+          "annotated_duration_ms": 760555,
+          "recording_duration_ms": 15718444128
+        },
+        ...
+      ]
+    },
+    {
+      "name": "eaf_2023/HM",
+      "columns": [
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "MAL",
+            "FEM",
+            "CHI"
+          ],
+          "annotated_duration_ms": 908559,
+          "recording_duration_ms": 25513058304
+        },
+        ...
+      ]
+    },
+    ...
+  ]
+}
+"""
+
+import json
+from pathlib import Path
+from typing import Dict, List
+
+import click
+import pandas as pd
+from ChildProject.annotations import AnnotationManager
+from ChildProject.projects import ChildProject
+
+from custom_types.datasets_json import get_datasets
+from helpers.gold_standard_data import (STANDARD_COLUMNS, get_annotated_ms,
+                                        get_recording_length_ms,
+                                        is_categorical)
+
+CURRENT_FILE: Path = Path(__file__)
+SCRIPT_FOLDER: Path = CURRENT_FILE.parent
+METADATA_FOLDER: Path = (SCRIPT_FOLDER / ".." / "metadata").resolve()
+DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
+OUTPUTS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "outputs").resolve()
+CATEGORICAL_CUTOFF: int = 20
+
+
+@click.command()
+@click.option("--dataset-name", help="Dataset name to process")
+def get_human_annotation_metadata(dataset_name: str) -> None:
+    data: Dict
+    datasets_json: Path = METADATA_FOLDER / "datasets.json"
+
+    with open(datasets_json, "r") as f:
+        data = json.load(f)
+
+    datasets = get_datasets(DATASETS_FOLDER)(**data)
+
+    if dataset_name not in [d.name for d in datasets.datasets]:
+        raise ValueError(f"Dataset '{dataset_name}' not found in {str(datasets_json)}")
+
+    dataset = next((d for d in datasets.datasets if d.name == dataset_name), None)
+
+    project = ChildProject(get_dataset_dir(dataset.name))
+    am = AnnotationManager(project)
+    am.read()
+
+    annotations: pd.DataFrame = am.annotations
+
+    dataset_info: Dict = {
+        "name": dataset_name,
+        "sets": [],
+    }
+    for gold_std_set in dataset.gold_std_sets:
+        set_info = {
+            "name": gold_std_set,
+            "columns": [],
+        }
+        set_info["columns"] += get_set_info(project, gold_std_set, annotations, am)
+
+        dataset_info["sets"].append(set_info)
+
+    save_dataset_info(dataset_info, dataset_name)
+
+
+def save_dataset_info(dataset_info: Dict, dataset_name: str) -> None:
+    output_location: Path = (
+        OUTPUTS_FOLDER
+        / "human_annotation_data"
+        / f"human_annotation_data-{dataset_name}.json"
+    )
+    output_location.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(output_location, "w") as f:
+        json.dump(dataset_info, f, indent=2)
+
+    print(f"Finished running script. Outputs at {str(output_location)}")
+
+
+def add_recording_durations(
+    segments: pd.DataFrame, recordings: pd.DataFrame
+) -> pd.DataFrame:
+    return segments.merge(
+        recordings[["recording_filename", "duration"]],
+        on="recording_filename",
+        how="left",
+    )
+
+
+def get_set_info(
+    project: ChildProject,
+    set_name: str,
+    annotations: pd.DataFrame,
+    am: AnnotationManager,
+) -> List:
+    result: List = []
+
+    gold_std_annotations = annotations[annotations["set"] == set_name]
+
+    segments = am.get_segments(gold_std_annotations)
+    segments = add_recording_durations(segments, project.recordings)
+
+    interesting_cols = set(segments.columns) - STANDARD_COLUMNS
+
+    for col in interesting_cols:
+        categorical, values = is_categorical(segments, col, 20)
+
+        result.append(
+            {
+                "column": col,
+                "categorical": categorical,
+                "values": values,
+                "annotated_duration_ms": get_annotated_ms(segments, col),
+                "recording_duration_ms": get_recording_length_ms(segments, col),
+            }
+        )
+
+    return result
+
+
+def get_dataset_dir(name: str) -> Path:
+    return DATASETS_FOLDER / name
+
+
+if __name__ == "__main__":
+    get_human_annotation_metadata()
