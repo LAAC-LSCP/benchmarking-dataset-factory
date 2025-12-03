@@ -1,0 +1,11 @@
+[project]
+name = "benchmarking_data_2025"
+version = "0.1.0"
+description = "Dataset for benchmarking data available to the LAAC"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "childproject>=0.4.3",
+    "pandas>=2.3.3",
+    "pydantic>=2.12.5",
+]

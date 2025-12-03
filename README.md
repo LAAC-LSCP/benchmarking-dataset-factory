@@ -4,6 +4,15 @@ This benchmarking dataset contains human "gold-standard" annotation data availab
 
 As well as containing human annotation data, this repository contains scripts that allows you to find certain annotation data, satisfying certain conditions.
 
+## Dependency management
+I decided to use `uv`. Things will probably work with the `ChildProject` conda environment we have been using for so long, maybe installing one or two missing dependencies.
+
+But if you want to use `uv` instead, simply use `uv run`, e.g.,
+
+```bash
+uv run scripts/get_human_annotation_metadata.py --dataset-name vanuatu
+```
+
 ## Scripts
 ### find_on_filter_expression.py
 Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type" == "Y"')`.
