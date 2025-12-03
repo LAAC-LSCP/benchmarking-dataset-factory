@@ -2,7 +2,7 @@
 Helpers to parse the converted .csv files of gold standard human annotation data
 """
 
-from typing import List, Set, Tuple
+from typing import Any, List, Set, Tuple
 
 import numpy as np
 import pandas as pd
@@ -29,7 +29,7 @@ STANDARD_COLUMNS: Set[str] = {
 
 def is_categorical(
     segments: pd.DataFrame, column: str, n: int
-) -> Tuple[bool, List | None]:
+) -> Tuple[bool, List[Any] | None]:
     """
     Determines if a column in segments is categorical or not
     based simply on a minimum number of unique values
@@ -53,12 +53,3 @@ def get_annotated_ms(segments: pd.DataFrame, column: str) -> int:
     return int(
         sum(non_na_segments["segment_offset"] - non_na_segments["segment_onset"])
     )
-
-
-def get_recording_length_ms(segments: pd.DataFrame, column: str) -> int:
-    """
-    Get the actual length of recordings on which this column was annotated
-    """
-    non_na_segments = segments[segments[column].notna()]
-
-    return int(sum(non_na_segments["duration"]))

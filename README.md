@@ -30,11 +30,9 @@ This script summarizes available human annotation metadata by going through the 
 
 It also tries to summarise what kinds of values are available in this data, by making a guess at whether the data is categorical in nature or not.
 
-It gathers the total length of annotated segments, and the duration of the associated recordings (although these latter durations are probably not useful, as we typically end up exposing only a subset of our recordings file for human annotation)
+It gathers the total length of annotated segments, as well as the total length of the associated sampled recordings.
 
-Since models, for training, testing and validation, have to compare against annotated segments, the former statistic is probably more useful. But still, **there is one edge case where that statistics doesn't apply**, which is that you may want to train on the absence of annotated segments as well instead of cherry-picking on slices of audio that have an explicit speech label laid down by a human. That is to say, in a training batch of say 12 seconds of annotated audio, there are unannotated pauses between the labelled speech segments, which the model should learn not to try to label as any sort of speech. For this the true available data–meaning what the annotator listened to, including audio he/she didn't label–can often be calculated separately, not using this script, but using the `metannots.yml` file, based on the `sampling_count` and `sampling_unit_duration` and `recording_selection`, although this is more involved and not always possible.
-
-TODO: add a script/option for the latter case
+Since models, for training, testing and validation, have to compare against annotated segments, the former statistic is probably more useful. But the other is also useful, which is that you may want to train on the absence of annotated segments as well instead of cherry-picking on slices of audio that have an explicit speech label laid down by a human. That is to say, in a training batch of say 12 seconds of annotated audio, there are unannotated pauses between the labelled speech segments, which the model should learn not to try to label as any sort of speech. For this the true available data–meaning what the annotator listened to, including audio he/she didn't label–can often be calculated separately, not using this script, but using the `metannots.yml` file, based on the `sampling_count` and `sampling_unit_duration` and `recording_selection`, although this is more involved and not always possible.
 
 Example:
 ```bash
@@ -59,7 +57,7 @@ Output (to `outputs/human_annotation_data/human_annotation_data-vanuatu.json` fi
             "MAL"
           ],
           "annotated_duration_ms": 760555,
-          "recording_duration_ms": 15718444128
+          "duration_from_samples_ms": 864000
         },
         ...
       ]
@@ -77,7 +75,7 @@ Output (to `outputs/human_annotation_data/human_annotation_data-vanuatu.json` fi
             "CHI"
           ],
           "annotated_duration_ms": 908559,
-          "recording_duration_ms": 25513058304
+          "duration_from_samples_ms": 864000
         },
         ...
       ]

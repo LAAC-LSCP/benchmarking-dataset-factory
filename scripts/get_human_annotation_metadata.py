@@ -25,7 +25,7 @@ Example output:
             "MAL"
           ],
           "annotated_duration_ms": 760555,
-          "recording_duration_ms": 15718444128
+          "duration_from_samples_ms": 864000,
         },
         ...
       ]
@@ -43,7 +43,7 @@ Example output:
             "CHI"
           ],
           "annotated_duration_ms": 908559,
-          "recording_duration_ms": 25513058304
+          "duration_from_samples_ms": 864000,
         },
         ...
       ]
@@ -55,16 +55,18 @@ Example output:
 
 import json
 from pathlib import Path
-from typing import Dict, List, TypedDict
+from typing import Any, Dict, List, Optional, TypedDict
 
 import click
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
+from pydantic import ValidationError
 
 from custom_types.datasets_json import get_datasets
+from custom_types.metannots import (MetaAnnotations, get_metannots,
+                                    get_sampled_duration)
 from helpers.gold_standard_data import (STANDARD_COLUMNS, get_annotated_ms,
-                                        get_recording_length_ms,
                                         is_categorical)
 
 CURRENT_FILE: Path = Path(__file__)
@@ -78,6 +80,14 @@ CATEGORICAL_CUTOFF: int = 20
 class DatasetInfo(TypedDict):
     name: str
     sets: List[str]
+
+
+class SetInfo(TypedDict):
+    column: str
+    categorical: bool
+    values: List[Any]
+    annotated_duration_ms: int
+    recording_duration_ms: int
 
 
 @click.command()
@@ -105,7 +115,9 @@ def get_human_annotation_metadata(dataset_name: str) -> None:
             "name": gold_std_set,
             "columns": [],
         }
-        set_info["columns"] += get_set_info(project, gold_std_set, annotations, am)
+        set_info["columns"] += get_set_info(
+            project, dataset_name, gold_std_set, annotations, am
+        )
 
         dataset_info["sets"].append(set_info)
 
@@ -126,33 +138,43 @@ def save_dataset_info(dataset_info: Dict, dataset_name: str) -> None:
     print(f"Finished running script. Outputs at {str(output_location)}")
 
 
-def add_recording_durations(
-    segments: pd.DataFrame, recordings: pd.DataFrame
-) -> pd.DataFrame:
-    return segments.merge(
-        recordings[["recording_filename", "duration"]],
-        on="recording_filename",
-        how="left",
-    )
-
-
 def get_set_info(
     project: ChildProject,
+    dataset_name: str,
     set_name: str,
     annotations: pd.DataFrame,
     am: AnnotationManager,
-) -> List:
-    result: List = []
+) -> List[SetInfo]:
+    result: List[SetInfo] = []
 
     gold_std_annotations = annotations[annotations["set"] == set_name]
 
     segments = am.get_segments(gold_std_annotations)
-    segments = add_recording_durations(segments, project.recordings)
 
     interesting_cols = set(segments.columns) - STANDARD_COLUMNS
 
     for col in interesting_cols:
         categorical, values = is_categorical(segments, col, 20)
+
+        metannots_dict: Optional[Dict] = None
+        try:
+            metannots: Optional[MetaAnnotations] = get_metannots(
+                DATASETS_FOLDER, dataset_name, set_name
+            )
+
+            if metannots is None:
+                continue
+
+            metannots_dict = metannots.model_dump()
+        except ValidationError as e:
+            print(f"Validation warnings: {e}")
+
+            metannots_dict: Optional[Dict] = get_metannots(
+                DATASETS_FOLDER, dataset_name, set_name, safe_load=True
+            )
+
+            if metannots_dict is None:
+                continue
 
         result.append(
             {
@@ -160,7 +182,9 @@ def get_set_info(
                 "categorical": categorical,
                 "values": values,
                 "annotated_duration_ms": get_annotated_ms(segments, col),
-                "recording_duration_ms": get_recording_length_ms(segments, col),
+                "duration_from_samples_ms": (
+                    get_sampled_duration(metannots_dict) if metannots_dict else None
+                ),
             }
         )
 
