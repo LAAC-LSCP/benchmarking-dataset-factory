@@ -13,6 +13,9 @@ But if you want to use `uv` instead, simply use `uv run`, e.g.,
 uv run scripts/get_human_annotation_metadata.py --dataset-name vanuatu
 ```
 
+## Linting, Formatting and More
+I use `tox` to keep code clean and standard. `pipx install tox`, and run `tox` to run some automated checks on the scripts folder.
+
 ## Scripts
 ### find_on_filter_expression.py
 Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type" == "Y"')`.

@@ -61,13 +61,19 @@ import click
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
-from pydantic import ValidationError
-
 from custom_types.datasets_json import get_datasets
-from custom_types.metannots import (MetaAnnotations, get_metannots,
-                                    get_sampled_duration)
-from helpers.gold_standard_data import (STANDARD_COLUMNS, get_annotated_ms,
-                                        is_categorical)
+from custom_types.metannots import (
+    MetaAnnotations,
+    get_metannots,
+    get_metannots_dict,
+    get_sampled_duration,
+)
+from helpers.gold_standard_data import (
+    STANDARD_COLUMNS,
+    get_annotated_ms,
+    is_categorical,
+)
+from pydantic import ValidationError
 
 CURRENT_FILE: Path = Path(__file__)
 SCRIPT_FOLDER: Path = CURRENT_FILE.parent
@@ -77,17 +83,22 @@ OUTPUTS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "outputs").resolve()
 CATEGORICAL_CUTOFF: int = 20
 
 
-class DatasetInfo(TypedDict):
-    name: str
-    sets: List[str]
-
-
-class SetInfo(TypedDict):
+class ColumnInfo(TypedDict):
     column: str
     categorical: bool
     values: List[Any]
     annotated_duration_ms: int
-    recording_duration_ms: int
+    duration_from_samples_ms: int
+
+
+class SetInfo(TypedDict):
+    name: str
+    columns: List[ColumnInfo]
+
+
+class DatasetInfo(TypedDict):
+    name: str
+    sets: List["SetInfo"]
 
 
 @click.command()
@@ -95,10 +106,10 @@ class SetInfo(TypedDict):
 def get_human_annotation_metadata(dataset_name: str) -> None:
     datasets = get_datasets(DATASETS_FOLDER)
 
-    if dataset_name not in [d["name"] for d in datasets["datasets"]]:
-        raise ValueError(f"Dataset '{dataset_name}' not found")
-
     dataset = next((d for d in datasets["datasets"] if d["name"] == dataset_name), None)
+
+    if dataset is None:
+        raise ValueError(f"Dataset '{dataset_name}' not found")
 
     project = ChildProject(get_dataset_dir(dataset["name"]))
     am = AnnotationManager(project)
@@ -111,18 +122,23 @@ def get_human_annotation_metadata(dataset_name: str) -> None:
         "sets": [],
     }
     for gold_std_set in dataset["gold_std_sets"]:
-        set_info = {
+        set_info: SetInfo = {
             "name": gold_std_set,
             "columns": [],
         }
-        set_info["columns"] += get_set_info(dataset_name, gold_std_set, annotations, am)
+        set_info["columns"] += get_column_info(  # type: ignore
+            dataset_name,
+            gold_std_set,
+            annotations,
+            am,
+        )
 
         dataset_info["sets"].append(set_info)
 
     save_dataset_info(dataset_info, dataset_name)
 
 
-def save_dataset_info(dataset_info: Dict, dataset_name: str) -> None:
+def save_dataset_info(dataset_info: DatasetInfo, dataset_name: str) -> None:
     output_location: Path = (
         OUTPUTS_FOLDER
         / "human_annotation_data"
@@ -136,13 +152,13 @@ def save_dataset_info(dataset_info: Dict, dataset_name: str) -> None:
     print(f"Finished running script. Outputs at {str(output_location)}")
 
 
-def get_set_info(
+def get_column_info(
     dataset_name: str,
     set_name: str,
     annotations: pd.DataFrame,
     am: AnnotationManager,
-) -> List[SetInfo]:
-    result: List[SetInfo] = []
+) -> List[ColumnInfo]:
+    result: List[ColumnInfo] = []
 
     gold_std_annotations = annotations[annotations["set"] == set_name]
 
@@ -166,9 +182,7 @@ def get_set_info(
         except ValidationError as e:
             print(f"Validation warnings: {e}")
 
-            metannots_dict: Optional[Dict] = get_metannots(
-                DATASETS_FOLDER, dataset_name, set_name, safe_load=True
-            )
+            metannots_dict = get_metannots_dict(DATASETS_FOLDER, dataset_name, set_name)
 
             if metannots_dict is None:
                 continue
@@ -180,7 +194,7 @@ def get_set_info(
                 "values": values,
                 "annotated_duration_ms": get_annotated_ms(segments, col),
                 "duration_from_samples_ms": (
-                    get_sampled_duration(metannots_dict) if metannots_dict else None
+                    get_sampled_duration(metannots_dict) if metannots_dict else -1
                 ),
             }
         )

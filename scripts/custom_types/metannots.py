@@ -43,7 +43,6 @@ def get_metannots(
     dataset_folder: Path,
     dataset_name: str,
     set_name: str,
-    safe_load: Optional[bool] = False,
 ) -> Optional[MetaAnnotations]:
     metannots: Path = (
         dataset_folder / dataset_name / "annotations" / set_name / "metannots.yml"
@@ -56,10 +55,26 @@ def get_metannots(
     with open(metannots, "r") as f:
         data = yaml.safe_load(f)
 
-    if safe_load:
-        return data
-
     return MetaAnnotations(**data)
+
+
+def get_metannots_dict(
+    dataset_folder: Path,
+    dataset_name: str,
+    set_name: str,
+) -> Optional[Dict]:
+    metannots: Path = (
+        dataset_folder / dataset_name / "annotations" / set_name / "metannots.yml"
+    )
+
+    if not metannots.exists():
+        return None
+
+    data: Dict
+    with open(metannots, "r") as f:
+        data = yaml.safe_load(f)
+
+    return data
 
 
 def get_sampled_duration(metannots_dict: Dict) -> Optional[int]:

@@ -1,6 +1,6 @@
 """
-This script validates metannots based on the annotation schema outlined in ChildProject's documentation
-(v0.4.3.)
+This script validates metannots based on the annotation schema outlined in
+ChildProject's documentation (v0.4.3.)
 
 Prints out validation errors. Usage:
 
@@ -13,10 +13,9 @@ Or with output redirection:
 
 from pathlib import Path
 
-from pydantic import ValidationError
-
 from custom_types.datasets_json import get_datasets
 from custom_types.metannots import get_metannots
+from pydantic import ValidationError
 
 CURRENT_FILE: Path = Path(__file__)
 SCRIPT_FOLDER: Path = CURRENT_FILE.parent

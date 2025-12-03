@@ -11,10 +11,9 @@ from typing import Dict, List, Optional
 
 import click
 import pandas as pd
-from pydantic import ValidationError
-
 from custom_types.datasets_json import get_datasets
-from custom_types.metannots import MetaAnnotations, get_metannots
+from custom_types.metannots import get_metannots, get_metannots_dict
+from pydantic import ValidationError
 
 CURRENT_FILE: Path = Path(__file__)
 SCRIPT_FOLDER: Path = CURRENT_FILE.parent
@@ -37,7 +36,7 @@ def filter_metannots(filter_expr: str | None) -> None:
         for gold_std_set in dataset["gold_std_sets"]:
             metannots_dict: Optional[Dict] = None
             try:
-                metannots: Optional[MetaAnnotations] = get_metannots(
+                metannots = get_metannots(
                     DATASETS_FOLDER, dataset["name"], gold_std_set
                 )
 
@@ -48,8 +47,8 @@ def filter_metannots(filter_expr: str | None) -> None:
             except ValidationError as e:
                 print(f"Validation warnings: {e}")
 
-                metannots_dict: Optional[Dict] = get_metannots(
-                    DATASETS_FOLDER, dataset["name"], gold_std_set, safe_load=True
+                metannots_dict = get_metannots_dict(
+                    DATASETS_FOLDER, dataset["name"], gold_std_set
                 )
 
                 if metannots_dict is None:
