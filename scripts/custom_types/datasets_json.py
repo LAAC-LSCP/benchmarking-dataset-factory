@@ -3,43 +3,41 @@ Pydantic boilerplate for the `datasets.json` file in the metadata folder
 """
 
 from pathlib import Path
-from typing import List
+from typing import List, TypedDict
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+import pandas as pd
+from ChildProject.annotations import AnnotationManager
+from ChildProject.projects import ChildProject
 
 
-def get_datasets(datasets_folder: Path) -> BaseModel:
-    class Dataset(BaseModel):
-        name: str
-        gold_std_sets: List[str]
+class Dataset(TypedDict):
+    name: str
+    gold_std_sets: List[str]
 
-        @field_validator("name")
-        @classmethod
-        def validate_name(cls, name: str) -> str:
-            if not (datasets_folder / name).exists():
-                raise ValueError(f"Dataset {name} not found in datasets folder")
 
-            return name
+class Datasets(TypedDict):
+    datasets: List[Dataset]
 
-        @field_validator("gold_std_sets")
-        @classmethod
-        def validate_gold_std_sets(
-            cls, gold_std_sets: List[str], info: ValidationInfo
-        ) -> List[str]:
-            for gold_std_set in gold_std_sets:
-                dataset_name: str = info.data["name"]
 
-                if not (
-                    datasets_folder / dataset_name / "annotations" / gold_std_set
-                ).exists():
-                    raise ValueError(
-                        f"Human annotation set {gold_std_set} not found in dataset \
-                        {dataset_name}"
-                    )
+def get_datasets(datasets_folder: Path) -> Datasets:
+    result: Datasets = {"datasets": []}
 
-            return gold_std_sets
+    datasets = [d for d in datasets_folder.iterdir() if d.is_dir()]
 
-    class Datasets(BaseModel):
-        datasets: List[Dataset]
+    for ds in datasets:
+        project = ChildProject(ds)
+        am = AnnotationManager(project)
 
-    return Datasets
+        sets_metadata: pd.DataFrame = am.get_sets_metadata()
+        sets_metadata = sets_metadata[sets_metadata["method"] == "manual"]
+
+        manual_sets: List[str] = [s for s in sets_metadata.index]
+
+        dataset: Dataset = {
+            "name": ds.name,
+            "gold_std_sets": manual_sets,
+        }
+
+        result["datasets"].append(dataset)
+
+    return result

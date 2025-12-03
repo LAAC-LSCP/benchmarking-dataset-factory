@@ -4,11 +4,6 @@ This benchmarking dataset contains human "gold-standard" annotation data availab
 
 As well as containing human annotation data, this repository contains scripts that allows you to find certain annotation data, satisfying certain conditions.
 
-## Important(!): datasets.json
-This file must be present and populated by you, the engineer. It must point to all the places with human annotations across the datasets
-
-This means that should you add a new dataset, you **must** update this file. You can then run the subsequent scripts to get the associated output files, as done for the existing datasets. Many scripts explicitly read `datasets.json`
-
 ## Scripts
 ### find_on_filter_expression.py
 Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type" == "Y"')`.

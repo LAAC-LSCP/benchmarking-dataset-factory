@@ -55,7 +55,7 @@ Example output:
 
 import json
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, TypedDict
 
 import click
 import pandas as pd
@@ -75,33 +75,32 @@ OUTPUTS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "outputs").resolve()
 CATEGORICAL_CUTOFF: int = 20
 
 
+class DatasetInfo(TypedDict):
+    name: str
+    sets: List[str]
+
+
 @click.command()
 @click.option("--dataset-name", help="Dataset name to process")
 def get_human_annotation_metadata(dataset_name: str) -> None:
-    data: Dict
-    datasets_json: Path = METADATA_FOLDER / "datasets.json"
+    datasets = get_datasets(DATASETS_FOLDER)
 
-    with open(datasets_json, "r") as f:
-        data = json.load(f)
+    if dataset_name not in [d["name"] for d in datasets["datasets"]]:
+        raise ValueError(f"Dataset '{dataset_name}' not found")
 
-    datasets = get_datasets(DATASETS_FOLDER)(**data)
+    dataset = next((d for d in datasets["datasets"] if d["name"] == dataset_name), None)
 
-    if dataset_name not in [d.name for d in datasets.datasets]:
-        raise ValueError(f"Dataset '{dataset_name}' not found in {str(datasets_json)}")
-
-    dataset = next((d for d in datasets.datasets if d.name == dataset_name), None)
-
-    project = ChildProject(get_dataset_dir(dataset.name))
+    project = ChildProject(get_dataset_dir(dataset["name"]))
     am = AnnotationManager(project)
     am.read()
 
     annotations: pd.DataFrame = am.annotations
 
-    dataset_info: Dict = {
+    dataset_info: DatasetInfo = {
         "name": dataset_name,
         "sets": [],
     }
-    for gold_std_set in dataset.gold_std_sets:
+    for gold_std_set in dataset["gold_std_sets"]:
         set_info = {
             "name": gold_std_set,
             "columns": [],
