@@ -25,6 +25,23 @@ Dataset: 'vanuatu'       Set: 'eaf_2023/MC'
 Dataset: 'vanuatu'       Set: 'eaf_2023/MR'
 ```
 
+### validate_metannots.py
+This script uses the schema laid out in the ChildProject documentation for metannots and checks that there are no errors. It prints any validation errors to standard output. Under the hood uses pydantic.
+
+Can be run simply with
+
+Prints out validation errors. Usage:
+
+```bash
+python3 scripts/validate_metannots.py
+```
+
+Or more practically, with output redirection:
+
+```bash
+python3 scripts/validate_metannots.py > validation_errors.txt
+```
+
 ### get_human_annotation_metadata.py
 This script summarizes available human annotation metadata by going through the converted .csv files
 

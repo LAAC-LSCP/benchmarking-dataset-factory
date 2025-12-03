@@ -115,9 +115,7 @@ def get_human_annotation_metadata(dataset_name: str) -> None:
             "name": gold_std_set,
             "columns": [],
         }
-        set_info["columns"] += get_set_info(
-            project, dataset_name, gold_std_set, annotations, am
-        )
+        set_info["columns"] += get_set_info(dataset_name, gold_std_set, annotations, am)
 
         dataset_info["sets"].append(set_info)
 
@@ -139,7 +137,6 @@ def save_dataset_info(dataset_info: Dict, dataset_name: str) -> None:
 
 
 def get_set_info(
-    project: ChildProject,
     dataset_name: str,
     set_name: str,
     annotations: pd.DataFrame,
