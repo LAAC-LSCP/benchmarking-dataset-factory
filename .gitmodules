@@ -3,3 +3,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/vanuatu.git
 	datalad-id = e6789925-03aa-490a-b832-db7dd64da7b5
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/vanuatu.git
+[submodule "datasets/bergelson"]
+	path = datasets/bergelson
+	url = git@gin.g-node.org:/LAAC-LSCP/bergelson.git
+	datalad-id = 83b18027-195f-4a83-aeaf-e995864eaa3d
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/bergelson.git
