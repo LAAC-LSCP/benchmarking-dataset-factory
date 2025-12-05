@@ -13,6 +13,7 @@ Or with output redirection:
 
 from pathlib import Path
 
+import click
 from custom_types.datasets_json import get_datasets
 from custom_types.metannots import get_metannots
 from pydantic import ValidationError
@@ -25,7 +26,9 @@ OUTPUTS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "outputs").resolve()
 CATEGORICAL_CUTOFF: int = 20
 
 
+@click.command()
 def validate_metannots() -> None:
+    """Validate metannots. Prints out validation errors across datasets and sets"""
     datasets = get_datasets(DATASETS_FOLDER)
 
     print("Printing out validation errors...")

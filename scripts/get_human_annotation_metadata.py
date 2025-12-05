@@ -104,6 +104,8 @@ class DatasetInfo(TypedDict):
 @click.command()
 @click.option("--dataset-name", help="Dataset name to process")
 def get_human_annotation_metadata(dataset_name: str) -> None:
+    """Aggregates human annotation metadata for a given dataset \
+(mostly duration-related) and saves it"""
     datasets = get_datasets(DATASETS_FOLDER)
 
     dataset = next((d for d in datasets["datasets"] if d["name"] == dataset_name), None)
@@ -113,7 +115,6 @@ def get_human_annotation_metadata(dataset_name: str) -> None:
 
     project = ChildProject(get_dataset_dir(dataset["name"]))
     am = AnnotationManager(project)
-    am.read()
 
     annotations: pd.DataFrame = am.annotations
 

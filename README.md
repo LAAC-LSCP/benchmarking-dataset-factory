@@ -17,19 +17,71 @@ uv run scripts/get_human_annotation_metadata.py --dataset-name vanuatu
 I use `tox` to keep code clean and standard. `pipx install tox`, and run `tox` to run some automated checks on the scripts folder.
 
 ## Scripts
+### find_files_on_filter_expression.py
+```
+Usage: find_files_on_filter_expression.py [OPTIONS]
+
+  Prints file paths matching filter expressions on metannots and
+  children metadata (specified separately)
+
+Options:
+  --metannots-filter-expr TEXT  Filter expression on metannots like
+                                'has_addressee == 'Y'' (see Pandas +
+                                ChildProject docs)
+  --children-filter-expr TEXT   Filter expression on children metadata
+                                like 'child_sex == 'f'' (see Pandas +
+                                ChildProject docs)
+  --no-info-output              Don't print info, such as error info.
+                                Only print file paths
+  --help                        Show this message and exit.
+```
+This script lets you find files matching certain conditions. See the Pandas documentation for filter expressions. See the ChildProject documentation to see what columns can be looked for.
+
+Note that ChildProject does not parse dates or anything like that, so all columns, like `child_dob` for example, are interpreted as strings. Luckily this turns out to be okay for comparisons of the sort below.
+
+```bash
+uv run scripts/find_files_on_filter_expression.py --metannots-filter-expr "has_addressee == 'Y'" --children-filter-expr "child_dob < '2006-06-06'"
+```
+
+Note that if values are missing in the metadata–which is very often the case except on required columns–the filter expression will typically jump over them (these values are `<NA>`) and ignored.
+
+Output (stdout)
+```bash
+/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf/an1/converted/123439-0396_1_10140000_10260000.csv
+/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf/an1/converted/123439-0396_1_11160000_11280000.csv
+...
+/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf_high_volubility/converted/123836-7117_2_1583460_1703460.csv
+/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf_high_volubility/converted/123836-7117_2_2183460_2303460.csv
+```
+
+The output of this command would typically be redirected with the `>` operator in bash. Preferably use the `--no-info-output` flag in this case, if you wish to post-process this data.
+
 ### find_on_filter_expression.py
+```
+Usage: find_on_filter_expression.py [OPTIONS]
+
+  Fidn datasets and sets matching a filter expression on the metannots
+  metadata
+
+Options:
+  --filter-expr TEXT  Filter expression like 'has_addressee == 'Y'' (see
+                      Pandas + ChildProject docs)
+  --no-info-output    Don't print info, such as error info. Only print
+                      datasets and sets
+  --help              Show this message and exit.
+```
+
 Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type" == "Y"')`.
 
 This script lets you pass in a filter expression and prints out the dataset and set (as it's called in ChildProject) that matches them.
 
 Example:
 ```bash
-python3 scripts/find_on_filter_expression.py --filter-expr "has_vcm_type == 'Y'"
+uv run scripts/find_on_filter_expression.py --filter-expr "has_vcm_type == 'Y'" --no-info-output
 ```
 
 Output (stdout):
 ```bash
-INFO: Printing datasets and sets matching filter expression 'has_vcm_type == 'Y''...
 Dataset: 'vanuatu'       Set: 'eaf_2023/AD'
 Dataset: 'vanuatu'       Set: 'eaf_2023/AM'
 Dataset: 'vanuatu'       Set: 'eaf_2023/HM'
@@ -38,6 +90,16 @@ Dataset: 'vanuatu'       Set: 'eaf_2023/MR'
 ```
 
 ### validate_metannots.py
+```
+Usage: validate_metannots.py [OPTIONS]
+
+  Validate metannots. Prints out validation errors across datasets and
+  sets
+
+Options:
+  --help  Show this message and exit.
+```
+
 This script uses the schema laid out in the ChildProject documentation for metannots and checks that there are no errors. It prints any validation errors to standard output. Under the hood uses pydantic.
 
 Can be run simply with
@@ -45,16 +107,27 @@ Can be run simply with
 Prints out validation errors. Usage:
 
 ```bash
-python3 scripts/validate_metannots.py
+uv run scripts/validate_metannots.py
 ```
 
 Or more practically, with output redirection:
 
 ```bash
-python3 scripts/validate_metannots.py > validation_errors.txt
+uv run scripts/validate_metannots.py > validation_errors.txt
 ```
 
 ### get_human_annotation_metadata.py
+```
+Usage: get_human_annotation_metadata.py [OPTIONS]
+
+  Aggregates human annotation metadata for a given dataset (mostly
+  duration-related) and saves it
+
+Options:
+  --dataset-name TEXT  Dataset name to process
+  --help               Show this message and exit.
+```
+
 This script summarizes available human annotation metadata by going through the converted .csv files
 
 It also tries to summarise what kinds of values are available in this data, by making a guess at whether the data is categorical in nature or not.
@@ -65,7 +138,7 @@ Since models, for training, testing and validation, have to compare against anno
 
 Example:
 ```bash
-python3 scripts/get_human_annotation_metadata.py --dataset-name "vanuatu"
+uv run scripts/get_human_annotation_metadata.py --dataset-name "vanuatu"
 ```
 
 Output (to `outputs/human_annotation_data/human_annotation_data-vanuatu.json` file):

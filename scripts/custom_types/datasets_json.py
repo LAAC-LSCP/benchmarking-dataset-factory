@@ -19,6 +19,7 @@ class Datasets(TypedDict):
     datasets: List[Dataset]
 
 
+# TODO: this function runs really slow because it uses the annotation manager
 def get_datasets(datasets_folder: Path) -> Datasets:
     result: Datasets = {"datasets": []}
 

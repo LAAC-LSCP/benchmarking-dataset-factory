@@ -26,9 +26,43 @@ DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
     "--filter-expr",
     required=False,
     default=None,
-    help="Filter expression like 'col_1 > 5' (see Pandas documentation)",
+    help="Filter expression like 'has_addressee == 'Y'' \
+(see Pandas + ChildProject docs)",
 )
-def filter_metannots(filter_expr: str | None) -> None:
+@click.option(
+    "--no-info-output",
+    is_flag=True,
+    help="Don't print info, such as error info. Only print datasets and sets",
+)
+def filter_metannots(filter_expr: str | None, no_info_output: bool) -> pd.DataFrame:
+    """Fidn datasets and sets matching a filter expression on the metannots metadata"""
+    df = get_metannots_df(print_errors=(not no_info_output))
+
+    if filter_expr is not None:
+        try:
+            df = df.query(filter_expr)
+        except Exception as e:
+            if not no_info_output:
+                print(
+                    f"ERROR: problem using the filter expression on \
+metannots dataframe: {e}"
+                )
+                print("INFO: Using no filter at all...")
+
+            filter_expr = ""
+
+    if not no_info_output:
+        print(
+            f"INFO: Printing datasets and sets matching \
+filter expression '{filter_expr}'..."
+        )
+    for _, row in df.iterrows():
+        print(f"Dataset: '{row["dataset"]}'       Set: '{row["set"]}'")
+
+    return df
+
+
+def get_metannots_df(print_errors: bool = False) -> pd.DataFrame:
     datasets = get_datasets(DATASETS_FOLDER)
 
     metannots_list: List[Dict] = []
@@ -45,7 +79,8 @@ def filter_metannots(filter_expr: str | None) -> None:
 
                 metannots_dict = metannots.model_dump()
             except ValidationError as e:
-                print(f"Validation warnings: {e}")
+                if print_errors:
+                    print(f"Validation warnings: {e}")
 
                 metannots_dict = get_metannots_dict(
                     DATASETS_FOLDER, dataset["name"], gold_std_set
@@ -59,30 +94,7 @@ def filter_metannots(filter_expr: str | None) -> None:
 
             metannots_list.append(metannots_dict)
 
-    df = pd.DataFrame(metannots_list)
-
-    if filter_expr is not None:
-        try:
-            df = df.query(filter_expr)
-        except Exception as e:
-            print(
-                f"ERROR: problem using the filter expression on \
-metannots dataframe: {e}"
-            )
-            print("INFO: Using no filter at all...")
-
-    print(
-        f"INFO: Printing datasets and sets matching \
-filter expression '{filter_expr}'..."
-    )
-    for _, row in df.iterrows():
-        print(f"Dataset: '{row["dataset"]}'       Set: '{row["set"]}'")
-
-    return
-
-
-def get_metannots_df() -> None:
-    pass
+    return pd.DataFrame(metannots_list)
 
 
 if __name__ == "__main__":
