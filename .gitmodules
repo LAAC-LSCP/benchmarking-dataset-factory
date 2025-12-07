@@ -23,3 +23,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/forrester.git
 	datalad-id = d4a02621-b4ce-4381-968b-c0e898422f73
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/forrester.git
+[submodule "datasets/israel-natovich"]
+	path = datasets/israel-natovich
+	url = git@gin.g-node.org:/LAAC-LSCP/israel-natovich.git
+	datalad-id = 18323131-56ce-4907-8823-9b7c72ed29d8
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/israel-natovich.git
