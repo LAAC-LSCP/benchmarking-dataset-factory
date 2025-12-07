@@ -13,3 +13,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/cougar.git
 	datalad-id = 666dc5f4-2702-4944-8d4d-e56276b14b58
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/cougar.git
+[submodule "datasets/fausey-trio"]
+	path = datasets/fausey-trio
+	url = git@gin.g-node.org:/LAAC-LSCP/fausey-trio.git
+	datalad-id = a343760a-883d-48b5-a6c7-6e6737420b31
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/fausey-trio.git
