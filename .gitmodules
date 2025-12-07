@@ -18,3 +18,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/fausey-trio.git
 	datalad-id = a343760a-883d-48b5-a6c7-6e6737420b31
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/fausey-trio.git
+[submodule "datasets/forrester"]
+	path = datasets/forrester
+	url = git@gin.g-node.org:/LAAC-LSCP/forrester.git
+	datalad-id = d4a02621-b4ce-4381-968b-c0e898422f73
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/forrester.git
