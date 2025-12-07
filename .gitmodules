@@ -8,3 +8,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/bergelson.git
 	datalad-id = 83b18027-195f-4a83-aeaf-e995864eaa3d
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/bergelson.git
+[submodule "datasets/cougar"]
+	path = datasets/cougar
+	url = git@gin.g-node.org:/LAAC-LSCP/cougar.git
+	datalad-id = 666dc5f4-2702-4944-8d4d-e56276b14b58
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/cougar.git
