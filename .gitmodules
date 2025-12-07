@@ -33,3 +33,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/lucid.git
 	datalad-id = acc75f63-bf89-4bef-ba7f-6a955d557b72
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/lucid.git
+[submodule "datasets/lyon"]
+	path = datasets/lyon
+	url = git@gin.g-node.org:/LAAC-LSCP/lyon.git
+	datalad-id = 6c16a6b9-0cbe-4f52-93e8-8b67b71a9193
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/lyon.git
