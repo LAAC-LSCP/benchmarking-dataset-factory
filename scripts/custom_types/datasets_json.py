@@ -20,7 +20,7 @@ class Datasets(TypedDict):
 
 
 # TODO: this function runs really slow because it uses the annotation manager
-def get_datasets(datasets_folder: Path) -> Datasets:
+def get_datasets(datasets_folder: Path, print_info: bool = False) -> Datasets:
     result: Datasets = {"datasets": []}
 
     datasets = [d for d in datasets_folder.iterdir() if d.is_dir()]
@@ -30,7 +30,12 @@ def get_datasets(datasets_folder: Path) -> Datasets:
         am = AnnotationManager(project)
 
         sets_metadata: pd.DataFrame = am.get_sets_metadata()
-        sets_metadata = sets_metadata[sets_metadata["method"] == "manual"]
+
+        if "method" in sets_metadata:
+            sets_metadata = sets_metadata[sets_metadata["method"] == "manual"]
+        elif print_info:
+            print(f"INFO: no 'method' column in sets metadata for \
+dataset {ds.name}. Assuming all sets are manual")
 
         manual_sets: List[str] = [s for s in sets_metadata.index]
 
