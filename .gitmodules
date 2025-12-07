@@ -28,3 +28,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/israel-natovich.git
 	datalad-id = 18323131-56ce-4907-8823-9b7c72ed29d8
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/israel-natovich.git
+[submodule "datasets/lucid"]
+	path = datasets/lucid
+	url = git@gin.g-node.org:/LAAC-LSCP/lucid.git
+	datalad-id = acc75f63-bf89-4bef-ba7f-6a955d557b72
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/lucid.git
