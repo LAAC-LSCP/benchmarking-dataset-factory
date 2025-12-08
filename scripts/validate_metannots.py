@@ -14,7 +14,7 @@ Or with output redirection:
 from pathlib import Path
 
 import click
-from custom_types.datasets_json import get_datasets
+from custom_types.datasets_json import Datasets, get_datasets
 from custom_types.metannots import get_metannots
 from pydantic import ValidationError
 
@@ -27,9 +27,21 @@ CATEGORICAL_CUTOFF: int = 20
 
 
 @click.command()
-def validate_metannots() -> None:
+@click.option(
+    "--dataset-name",
+    type=str,
+    required=False,
+    default=None,
+    help="Dataset name to process",
+)
+def validate_metannots(dataset_name: str | None) -> None:
     """Validate metannots. Prints out validation errors across datasets and sets"""
-    datasets = get_datasets(DATASETS_FOLDER)
+    datasets: Datasets
+
+    if dataset_name is not None:
+        datasets = get_datasets(DATASETS_FOLDER, dataset_names=[dataset_name])
+    else:
+        datasets = get_datasets(DATASETS_FOLDER)
 
     print("Printing out validation errors...")
     for dataset in datasets["datasets"]:
