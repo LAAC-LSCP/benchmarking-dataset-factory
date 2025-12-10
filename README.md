@@ -13,6 +13,8 @@ But if you want to use `uv` instead, simply use `uv run`, e.g.,
 uv run scripts/get_human_annotation_metadata.py --dataset-name vanuatu
 ```
 
+The use of `uv` is encouraged over `conda` as it allows locking of dependencies, and therefore correct reproducibility, at least as far as Python packages are concerned.
+
 ## Linting, Formatting and More
 I use `tox` to keep code clean and standard. `pipx install tox`, and run `tox` to run some automated checks on the scripts folder.
 
@@ -46,7 +48,7 @@ uv run scripts/find_files_on_filter_expression.py --metannots-filter-expr "has_a
 
 Note that if values are missing in the metadata–which is very often the case except on required columns–the filter expression will typically jump over them (these values are `<NA>`) and ignored.
 
-The output is a .csv file with the human annotation file path, recording file path, annotation start, end, duration and recording duration. Typically, you'll want to do some weighted train, test, validation split based on these durations, which is standard stuff in any ML toolkit. Note that the human annotation file typically signifies a part of the recording file that was listened to by an annotator, hence the columns.
+The output is a .csv file with the human annotation file path, recording file path, annotation start, end, duration and recording duration. Typically, you'll want to do some weighted train, test, validation split based on these durations, which is standard stuff in any ML toolkit. Note that the human annotation file typically signifies only a given part of the recording file that was listened to by an annotator, hence the choice of columns.
 
 ### find_on_filter_expression.py
 ```
@@ -63,7 +65,7 @@ Options:
   --help              Show this message and exit.
 ```
 
-Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type" == "Y"')`.
+Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type == "Y"')`.
 
 This script lets you pass in a filter expression and prints out the dataset and set (as it's called in ChildProject) that matches them.
 
@@ -126,7 +128,7 @@ It also tries to summarise what kinds of values are available in this data, by m
 
 It gathers the total length of annotated segments, as well as the total length of the associated sampled recordings.
 
-Since models, for training, testing and validation, have to compare against annotated segments, the former statistic is probably more useful. But the other is also useful, which is that you may want to train on the absence of annotated segments as well instead of cherry-picking on slices of audio that have an explicit speech label laid down by a human. That is to say, in a training batch of say 12 seconds of annotated audio, there are unannotated pauses between the labelled speech segments, which the model should learn not to try to label as any sort of speech. For this the true available data–meaning what the annotator listened to, including audio he/she didn't label–can often be calculated separately, not using this script, but using the `metannots.yml` file, based on the `sampling_count` and `sampling_unit_duration` and `recording_selection`, although this is more involved and not always possible.
+Since models, for training, testing and validation, have to compare against annotated segments, the former statistic is probably more useful. But the other is also useful, which is that you may want to train on the absence of annotated segments as well instead of cherry-picking on slices of audio that have an explicit speech label laid down by a human. That is to say, in a training batch of say 12 seconds of annotated audio, there are unannotated pauses between the labelled speech segments, which the model should learn not to try to label as any sort of speech. For this the true available data–meaning whatever audio the annotator had at their disposal, including audio he/she didn't label–can often be calculated separately, not using this script, but using the `metannots.yml` file, based on the `sampling_count` and `sampling_unit_duration`.
 
 Example:
 ```bash
