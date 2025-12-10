@@ -78,7 +78,7 @@ def graph(
     x_axis: XValue,
     y_axis: YValue,
     metric: MetricValue,
-    output_folder: None | Path,
+    output_folder: Path | None,
 ) -> List[Tuple[pd.Series, Annotated[str, "dataset"]]]:
     """Lets you graph distributional info of metadata over a dataset
 

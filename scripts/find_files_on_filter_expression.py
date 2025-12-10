@@ -1,22 +1,21 @@
 """
-This script prints out a list of human annotation file paths
+This script creates a dataframe of files
 matching a filter expression on (1) children metadata and (2) metannots
 
+This dataframe can be used for later train/test/validation splitting of the data
+
 For more information on filter expressions, visit the Pandas documentation
-
-
 """
 
 from pathlib import Path
-from typing import List
+from typing import Dict, List, Tuple
 
 import click
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
-from helpers.constants import DATASETS_FOLDER
-
 from find_on_filter_expression import get_metannots_df
+from helpers.constants import DATASETS_FOLDER
 
 
 @click.command()
@@ -37,16 +36,17 @@ like 'child_sex == 'f'' (see Pandas + \
 ChildProject docs)",
 )
 @click.option(
-    "--no-info-output",
-    is_flag=True,
-    help="Don't print info, such as error info. Only print file paths",
+    "--output-csv",
+    required=True,
+    type=click.Path(exists=False),
+    help="Output .csv path",
 )
 def find_files(
     metannots_filter_expr: str | None,
     children_filter_expr: str | None,
-    no_info_output: bool,
-) -> List[Path]:
-    """Prints file paths matching filter expressions on metannots \
+    output_csv: Path,
+) -> pd.DataFrame:
+    """Save file paths matching filter expressions on metannots \
 and children metadata (specified separately)"""
     metannots_df: pd.DataFrame = get_metannots_df(print_errors=False)
     children_df = get_children_df()
@@ -55,12 +55,11 @@ and children metadata (specified separately)"""
         try:
             metannots_df = metannots_df.query(metannots_filter_expr)
         except Exception as e:
-            if not no_info_output:
-                print(
-                    f"ERROR: problem using the filter expression on \
+            print(
+                f"ERROR: problem using the filter expression on \
 metannots dataframe: {e}"
-                )
-                print("INFO: Using no filter at all...")
+            )
+            print("INFO: Using no filter at all...")
 
             metannots_filter_expr = ""
 
@@ -68,21 +67,23 @@ metannots dataframe: {e}"
         try:
             children_df = children_df.query(children_filter_expr)
         except Exception as e:
-            if not no_info_output:
-                print(
-                    f"ERROR: problem using the filter expression on \
+            print(
+                f"ERROR: problem using the filter expression on \
 children dataframe: {e}"
-                )
-                print("INFO: Using no filter at all...")
+            )
+            print("INFO: Using no filter at all...")
 
             children_filter_expr = ""
 
     file_paths = get_file_paths(children_df, metannots_df)
 
-    for file_path in file_paths:
-        print(str(file_path))
+    save_file_paths(file_paths, output_csv)
 
     return file_paths
+
+
+def save_file_paths(file_paths: pd.DataFrame, output_path: Path) -> None:
+    file_paths.to_csv(output_path, index=False)
 
 
 def get_children_df() -> pd.DataFrame:
@@ -103,31 +104,37 @@ def get_children_df() -> pd.DataFrame:
     return pd.concat(children_df_list)
 
 
-def get_file_paths(children_df: pd.DataFrame, metannots_df: pd.DataFrame) -> List[Path]:
-    file_paths: List[Path] = []
+def get_file_paths(
+    children_df: pd.DataFrame, metannots_df: pd.DataFrame
+) -> pd.DataFrame:
+    file_paths: List[pd.DataFrame] = []
 
     for _, metannot in metannots_df.iterrows():
         gold_std_set: str = metannot["set"]
         dataset: str = metannot["dataset"]
 
-        file_paths += get_file_paths_for_set_dataset(gold_std_set, dataset, children_df)
+        file_paths.append(
+            get_file_paths_for_set_dataset(gold_std_set, dataset, children_df)
+        )
 
-    return file_paths
+    return pd.concat(file_paths, axis=0)
 
 
 def get_file_paths_for_set_dataset(
     set_name: str, dataset: str, children_df: pd.DataFrame
-) -> List[Path]:
-    file_paths: List[Path] = []
+) -> pd.DataFrame:
+    file_paths: List[Dict] = []
 
     project = ChildProject(DATASETS_FOLDER / dataset)
     am: AnnotationManager = AnnotationManager(project)
 
     recordings: pd.DataFrame = project.recordings
-    recordings = recordings[["recording_filename", "child_id", "discard"]]
+    recordings = recordings.reindex(
+        columns=["recording_filename", "child_id", "discard", "duration"]
+    )
 
     if "discard" in recordings.columns:
-        recordings = recordings.rename(columns={"discard": "discard_recording"})
+        recordings = recordings[recordings["discard"] != "1"]
 
     annotations: pd.DataFrame = am.annotations
     annotations = annotations[annotations["set"] == set_name]
@@ -135,9 +142,6 @@ def get_file_paths_for_set_dataset(
     annotations_w_child_id = annotations.merge(
         recordings, on="recording_filename", how="left"
     )
-    annotations_w_child_id = annotations_w_child_id[
-        annotations_w_child_id["discard_recording"] != "1"
-    ]
 
     valid_child_ids = children_df[children_df["dataset"] == dataset]["child_id"]
     annotations_w_child_id = annotations_w_child_id[
@@ -145,11 +149,33 @@ def get_file_paths_for_set_dataset(
     ]
 
     for _, row in annotations_w_child_id.iterrows():
+        start, end, duration = get_annotation_duration(row["annotation_filename"])
+
         file_paths.append(
-            get_path_of_annotation_file(dataset, set_name, row["annotation_filename"])
+            {
+                "annotation path": get_path_of_annotation_file(
+                    dataset, set_name, row["annotation_filename"]
+                ),
+                "recording path": project.get_recording_path(row["recording_filename"]),
+                "dataset": dataset,
+                "set": row["set"],
+                "annotation start (ms)": start,
+                "annotation end (ms)": end,
+                "annotation duration (ms)": duration,
+                "recording duration (ms)": row["duration"],
+            }
         )
 
-    return file_paths
+    return pd.DataFrame(file_paths)
+
+
+def get_annotation_duration(annotation_filename: str) -> Tuple[int, int, int]:
+    parts = annotation_filename.split("_")
+
+    start = int(parts[-2])
+    end = int(parts[-1].rstrip(".csv"))
+
+    return start, end, end - start
 
 
 def get_path_of_annotation_file(dataset: str, set_name: str, filename: str) -> Path:

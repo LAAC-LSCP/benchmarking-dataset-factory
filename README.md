@@ -21,18 +21,19 @@ I use `tox` to keep code clean and standard. `pipx install tox`, and run `tox` t
 ```
 Usage: find_files_on_filter_expression.py [OPTIONS]
 
-  Prints file paths matching filter expressions on metannots and
+  Save file paths matching filter expressions on metannots and
   children metadata (specified separately)
 
 Options:
   --metannots-filter-expr TEXT  Filter expression on metannots like
                                 'has_addressee == 'Y'' (see Pandas +
                                 ChildProject docs)
+
   --children-filter-expr TEXT   Filter expression on children metadata
                                 like 'child_sex == 'f'' (see Pandas +
                                 ChildProject docs)
-  --no-info-output              Don't print info, such as error info.
-                                Only print file paths
+
+  --output-csv PATH             Output .csv path  [required]
   --help                        Show this message and exit.
 ```
 This script lets you find files matching certain conditions. See the Pandas documentation for filter expressions. See the ChildProject documentation to see what columns can be looked for.
@@ -45,16 +46,7 @@ uv run scripts/find_files_on_filter_expression.py --metannots-filter-expr "has_a
 
 Note that if values are missing in the metadata–which is very often the case except on required columns–the filter expression will typically jump over them (these values are `<NA>`) and ignored.
 
-Output (stdout)
-```bash
-/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf/an1/converted/123439-0396_1_10140000_10260000.csv
-/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf/an1/converted/123439-0396_1_11160000_11280000.csv
-...
-/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf_high_volubility/converted/123836-7117_2_1583460_1703460.csv
-/Users/me/Desktop/benchmarking-data-2025/datasets/bergelson/annotations/eaf_high_volubility/converted/123836-7117_2_2183460_2303460.csv
-```
-
-The output of this command would typically be redirected with the `>` operator in bash. Preferably use the `--no-info-output` flag in this case, if you wish to post-process this data.
+The output is a .csv file with the human annotation file path, recording file path, annotation start, end, duration and recording duration. Typically, you'll want to do some weighted train, test, validation split based on these durations, which is standard stuff in any ML toolkit. Note that the human annotation file typically signifies a part of the recording file that was listened to by an annotator, hence the columns.
 
 ### find_on_filter_expression.py
 ```
