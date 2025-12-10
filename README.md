@@ -192,9 +192,8 @@ Usage: graph_dataset_distribution.py [OPTIONS]
   recording information regardless of which sets
 
 Options:
-  -d, --dataset TEXT              datasets to graph. If not specified,
-                                  will use all datasets
-
+  -d, --dataset TEXT              datasets to graph. If not specified, will
+                                  use all datasets
   -x, --x-axis [child_id|child_age|child_sex|speaker_type|speaker_id]
                                   x-axis  [required]
   -y, --y-axis [segment|recording]
@@ -202,7 +201,7 @@ Options:
   --metric [duration_mean|count|duration_std|duration_total]
                                   function to run over aggregated data
                                   [required]
-
+  --sort-by-y                     Sort data by y (instead of x) axis
   --output-folder PATH            path of output folder
   --help                          Show this message and exit.
 ```

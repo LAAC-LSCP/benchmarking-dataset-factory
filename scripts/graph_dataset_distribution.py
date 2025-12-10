@@ -67,6 +67,7 @@ SEGMENT_PROPS: List[XValue] = [XValue.SPEAKER_TYPE, XValue.SPEAKER_ID]
     type=click.Choice(["duration_mean", "count", "duration_std", "duration_total"]),
     help="function to run over aggregated data",
 )
+@click.option("--sort-by-y", is_flag=True, help="Sort data by y (instead of x) axis")
 @click.option(
     "--output-folder",
     required=False,
@@ -78,6 +79,7 @@ def graph(
     x_axis: XValue,
     y_axis: YValue,
     metric: MetricValue,
+    sort_by_y: bool,
     output_folder: Path | None,
 ) -> List[Tuple[pd.Series, Annotated[str, "dataset"]]]:
     """Lets you graph distributional info of metadata over a dataset
@@ -100,7 +102,10 @@ def graph(
         dataset_dir = DATASETS_FOLDER / d
         data = get_data(dataset_dir, x_axis, y_axis, metric, use_ms)
 
-        data.sort_index()
+        if sort_by_y:
+            data = data.sort_values(ascending=False)
+        else:
+            data = data.sort_index()
 
         if data.index.dtype == "float64":
             data.index = data.index.round(1)  # type: ignore
