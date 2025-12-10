@@ -68,6 +68,7 @@ from custom_types.metannots import (
     get_metannots_dict,
     get_sampled_duration,
 )
+from helpers.constants import DATASETS_FOLDER, OUTPUTS_FOLDER
 from helpers.gold_standard_data import (
     STANDARD_COLUMNS,
     get_annotated_ms,
@@ -75,11 +76,6 @@ from helpers.gold_standard_data import (
 )
 from pydantic import ValidationError
 
-CURRENT_FILE: Path = Path(__file__)
-SCRIPT_FOLDER: Path = CURRENT_FILE.parent
-METADATA_FOLDER: Path = (SCRIPT_FOLDER / ".." / "metadata").resolve()
-DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
-OUTPUTS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "outputs").resolve()
 CATEGORICAL_CUTOFF: int = 20
 
 

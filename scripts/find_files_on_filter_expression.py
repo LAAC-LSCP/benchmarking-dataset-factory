@@ -14,12 +14,9 @@ import click
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
-from find_on_filter_expression import get_metannots_df  # type: ignore
+from helpers.constants import DATASETS_FOLDER
 
-CURRENT_FILE: Path = Path(__file__)
-SCRIPT_FOLDER: Path = CURRENT_FILE.parent
-METADATA_FOLDER: Path = (SCRIPT_FOLDER / ".." / "metadata").resolve()
-DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
+from find_on_filter_expression import get_metannots_df
 
 
 @click.command()
@@ -113,15 +110,13 @@ def get_file_paths(children_df: pd.DataFrame, metannots_df: pd.DataFrame) -> Lis
         gold_std_set: str = metannot["set"]
         dataset: str = metannot["dataset"]
 
-        file_paths += get_file_paths_for_set_dataset(
-            gold_std_set, dataset, children_df, metannots_df
-        )
+        file_paths += get_file_paths_for_set_dataset(gold_std_set, dataset, children_df)
 
     return file_paths
 
 
 def get_file_paths_for_set_dataset(
-    set_name: str, dataset: str, children_df: pd.DataFrame, metannots_df: pd.DataFrame
+    set_name: str, dataset: str, children_df: pd.DataFrame
 ) -> List[Path]:
     file_paths: List[Path] = []
 

@@ -60,7 +60,7 @@ The output of this command would typically be redirected with the `>` operator i
 ```
 Usage: find_on_filter_expression.py [OPTIONS]
 
-  Fidn datasets and sets matching a filter expression on the metannots
+  Find datasets and sets matching a filter expression on the metannots
   metadata
 
 Options:
@@ -186,3 +186,38 @@ Output (to `outputs/human_annotation_data/human_annotation_data-vanuatu.json` fi
   ]
 }
 ```
+
+### graph_dataset_distribution.py
+```
+Usage: graph_dataset_distribution.py [OPTIONS]
+
+  Lets you graph distributional info of metadata over a dataset
+
+  If looking at segments, will choose information only from human-
+  annotated sets If looking at recordings in general, will choose all
+  recording information regardless of which sets
+
+Options:
+  -d, --dataset TEXT              datasets to graph. If not specified,
+                                  will use all datasets
+
+  -x, --x-axis [child_id|child_age|child_sex|speaker_type|speaker_id]
+                                  x-axis  [required]
+  -y, --y-axis [segment|recording]
+                                  y-axis  [required]
+  --metric [duration_mean|count|duration_std|duration_total]
+                                  function to run over aggregated data
+                                  [required]
+
+  --output-folder PATH            path of output folder
+  --help                          Show this message and exit.
+```
+
+This is a generic graphing script that gives you a basic outline of how much data is available over some categorical index.
+
+The following is some example output for the following command:
+```bash
+uv run scripts/graph_dataset_distribution.py -d vanuatu -d fausey-trio -x speaker_type -y segment --metric duration_total
+```
+
+![Example age distribution](static/images/segment-duration-over-speaker-type.png)

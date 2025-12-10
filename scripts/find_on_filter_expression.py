@@ -6,19 +6,14 @@ To see the list of columns, look under `metannots.py`, or in the
 ChildProject documentation
 """
 
-from pathlib import Path
 from typing import Dict, List, Optional
 
 import click
 import pandas as pd
 from custom_types.datasets_json import get_datasets
 from custom_types.metannots import get_metannots, get_metannots_dict
+from helpers.constants import DATASETS_FOLDER
 from pydantic import ValidationError
-
-CURRENT_FILE: Path = Path(__file__)
-SCRIPT_FOLDER: Path = CURRENT_FILE.parent
-METADATA_FOLDER: Path = (SCRIPT_FOLDER / ".." / "metadata").resolve()
-DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
 
 
 @click.command()
@@ -35,7 +30,7 @@ DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
     help="Don't print info, such as error info. Only print datasets and sets",
 )
 def filter_metannots(filter_expr: str | None, no_info_output: bool) -> pd.DataFrame:
-    """Fidn datasets and sets matching a filter expression on the metannots metadata"""
+    """Find datasets and sets matching a filter expression on the metannots metadata"""
     df = get_metannots_df(print_errors=(not no_info_output))
 
     if filter_expr is not None:

@@ -33,5 +33,7 @@ module = [
     'custom_types.metannots',
     'custom_types.datasets_json',
     'helpers.gold_standard_data',
+    'find_on_filter_expression',
+    'helpers.constants',
 ]
 ignore_missing_imports = true
