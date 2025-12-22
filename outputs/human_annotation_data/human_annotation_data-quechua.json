@@ -1,0 +1,278 @@
+{
+  "name": "quechua",
+  "sets": [
+    {
+      "name": "eaf/IK",
+      "columns": [
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "L'enfant dort",
+            "L'enfant dort ",
+            "Conversations Inaudibles",
+            "Peu \u00ebtre pr\u00e9nom ?"
+          ],
+          "annotated_duration_ms": 8837,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "FEM",
+            "OCH",
+            "MAL"
+          ],
+          "annotated_duration_ms": 757044,
+          "duration_from_samples_ms": 2280000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "FA1",
+            "FA2",
+            "UC1",
+            "UC3",
+            "MA1",
+            "FA3",
+            "UC2"
+          ],
+          "annotated_duration_ms": 757044,
+          "duration_from_samples_ms": 2280000
+        }
+      ]
+    },
+    {
+      "name": "eaf/JH",
+      "columns": [
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "MAL",
+            "<NA>",
+            "FEM",
+            "OCH"
+          ],
+          "annotated_duration_ms": 504635,
+          "duration_from_samples_ms": 1860000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "MA2",
+            "MA3",
+            "UA1",
+            "FA2",
+            "UC1",
+            "MA1",
+            "FA1",
+            "UC2",
+            "UC3",
+            "UC4"
+          ],
+          "annotated_duration_ms": 517287,
+          "duration_from_samples_ms": 1860000
+        }
+      ]
+    },
+    {
+      "name": "eaf/ML",
+      "columns": [
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "watching a movie, no talking",
+            "Chi watch TVthe whole minute",
+            "nothing to annotate, CHI is playing in silence"
+          ],
+          "annotated_duration_ms": 12100,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "MAL",
+            "FEM",
+            "OCH",
+            "CHI"
+          ],
+          "annotated_duration_ms": 974374,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "MA2",
+            "MA1",
+            "FA1",
+            "UC1",
+            "UC2",
+            "CHI",
+            "FA2",
+            "UC3",
+            "FA3"
+          ],
+          "annotated_duration_ms": 974374,
+          "duration_from_samples_ms": 2340000
+        }
+      ]
+    }
+  ]
+}
