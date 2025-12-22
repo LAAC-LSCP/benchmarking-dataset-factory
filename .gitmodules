@@ -108,3 +108,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/tsimane2017.git
 	datalad-id = 5acde0e8-1e8e-4da3-86ea-92baace24d57
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/tsimane2017.git
+[submodule "datasets/tsimanem2018"]
+	path = datasets/tsimanem2018
+	url = git@gin.g-node.org:/LAAC-LSCP/tsimanem2018.git
+	datalad-id = 35223c45-1207-4092-8e7a-721f1ed4b4f2
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/tsimanem2018.git
