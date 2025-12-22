@@ -1,0 +1,94 @@
+{
+  "name": "forrester",
+  "sets": [
+    {
+      "name": "cha",
+      "columns": [
+        {
+          "column": "words",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "MAL",
+            "CHI",
+            "OCH",
+            "FEM",
+            "<NA>"
+          ],
+          "annotated_duration_ms": 38429694,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "com",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "points and shakes her head while speaking at doll on table",
+            "spoon in mouth #1",
+            "slight laugh . #9_5",
+            "points spoon at Ella's mouth . #1_7",
+            "looking over chair at floor #3_2",
+            "pointing upwards at the ceiling #1_5",
+            "after looking up in direction of point . #1_6",
+            "spoken from the next room #0_3",
+            "shakes head at Eva as Eva stares at her #3",
+            "does mumbling/singing sound continuing during next utterances",
+            "addressing toy #0_6",
+            "spoken in a North Yorkshire accent . #0_4",
+            "singing #1_8"
+          ],
+          "annotated_duration_ms": 43221,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "gpx",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 2125668,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Father",
+            "Target_Child",
+            "Sister",
+            "Mother",
+            "Adult",
+            "Child"
+          ],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "FAT",
+            "CHI",
+            "EV",
+            "MOT",
+            "L",
+            "J"
+          ],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": null
+        }
+      ]
+    }
+  ]
+}
