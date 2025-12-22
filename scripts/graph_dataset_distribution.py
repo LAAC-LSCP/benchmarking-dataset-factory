@@ -4,10 +4,11 @@ Generic script that lets you graph certain properties of datasets
 
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated, List, Set, Tuple
+from typing import Annotated, Callable, List, Set, Tuple
 
 import click
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
@@ -67,7 +68,16 @@ SEGMENT_PROPS: List[XValue] = [XValue.SPEAKER_TYPE, XValue.SPEAKER_ID]
     type=click.Choice(["duration_mean", "count", "duration_std", "duration_total"]),
     help="function to run over aggregated data",
 )
-@click.option("--sort-by-y", is_flag=True, help="Sort data by y (instead of x) axis")
+@click.option(
+    "--sort-by-y",
+    is_flag=True,
+    help="Sort data by y (instead of x) axis",
+)
+@click.option(
+    "--aggregate",
+    is_flag=True,
+    help="Aggregate over datasets to obtain a single plot",
+)
 @click.option(
     "--output-folder",
     required=False,
@@ -80,6 +90,7 @@ def graph(
     y_axis: YValue,
     metric: MetricValue,
     sort_by_y: bool,
+    aggregate: bool,
     output_folder: Path | None,
 ) -> List[Tuple[pd.Series, Annotated[str, "dataset"]]]:
     """Lets you graph distributional info of metadata over a dataset
@@ -90,17 +101,24 @@ def graph(
 
     validate(x_axis, y_axis)
 
-    datasets: Set[str] = {d for d in dataset}
-    datas: List[Tuple[pd.Series, Annotated[str, "dataset"]]] = []
+    datasets: Set[str]
+
+    if len(dataset) == 0:
+        datasets = {d.name for d in DATASETS_FOLDER.iterdir() if d.is_dir()}
+    else:
+        datasets = {d for d in dataset}
 
     use_ms = y_axis == YValue.SEGMENT and metric in [
         MetricValue.DURATION_MEAN,
         MetricValue.DURATION_STD,
     ]
 
+    datas: List[Tuple[pd.Series, Annotated[str, "dataset"]]] = []
+    counts: List[Tuple[pd.Series, Annotated[str, "dataset"]]] = []
+
     for d in datasets:
         dataset_dir = DATASETS_FOLDER / d
-        data = get_data(dataset_dir, x_axis, y_axis, metric, use_ms)
+        data, count_data = get_data(dataset_dir, x_axis, y_axis, metric, use_ms)
 
         if sort_by_y:
             data = data.sort_values(ascending=False)
@@ -113,6 +131,12 @@ def graph(
         data.index = data.index.fillna("N/A")
 
         datas.append((data, d))
+        counts.append((count_data, d))
+
+    if aggregate:
+        datas = [
+            (aggregate_data(datas, counts, metric, x_axis, y_axis), "all datasets")
+        ]
 
     datas = sorted(datas, key=lambda x: x[1])
 
@@ -165,7 +189,7 @@ Please choose a different x or y axis."
 
 def get_data(
     dataset: Path, x_axis: XValue, y_axis: YValue, metric: MetricValue, use_ms: bool
-) -> pd.Series:
+) -> Tuple[pd.Series, pd.Series]:
     project = ChildProject(dataset)
     project.read()
 
@@ -211,7 +235,7 @@ def get_data_child_segments(
     metric: MetricValue,
     project: ChildProject,
     use_ms: bool,
-) -> pd.Series:
+) -> Tuple[pd.Series, pd.Series]:
     am = AnnotationManager(project)
     gold_std_sets = get_gold_std_sets(am)
     annotations = am.annotations
@@ -245,7 +269,7 @@ def get_gold_std_sets(am: AnnotationManager) -> List[str]:
 
 def get_data_child_recordings(
     child_recordings: pd.DataFrame, x_axis: XValue, metric: MetricValue, use_ms: bool
-) -> pd.Series:
+) -> Tuple[pd.Series, pd.Series]:
     data = child_recordings.reindex(
         columns=([p.value for p in CHILD_PROPS] + ["duration"])
     )
@@ -261,17 +285,89 @@ def get_data_child_recordings(
 
 def get_grouped_data(
     data: pd.DataFrame, x_axis: XValue, metric: MetricValue
-) -> pd.Series:
+) -> Tuple[Annotated[pd.Series, "metric"], Annotated[pd.Series, "count"]]:
     grouped_data = data.groupby(x_axis, dropna=False)["duration"]
 
     if metric == MetricValue.COUNT:
-        return grouped_data.count()
+        return grouped_data.count(), grouped_data.count()
     elif metric == MetricValue.DURATION_MEAN:
-        return grouped_data.mean()
+        return grouped_data.mean(), grouped_data.count()
     elif metric == MetricValue.DURATION_STD:
-        return grouped_data.std()
+        return grouped_data.std(), grouped_data.count()
     elif metric == MetricValue.DURATION_TOTAL:
-        return grouped_data.sum()
+        return grouped_data.sum(), grouped_data.count()
+
+
+def aggregate_data(
+    datas: List[Tuple[pd.Series, str]],
+    counts: List[Tuple[pd.Series, str]],
+    metric: MetricValue,
+    x_axis: XValue,
+    y_axis: YValue,
+) -> pd.Series:
+    df = get_aggregate_df(datas, counts, x_axis, metric)
+
+    if metric == MetricValue.COUNT or metric == MetricValue.DURATION_TOTAL:
+        return df.groupby(x_axis, dropna=False)[metric].sum()
+
+    if metric == MetricValue.DURATION_MEAN:
+        return df.groupby(x_axis, dropna=False)[[metric, "counts"]].apply(
+            pooled_mean(metric)
+        )
+
+    if metric == MetricValue.DURATION_STD:
+        return df.groupby(x_axis, dropna=False)[[metric, "counts"]].apply(
+            pooled_std(metric)
+        )
+
+    raise ValueError("Invalid choice of metric")
+
+
+def pooled_mean(metric: MetricValue) -> Callable:
+    def pooled_mean_callback(group: pd.DataFrame) -> np.float64:
+        return (group[metric] * group["counts"]).sum() / group["counts"].sum()
+
+    return pooled_mean_callback
+
+
+def pooled_std(metric: MetricValue) -> Callable:
+    def pooled_std_callback(group: pd.DataFrame) -> np.float64:
+        return np.sqrt(
+            (group[metric] * group[metric] * group["counts"]).sum()
+            / group["counts"].sum()
+        )
+
+    return pooled_std_callback
+
+
+def get_aggregate_df(
+    datas: List[Tuple[pd.Series, str]],
+    counts: List[Tuple[pd.Series, str]],
+    x_axis: XValue,
+    metric: MetricValue,
+) -> pd.DataFrame:
+    """
+    Get a dataframe with dataset, `x_axis`, counts, `metric` info
+
+    This allows us to take weighted averages over datasets, e.g.,
+    to get the pooled variance or pooled mean
+    """
+    dataframes: List[pd.DataFrame] = []
+
+    for data_series, dataset in datas:
+        data_df: pd.DataFrame = data_series.reset_index(name=metric)
+        data_df["dataset"] = dataset
+
+        count_series: None | pd.Series = next(
+            (s for s, c in counts if c == dataset), None
+        )
+        assert count_series is not None
+
+        count_df: pd.DataFrame = count_series.reset_index(name="counts")
+
+        dataframes.append(count_df.merge(data_df, on=x_axis, how="inner"))
+
+    return pd.concat(dataframes)
 
 
 def save_data(
