@@ -78,3 +78,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/soderstrom.git
 	datalad-id = 69072baa-6f3d-47a1-8b4e-ce132882f88b
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/soderstrom.git
+[submodule "datasets/thomas"]
+	path = datasets/thomas
+	url = git@gin.g-node.org:/LAAC-LSCP/thomas.git
+	datalad-id = 2ed2bd94-cf09-4212-b877-159866baff54
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/thomas.git
