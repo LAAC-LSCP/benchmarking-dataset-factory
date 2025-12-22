@@ -1,0 +1,104 @@
+{
+  "name": "png2016",
+  "sets": [
+    {
+      "name": "eaf_2016",
+      "columns": [
+        {
+          "column": "speaker_id",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 63108613,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "N",
+            "C",
+            "L",
+            "U",
+            "Y"
+          ],
+          "annotated_duration_ms": 3409058,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "0",
+            "W",
+            "0",
+            "nan"
+          ],
+          "annotated_duration_ms": 1854962,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "U",
+            "C",
+            "T",
+            "A",
+            "B",
+            "P",
+            "O"
+          ],
+          "annotated_duration_ms": 14312774,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "code",
+            "code_num",
+            "OCH",
+            "CHI",
+            "FEM",
+            "notes",
+            "MAL"
+          ],
+          "annotated_duration_ms": 63108613,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "nan",
+            "<NA>",
+            "1",
+            "M",
+            "1"
+          ],
+          "annotated_duration_ms": 1337411,
+          "duration_from_samples_ms": 22454000
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 63107527,
+          "duration_from_samples_ms": 22454000
+        }
+      ]
+    }
+  ]
+}
