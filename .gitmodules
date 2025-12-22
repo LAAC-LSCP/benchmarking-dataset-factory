@@ -83,3 +83,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/thomas.git
 	datalad-id = 2ed2bd94-cf09-4212-b877-159866baff54
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/thomas.git
+[submodule "datasets/timor-leste2022"]
+	path = datasets/timor-leste2022
+	url = git@gin.g-node.org:/LAAC-LSCP/timor-leste2022.git
+	datalad-id = 27998773-dce0-4cb4-9436-6495784a8cea
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/timor-leste2022.git
