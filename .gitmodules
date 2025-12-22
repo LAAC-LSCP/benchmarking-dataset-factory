@@ -98,3 +98,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/tsay.git
 	datalad-id = 4e09e898-7967-414b-8172-2d6a1608c3da
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/tsay.git
+[submodule "datasets/tseltal2015"]
+	path = datasets/tseltal2015
+	url = git@gin.g-node.org:/LAAC-LSCP/tseltal2015.git
+	datalad-id = f56cbfb7-33fb-46e1-9694-f1b115c10cfd
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/tseltal2015.git
