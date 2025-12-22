@@ -73,3 +73,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/japanese-tsuji2024.git
 	datalad-id = 621a2191-1adf-41e1-8eb8-56da4e7de440
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/japanese-tsuji2024.git
+[submodule "datasets/soderstrom"]
+	path = datasets/soderstrom
+	url = git@gin.g-node.org:/LAAC-LSCP/soderstrom.git
+	datalad-id = 69072baa-6f3d-47a1-8b4e-ce132882f88b
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/soderstrom.git
