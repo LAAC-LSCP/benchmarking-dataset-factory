@@ -58,3 +58,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/quechua.git
 	datalad-id = 176ab118-79f8-4aee-8cfa-7880bd375cd6
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/quechua.git
+[submodule "datasets/providence"]
+	path = datasets/providence
+	url = git@gin.g-node.org:/LAAC-LSCP/providence.git
+	datalad-id = 55527f8b-2e35-4883-8442-3037426384c0
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/providence.git
