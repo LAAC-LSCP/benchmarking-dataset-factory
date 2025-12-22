@@ -1,0 +1,57 @@
+{
+  "name": "png2019",
+  "sets": [
+    {
+      "name": "eaf/mc",
+      "columns": [
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1440000
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1440000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "<NA>",
+            "FEM",
+            "CHI",
+            "MAL"
+          ],
+          "annotated_duration_ms": 620419,
+          "duration_from_samples_ms": 1440000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "OC",
+            "2T",
+            "FA",
+            "TC",
+            "MA",
+            "N",
+            "MA (mm)",
+            "FA "
+          ],
+          "annotated_duration_ms": 738707,
+          "duration_from_samples_ms": 1440000
+        }
+      ]
+    }
+  ]
+}
