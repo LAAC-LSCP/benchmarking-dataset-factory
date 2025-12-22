@@ -63,3 +63,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/providence.git
 	datalad-id = 55527f8b-2e35-4883-8442-3037426384c0
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/providence.git
+[submodule "datasets/solomon"]
+	path = datasets/solomon
+	url = git@gin.g-node.org:/LAAC-LSCP/solomon.git
+	datalad-id = e9dbf182-7566-453c-b0d3-2e2faf439526
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/solomon.git
