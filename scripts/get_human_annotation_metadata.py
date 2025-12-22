@@ -102,7 +102,7 @@ class DatasetInfo(TypedDict):
 def get_human_annotation_metadata(dataset_name: str) -> None:
     """Aggregates human annotation metadata for a given dataset \
 (mostly duration-related) and saves it"""
-    datasets = get_datasets(DATASETS_FOLDER)
+    datasets = get_datasets(DATASETS_FOLDER, dataset_names=[dataset_name])
 
     dataset = next((d for d in datasets["datasets"] if d["name"] == dataset_name), None)
 
