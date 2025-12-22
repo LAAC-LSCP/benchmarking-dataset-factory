@@ -118,3 +118,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/warlaumont.git
 	datalad-id = 6f880209-b5aa-4249-ae5f-e1b6fe4d4796
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/warlaumont.git
+[submodule "datasets/winnipeg"]
+	path = datasets/winnipeg
+	url = git@gin.g-node.org:/LAAC-LSCP/winnipeg.git
+	datalad-id = dbd0c9ff-8304-49ef-98d8-ae48dee983fb
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/winnipeg.git
