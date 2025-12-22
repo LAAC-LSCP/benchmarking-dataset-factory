@@ -113,3 +113,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/tsimanem2018.git
 	datalad-id = 35223c45-1207-4092-8e7a-721f1ed4b4f2
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/tsimanem2018.git
+[submodule "datasets/warlaumont"]
+	path = datasets/warlaumont
+	url = git@gin.g-node.org:/LAAC-LSCP/warlaumont.git
+	datalad-id = 6f880209-b5aa-4249-ae5f-e1b6fe4d4796
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/warlaumont.git
