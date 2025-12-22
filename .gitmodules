@@ -53,3 +53,8 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/png2019.git
 	datalad-id = 3450d8e0-8da1-472d-8f10-192c9007eaee
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/png2019.git
+[submodule "datasets/quechua"]
+	path = datasets/quechua
+	url = git@gin.g-node.org:/LAAC-LSCP/quechua.git
+	datalad-id = 176ab118-79f8-4aee-8cfa-7880bd375cd6
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/quechua.git
