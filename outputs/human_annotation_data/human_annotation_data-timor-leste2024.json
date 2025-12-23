@@ -1,0 +1,71 @@
+{
+  "name": "timor-leste2024",
+  "sets": [
+    {
+      "name": "eaf_2025/AC",
+      "columns": [
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "FEM",
+            "CHI",
+            "OCH",
+            "MAL"
+          ],
+          "annotated_duration_ms": 1158649,
+          "duration_from_samples_ms": 3900000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "FA1",
+            "FA2",
+            "CHI",
+            "UC1",
+            "UC2",
+            "MA1",
+            "UC3",
+            "FA3"
+          ],
+          "annotated_duration_ms": 1158649,
+          "duration_from_samples_ms": 3900000
+        }
+      ]
+    },
+    {
+      "name": "eaf_2025/PB",
+      "columns": [
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "FEM",
+            "CHI",
+            "MAL"
+          ],
+          "annotated_duration_ms": 597948,
+          "duration_from_samples_ms": 2340000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "UC1",
+            "FA1",
+            "UC2",
+            "CHI",
+            "UC3",
+            "MA1",
+            "FA2",
+            "MA2"
+          ],
+          "annotated_duration_ms": 597948,
+          "duration_from_samples_ms": 2340000
+        }
+      ]
+    }
+  ]
+}
