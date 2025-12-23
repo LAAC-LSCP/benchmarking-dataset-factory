@@ -1,0 +1,104 @@
+{
+  "name": "tseltal2015",
+  "sets": [
+    {
+      "name": "eaf_2015",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "nan",
+            "<NA>",
+            "M",
+            "1",
+            "1"
+          ],
+          "annotated_duration_ms": 1103841,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "T",
+            "U",
+            "C",
+            "B",
+            "A",
+            "O"
+          ],
+          "annotated_duration_ms": 9587991,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "C",
+            "N",
+            "Y",
+            "L",
+            "U"
+          ],
+          "annotated_duration_ms": 2841234,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 60672830,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 60673720,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "code",
+            "code_num",
+            "CHI",
+            "OCH",
+            "FEM",
+            "notes",
+            "AudioOnly",
+            "MAL"
+          ],
+          "annotated_duration_ms": 60673720,
+          "duration_from_samples_ms": 23751000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "nan",
+            "0",
+            "<NA>",
+            "W",
+            "0"
+          ],
+          "annotated_duration_ms": 1428619,
+          "duration_from_samples_ms": 23751000
+        }
+      ]
+    }
+  ]
+}
