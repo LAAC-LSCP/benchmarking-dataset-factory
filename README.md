@@ -219,3 +219,42 @@ uv run scripts/graph_dataset_distribution.py -d vanuatu -d fausey-trio -x speake
 ```
 
 ![Example age distribution](static/images/segment-duration-over-speaker-type.png)
+
+### split_data.py
+```
+Usage: split_data.py [OPTIONS]
+
+  Splits the output of `find_files_on_filter_expression.py` based on a
+  specified train, test, validation split
+
+Options:
+  --input PATH       Input file (output from
+                     `find_files_on_filter_expression.py`)  [required]
+
+  --train FLOAT      Train percentage in [0, 1]  [required]
+  --test FLOAT       Test percentage in [0, 1]  [required]
+  --validate FLOAT   Validation percentage in [0, 1]  [required]
+  --output-csv PATH  Output .csv path  [required]
+  --same-child       Stratify by child
+  --same-set         Stratify by set
+  --seed INTEGER     Random seed for split
+  --help             Show this message and exit.
+```
+
+This script takes the output from `find_files_on_filter_expression.py` and adds a column "split" to it.
+
+To split data among train, test, validation sets, you can use this script. Unlike the standard routines in sklearn or TensorFlow this routine can actually take into account the length of the recordings themselves. It also stratifies according to the set and child id inside a dataset.
+
+You can call it as follows:
+```bash
+python3 scripts/split_data.py --input /Users/me/Desktop/benchmarking-data-2025/files.csv --train 0.8 --test 0.1 --validate 0.1 --output-csv files_with_split.csv --same-child --same-set --seed 0
+```
+
+With output
+```bash
+Found split!
+Desired train, test, validation split (ms): 1188633405, 148579175, 148579175
+Found train, test, validation split (ms): 1187692678, 148317595, 149781484
+```
+
+By changing the seed you'll get slightly different splits, as it shuffles the file paths.
