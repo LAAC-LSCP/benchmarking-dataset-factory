@@ -1,0 +1,44 @@
+{
+  "name": "tsimanem2018",
+  "sets": [
+    {
+      "name": "eaf/vocs",
+      "columns": [
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "UC1",
+            "CHI",
+            "MA1",
+            "FA1",
+            "UC2",
+            "UC3",
+            "FA2"
+          ],
+          "annotated_duration_ms": 4712366,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 4709479,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "CHI",
+            "MAL",
+            "FEM"
+          ],
+          "annotated_duration_ms": 4712366,
+          "duration_from_samples_ms": null
+        }
+      ]
+    }
+  ]
+}
