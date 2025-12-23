@@ -1,0 +1,222 @@
+{
+  "name": "warlaumont",
+  "sets": [
+    {
+      "name": "eaf/an1",
+      "columns": [
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "nan",
+            "<NA>",
+            "0",
+            "W",
+            "0"
+          ],
+          "annotated_duration_ms": 115817,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 7867293,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "<NA>",
+            "MAL",
+            "FEM",
+            "OCH"
+          ],
+          "annotated_duration_ms": 5339102,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "EE1",
+            "MA1",
+            "FA1",
+            "FC1",
+            "UC1",
+            "FAE",
+            "FA2",
+            "MA2",
+            "MA3",
+            "FA3",
+            "UC2",
+            "FA4",
+            "MA4",
+            "FA5",
+            "FA6",
+            "MA5"
+          ],
+          "annotated_duration_ms": 7867293,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "1"
+          ],
+          "annotated_duration_ms": 3316,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "N",
+            "<NA>",
+            "C",
+            "Y",
+            "L"
+          ],
+          "annotated_duration_ms": 1568399,
+          "duration_from_samples_ms": 18120000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "A",
+            "T",
+            "O",
+            "C",
+            "B",
+            "U",
+            "P"
+          ],
+          "annotated_duration_ms": 6298894,
+          "duration_from_samples_ms": 18120000
+        }
+      ]
+    },
+    {
+      "name": "eaf_hv",
+      "columns": [
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "0"
+          ],
+          "annotated_duration_ms": 45592,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 6951532,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "FEM",
+            "CHI",
+            "OCH",
+            "<NA>",
+            "MAL"
+          ],
+          "annotated_duration_ms": 6474103,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "FA1",
+            "CHI",
+            "FA2",
+            "UC1",
+            "FA3",
+            "MAE",
+            "MA1",
+            "MC1",
+            "FC1",
+            "EE1",
+            "FAE",
+            "MA2",
+            "FC2",
+            "FC3",
+            "MC2",
+            "MA3"
+          ],
+          "annotated_duration_ms": 6951532,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "N",
+            "C",
+            "Y",
+            "L"
+          ],
+          "annotated_duration_ms": 2000560,
+          "duration_from_samples_ms": 12720000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "T",
+            "P",
+            "<NA>",
+            "U",
+            "A",
+            "B",
+            "C",
+            "O"
+          ],
+          "annotated_duration_ms": 4950972,
+          "duration_from_samples_ms": 12720000
+        }
+      ]
+    }
+  ]
+}
