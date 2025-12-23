@@ -1,0 +1,139 @@
+{
+  "name": "tsay",
+  "sets": [
+    {
+      "name": "cha",
+      "columns": [
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 362234339,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "CHI",
+            "FEM",
+            "OCH",
+            "MAL"
+          ],
+          "annotated_duration_ms": 161477445,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "exp",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 10288871,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Investigator",
+            "Target_Child",
+            "Mother",
+            "Sister",
+            "Grandmother",
+            "Grandfather",
+            "Unidentified",
+            "Brother",
+            "Relative",
+            "Child",
+            "Father",
+            "Adult"
+          ],
+          "annotated_duration_ms": 362234339,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "xsyl",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 1661096,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "xsyc",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 691793,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "act",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 727097,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "INV",
+            "CHI",
+            "MOT",
+            "SIS",
+            "GRM",
+            "GRF",
+            "OTH",
+            "BRO",
+            "IN1",
+            "IN2",
+            "FAT"
+          ],
+          "annotated_duration_ms": 362234339,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "xcod",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 362224195,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "ort",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 362228021,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "com",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 4165252,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "words",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 362234339,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "xton",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 68383947,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "pho",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 71759467,
+          "duration_from_samples_ms": null
+        }
+      ]
+    }
+  ]
+}
