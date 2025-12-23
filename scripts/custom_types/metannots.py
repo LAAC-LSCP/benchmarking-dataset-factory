@@ -78,10 +78,10 @@ def get_metannots_dict(
 
 
 def get_sampled_duration(metannots_dict: Dict) -> Optional[int]:
-    if (
-        not metannots_dict["sampling_count"]
-        or not metannots_dict["sampling_unit_duration"]
-    ):
+    sampling_count = metannots_dict.get("sampling_count")
+    sampling_unit_duration = metannots_dict.get("sampling_unit_duration")
+
+    if not sampling_count or not sampling_unit_duration:
         return None
 
-    return metannots_dict["sampling_count"] * metannots_dict["sampling_unit_duration"]
+    return sampling_count * sampling_unit_duration
