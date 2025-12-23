@@ -1,0 +1,307 @@
+{
+  "name": "timor-leste2022",
+  "sets": [
+    {
+      "name": "eaf_periodic/CC",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "FEM",
+            "CHI",
+            "MAL",
+            "notes"
+          ],
+          "annotated_duration_ms": 2127301,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "UC1",
+            "FA1",
+            "CHI",
+            "FA4",
+            "FA2",
+            "FA3",
+            "UC2",
+            "MA1",
+            "Notes",
+            "UC3",
+            "MA2",
+            "MA3"
+          ],
+          "annotated_duration_ms": 2127301,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "baby is sleeping",
+            "not listen to",
+            "various female voices",
+            "maybe television ?",
+            "television",
+            "indistinctive noise",
+            "dog barking",
+            "nothing to annotate",
+            "CHI and/or UC1?",
+            "television only",
+            "background music",
+            "baby seems to sleep",
+            "noise far away",
+            "various child voices mixed",
+            "various female voices mixed",
+            "indistinct noice far away",
+            "music"
+          ],
+          "annotated_duration_ms": 1163670,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        }
+      ]
+    },
+    {
+      "name": "eaf_periodic/DJ",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "FEM",
+            "CHI",
+            "OCH",
+            "MAL",
+            "notes"
+          ],
+          "annotated_duration_ms": 4960728,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "FA1",
+            "CHI",
+            "UC1",
+            "MA1",
+            "Notes",
+            "FA2",
+            "UC2",
+            "MA2",
+            "FA3",
+            "UC3"
+          ],
+          "annotated_duration_ms": 4960728,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 3388519,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        }
+      ]
+    },
+    {
+      "name": "eaf_periodic/LL",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "notes",
+            "FEM",
+            "OCH",
+            "CHI",
+            "MAL"
+          ],
+          "annotated_duration_ms": 2041557,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "Notes",
+            "FA2",
+            "UC1",
+            "FA1",
+            "FA3",
+            "CHI",
+            "UC3",
+            "UC2",
+            "MA1"
+          ],
+          "annotated_duration_ms": 2041557,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "CHI is sleeping",
+            "<NA>",
+            "Scream :  speech inaudible",
+            "?",
+            "FA1 or FA2 ? ",
+            "Voix FA1 lointaine",
+            "CHI is sleeping ",
+            "CHI ?",
+            "MA1 ? too low",
+            "MA1? too low",
+            "CHI inaudible , whisper",
+            "CHI : inaudible whisper ?",
+            "Children noise in the background",
+            "baby ?",
+            "Baby",
+            "TV",
+            "Children noise far away  in the background "
+          ],
+          "annotated_duration_ms": 1341473,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        }
+      ]
+    }
+  ]
+}
