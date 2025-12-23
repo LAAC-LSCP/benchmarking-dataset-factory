@@ -57,8 +57,12 @@ filter expression '{filter_expr}'..."
     return df
 
 
-def get_metannots_df(print_errors: bool = False) -> pd.DataFrame:
-    datasets = get_datasets(DATASETS_FOLDER, print_info=print_errors)
+def get_metannots_df(
+    print_errors: bool = False, dataset_names: Optional[List[str]] = None
+) -> pd.DataFrame:
+    datasets = get_datasets(
+        DATASETS_FOLDER, print_info=print_errors, dataset_names=dataset_names
+    )
 
     metannots_list: List[Dict] = []
     for dataset in datasets["datasets"]:

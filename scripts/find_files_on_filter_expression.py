@@ -20,6 +20,12 @@ from helpers.constants import DATASETS_FOLDER
 
 @click.command()
 @click.option(
+    "--dataset",
+    "-d",
+    multiple=True,
+    help="datasets to graph. If not specified, will use all datasets",
+)
+@click.option(
     "--metannots-filter-expr",
     required=False,
     default=None,
@@ -42,13 +48,18 @@ ChildProject docs)",
     help="Output .csv path",
 )
 def find_files(
+    dataset: Tuple[str],
     metannots_filter_expr: str | None,
     children_filter_expr: str | None,
     output_csv: Path,
 ) -> pd.DataFrame:
     """Save file paths matching filter expressions on metannots \
 and children metadata (specified separately)"""
-    metannots_df: pd.DataFrame = get_metannots_df(print_errors=False)
+    datasets: List[str] = [d for d in dataset]
+
+    metannots_df: pd.DataFrame = get_metannots_df(
+        print_errors=False, dataset_names=(datasets if len(datasets) else None)
+    )
     children_df = get_children_df()
 
     if metannots_filter_expr is not None:
@@ -75,11 +86,11 @@ children dataframe: {e}"
 
             children_filter_expr = ""
 
-    file_paths = get_file_paths(children_df, metannots_df)
+    file_infos = get_file_infos(children_df, metannots_df)
 
-    save_file_paths(file_paths, output_csv)
+    save_file_paths(file_infos, output_csv)
 
-    return file_paths
+    return file_infos
 
 
 def save_file_paths(file_paths: pd.DataFrame, output_path: Path) -> None:
@@ -104,26 +115,26 @@ def get_children_df() -> pd.DataFrame:
     return pd.concat(children_df_list)
 
 
-def get_file_paths(
+def get_file_infos(
     children_df: pd.DataFrame, metannots_df: pd.DataFrame
 ) -> pd.DataFrame:
-    file_paths: List[pd.DataFrame] = []
+    file_infos: List[pd.DataFrame] = []
 
     for _, metannot in metannots_df.iterrows():
         gold_std_set: str = metannot["set"]
         dataset: str = metannot["dataset"]
 
-        file_paths.append(
+        file_infos.append(
             get_file_paths_for_set_dataset(gold_std_set, dataset, children_df)
         )
 
-    return pd.concat(file_paths, axis=0)
+    return pd.concat(file_infos, axis=0)
 
 
 def get_file_paths_for_set_dataset(
     set_name: str, dataset: str, children_df: pd.DataFrame
 ) -> pd.DataFrame:
-    file_paths: List[Dict] = []
+    file_infos: List[Dict] = []
 
     project = ChildProject(DATASETS_FOLDER / dataset)
     am: AnnotationManager = AnnotationManager(project)
@@ -151,7 +162,7 @@ def get_file_paths_for_set_dataset(
     for _, row in annotations_w_child_id.iterrows():
         start, end, duration = get_annotation_duration(row["annotation_filename"])
 
-        file_paths.append(
+        file_infos.append(
             {
                 "annotation path": get_path_of_annotation_file(
                     dataset, set_name, row["annotation_filename"]
@@ -163,10 +174,12 @@ def get_file_paths_for_set_dataset(
                 "annotation end (ms)": end,
                 "annotation duration (ms)": duration,
                 "recording duration (ms)": row["duration"],
+                "format": row["format"],
+                "child_id": row["child_id"],
             }
         )
 
-    return pd.DataFrame(file_paths)
+    return pd.DataFrame(file_infos)
 
 
 def get_annotation_duration(annotation_filename: str) -> Tuple[int, int, int]:
