@@ -1,0 +1,109 @@
+{
+  "name": "providence",
+  "sets": [
+    {
+      "name": "cha",
+      "columns": [
+        {
+          "column": "pho",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 536600538,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "com",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 25342861,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "words",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 1201597714,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 1201597714,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "sit",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 63786468,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_id",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 1201597714,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "gra",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 1009284204,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "FEM",
+            "CHI",
+            "MAL",
+            "OCH"
+          ],
+          "annotated_duration_ms": 1189955868,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Investigator",
+            "Mother",
+            "Environment",
+            "Target_Child",
+            "Media",
+            "Adult",
+            "Father",
+            "Grandmother",
+            "Relative",
+            "Unidentified",
+            "Grandfather",
+            "Visitor",
+            "Brother",
+            "Friend",
+            "Sister"
+          ],
+          "annotated_duration_ms": 1201597714,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "mod",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 532627629,
+          "duration_from_samples_ms": null
+        },
+        {
+          "column": "mor",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 1009284204,
+          "duration_from_samples_ms": null
+        }
+      ]
+    }
+  ]
+}
