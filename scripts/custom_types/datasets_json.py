@@ -47,10 +47,8 @@ def get_datasets(
         if "method" in sets_metadata:
             sets_metadata = sets_metadata[sets_metadata["method"] == "manual"]
         elif print_info:
-            print(
-                f"INFO: no 'method' column in sets metadata for \
-dataset {ds.name}. Assuming all sets are manual"
-            )
+            print(f"INFO: no 'method' column in sets metadata for \
+dataset {ds.name}. Assuming all sets are manual")
 
         manual_sets: List[str] = [s for s in sets_metadata.index]
 

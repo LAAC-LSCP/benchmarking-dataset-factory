@@ -38,19 +38,15 @@ def filter_metannots(filter_expr: str | None, no_info_output: bool) -> pd.DataFr
             df = df.query(filter_expr)
         except Exception as e:
             if not no_info_output:
-                print(
-                    f"ERROR: problem using the filter expression on \
-metannots dataframe: {e}"
-                )
+                print(f"ERROR: problem using the filter expression on \
+metannots dataframe: {e}")
                 print("INFO: Using no filter at all...")
 
             filter_expr = ""
 
     if not no_info_output:
-        print(
-            f"INFO: Printing datasets and sets matching \
-filter expression '{filter_expr}'..."
-        )
+        print(f"INFO: Printing datasets and sets matching \
+filter expression '{filter_expr}'...")
     for _, row in df.iterrows():
         print(f"Dataset: '{row["dataset"]}'       Set: '{row["set"]}'")
 

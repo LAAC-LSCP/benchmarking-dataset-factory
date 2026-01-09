@@ -50,10 +50,10 @@ import pandas as pd
 @click.option(
     "--same-child",
     is_flag=True,
-    help="Stratify by child",
+    help="Assure same child doesn't cross train/test/validation boundary",
 )
 @click.option(
-    "--same-set",
+    "--stratify-set",
     is_flag=True,
     help="Stratify by set",
 )
@@ -71,7 +71,7 @@ def split_data(
     validate: float,
     output_csv: Path,
     same_child: bool,
-    same_set: bool,
+    stratify_set: bool,
     seed: int,
 ) -> None:
     """
@@ -82,10 +82,8 @@ def split_data(
 
     file_infos: pd.DataFrame = pd.read_csv(input)
 
-    groups = ["dataset", "set", "child_id"]
-    if not same_child:
-        groups.remove("child_id")
-    if not same_set:
+    groups = ["dataset", "set"]
+    if not stratify_set:
         groups.remove("set")
     grouped = file_infos.groupby(groups)
 
@@ -97,7 +95,26 @@ def split_data(
         file_infos_with_splits.append(va)
 
     file_infos_with_split = pd.concat(file_infos_with_splits)
+    file_infos_with_split = file_infos_with_split.drop("cum_duration", axis=1)
+
     tot_duration = file_infos["annotation duration (ms)"].sum()
+
+    if same_child:
+        file_infos_with_split = reassign_split_by_child(file_infos_with_split, train, test, validate, seed)
+
+    train_set = set(
+        tuple(x) for x in file_infos_with_split[file_infos_with_split["split"] == "train"][["child_id", "dataset"]].to_records(index=False)
+    )
+    test_set = set(
+        tuple(x) for x in file_infos_with_split[file_infos_with_split["split"] == "test"][["child_id", "dataset"]].to_records(index=False)
+    )
+    validate_set = set(
+        tuple(x) for x in file_infos_with_split[file_infos_with_split["split"] == "validate"][["child_id", "dataset"]].to_records(index=False)
+    )
+
+    assert not train_set & test_set
+    assert not train_set & validate_set
+    assert not test_set & validate_set
 
     print_info(file_infos_with_split, tot_duration, train, test, validate)
     save_file(file_infos_with_split, output_csv)
@@ -117,18 +134,14 @@ def print_info(
     validate: float,
 ) -> None:
     print("Found split!")
-    print(
-        f"Desired train, test, validation split (ms): \
+    print(f"Desired train, test, validation split (ms): \
 {int(get_dur(tot_duration, train))}, \
 {int(get_dur(tot_duration, test))}, \
-{int(get_dur(tot_duration, validate))}"
-    )
-    print(
-        f"Found train, test, validation split (ms): \
+{int(get_dur(tot_duration, validate))}")
+    print(f"Found train, test, validation split (ms): \
 {int(get_dur_split(file_infos_with_split, "train"))}, \
 {int(get_dur_split(file_infos_with_split, "test"))}, \
-{int(get_dur_split(file_infos_with_split, "validate"))}"
-    )
+{int(get_dur_split(file_infos_with_split, "validate"))}")
 
 
 def save_file(df: pd.DataFrame, output_csv: Path) -> None:
@@ -165,6 +178,32 @@ def train_test_split(
     validate_df["split"] = "validate"
 
     return train_df, test_df, validate_df
+
+
+def reassign_split_by_child(file_infos_with_splits: pd.DataFrame, train: float, test: float, validate: float, seed: int):
+    group_cols = ["child_id", "dataset"]
+    groups = list(file_infos_with_splits.groupby(group_cols))
+    rng = pd.Series(range(len(groups))).sample(frac=1, random_state=seed).tolist()
+    groups = [groups[i] for i in rng]
+
+    total_duration = file_infos_with_splits["annotation duration (ms)"].sum()
+    targets = {
+        "train": train * total_duration,
+        "test": test * total_duration,
+        "validate": validate * total_duration,
+    }
+    current = {"train": 0, "test": 0, "validate": 0}
+    assignments = []
+
+    for _, group in groups:
+        gaps = {k: targets[k] - current[k] for k in targets}
+        split = max(gaps, key=gaps.get)
+        group = group.copy()
+        group["split"] = split
+        current[split] += group["annotation duration (ms)"].sum()
+        assignments.append(group)
+
+    return pd.concat(assignments)
 
 
 def validate_inputs(train: float, test: float, validate: float) -> None:

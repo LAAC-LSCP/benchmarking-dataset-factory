@@ -8,7 +8,7 @@ For more information on filter expressions, visit the Pandas documentation
 """
 
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Annotated, Dict, List, Tuple
 
 import click
 import pandas as pd
@@ -23,7 +23,7 @@ from helpers.constants import DATASETS_FOLDER
     "--dataset",
     "-d",
     multiple=True,
-    help="datasets to graph. If not specified, will use all datasets",
+    help="datasets. If not specified, will use all datasets",
 )
 @click.option(
     "--metannots-filter-expr",
@@ -38,7 +38,7 @@ ChildProject docs)",
     required=False,
     default=None,
     help="Filter expression on children metadata \
-like 'child_sex == 'f'' (see Pandas + \
+like 'child_sex == 'F'' (see Pandas + \
 ChildProject docs)",
 )
 @click.option(
@@ -47,29 +47,44 @@ ChildProject docs)",
     type=click.Path(exists=False),
     help="Output .csv path",
 )
-def find_files(
+def find_files_and_save(
     dataset: Tuple[str],
     metannots_filter_expr: str | None,
     children_filter_expr: str | None,
     output_csv: Path,
-) -> pd.DataFrame:
+) -> None:
     """Save file paths matching filter expressions on metannots \
 and children metadata (specified separately)"""
+    file_infos = find_files(dataset, metannots_filter_expr, children_filter_expr)[0]
+
+    save_file_paths(file_infos, output_csv)
+
+    return
+
+
+def find_files(
+    dataset: Tuple[str],
+    metannots_filter_expr: str | None,
+    children_filter_expr: str | None,
+) -> Tuple[Annotated[pd.DataFrame, "file csv"], Annotated[pd.DataFrame, "children"], Annotated[pd.DataFrame, "recordings"], Annotated[pd.DataFrame, "annotations"]]:
     datasets: List[str] = [d for d in dataset]
+
+    if len(datasets) == 0:
+        datasets = [d.name for d in DATASETS_FOLDER.iterdir() if d.is_dir()]
 
     metannots_df: pd.DataFrame = get_metannots_df(
         print_errors=False, dataset_names=(datasets if len(datasets) else None)
     )
-    children_df = get_children_df()
+    children_df = get_children_df(datasets)
+    recordings_df = get_recordings_df(datasets)
+    annotations_df = get_annotations_df(datasets)
 
     if metannots_filter_expr is not None:
         try:
             metannots_df = metannots_df.query(metannots_filter_expr)
         except Exception as e:
-            print(
-                f"ERROR: problem using the filter expression on \
-metannots dataframe: {e}"
-            )
+            print(f"ERROR: problem using the filter expression on \
+metannots dataframe: {e}")
             print("INFO: Using no filter at all...")
 
             metannots_filter_expr = ""
@@ -78,26 +93,80 @@ metannots dataframe: {e}"
         try:
             children_df = children_df.query(children_filter_expr)
         except Exception as e:
-            print(
-                f"ERROR: problem using the filter expression on \
-children dataframe: {e}"
-            )
+            print(f"ERROR: problem using the filter expression on \
+children dataframe: {e}")
             print("INFO: Using no filter at all...")
 
             children_filter_expr = ""
 
     file_infos = get_file_infos(children_df, metannots_df)
+    filtered_children = _get_children_on_files(file_infos, children_df)
+    filtered_recordings = _get_recordings_on_files(file_infos, recordings_df)
+    filtered_annotations =_get_annotations_on_files(file_infos, annotations_df)
 
-    save_file_paths(file_infos, output_csv)
+    return file_infos, filtered_children, filtered_recordings, filtered_annotations
 
-    return file_infos
+
+def _get_children_on_files(file_infos: pd.DataFrame, original_children_df: pd.DataFrame) -> pd.DataFrame:
+    children = original_children_df.copy()
+    children = children.merge(
+        file_infos[["child_id", "dataset"]].drop_duplicates(),
+        on=["child_id", "dataset"],
+        how="inner"
+    )
+
+    children["child_id"] = children["dataset"].astype(str) + "_" + children["child_id"].astype(str)
+
+    children = children.loc[:, ~children.isna().all()]
+    children = children.drop("dataset", axis=1)
+
+    return children
+
+
+def _get_recordings_on_files(file_infos: pd.DataFrame, original_recordings_df: pd.DataFrame) -> pd.DataFrame:
+    recordings = original_recordings_df.copy()
+    recordings = recordings.merge(
+        file_infos[["recording_filename", "dataset"]].drop_duplicates(),
+        on=["recording_filename", "dataset"],
+        how="inner"
+    )
+
+    recordings["child_id"] = recordings["dataset"].astype(str) + "_" + recordings["child_id"].astype(str)
+
+    recordings = recordings.loc[:, ~recordings.isna().all()]
+
+    filename_cols = [col for col in recordings.columns if col.endswith("_filename")]
+    for col in filename_cols:
+        recordings[col] = recordings["dataset"].astype(str) + "/" + recordings[col].astype(str)
+
+    recordings = recordings.drop("dataset", axis=1)
+
+    return recordings
+
+
+def _get_annotations_on_files(file_infos: pd.DataFrame, original_annotations_df: pd.DataFrame) -> pd.DataFrame:
+    annotations = original_annotations_df.copy()
+    annotations = annotations.merge(
+        file_infos[["annotation_filename", "dataset"]].drop_duplicates(),
+        on=["annotation_filename", "dataset"],
+        how="inner"
+    )
+
+    annotations["set"] = annotations["dataset"] + "/" + annotations["set"].astype(str)
+    annotations["recording_filename"] = annotations["dataset"] + "/" + annotations["recording_filename"].astype(str)
+
+    annotations = annotations.loc[:, ~annotations.isna().all()]
+
+    annotations = annotations.drop("dataset", axis=1)
+
+    return annotations
 
 
 def save_file_paths(file_paths: pd.DataFrame, output_path: Path) -> None:
     file_paths.to_csv(output_path, index=False)
 
 
-def get_children_df() -> pd.DataFrame:
+def get_children_df(datasets: List[str]) -> pd.DataFrame:
     children_df_list: List[pd.DataFrame] = []
 
     for dataset in [d for d in DATASETS_FOLDER.iterdir() if d.is_dir()]:
@@ -112,7 +181,46 @@ def get_children_df() -> pd.DataFrame:
 
         children_df_list.append(children_df)
 
-    return pd.concat(children_df_list)
+    children_df = pd.concat(children_df_list)
+
+    return children_df[children_df["dataset"].isin(datasets)]
+
+
+def get_recordings_df(datasets: List[str]) -> pd.DataFrame:
+    recordings_df_list: List[pd.DataFrame] = []
+
+    for dataset in [d for d in DATASETS_FOLDER.iterdir() if d.is_dir()]:
+        project = ChildProject(dataset)
+        project.read()
+
+        recordings_df = project.recordings
+
+        if "discard" in recordings_df.columns:
+            recordings_df = recordings_df[recordings_df["discard"] != "1"]
+        recordings_df["dataset"] = dataset.name
+
+        recordings_df_list.append(recordings_df)
+
+    recordings_df = pd.concat(recordings_df_list)
+
+    return recordings_df[recordings_df["dataset"].isin(datasets)]
+
+
+def get_annotations_df(datasets: List[str]) -> pd.DataFrame:
+    # NOTE: I'm deliberately avoiding using annotation manager (it's slow)
+    annotations_df_list: List[pd.DataFrame] = []
+
+    for dataset in [d for d in DATASETS_FOLDER.iterdir() if d.is_dir()]:
+        annotations_df = pd.read_csv(dataset / "metadata" / "annotations.csv")
+
+        annotations_df["dataset"] = dataset.name
+
+        annotations_df_list.append(annotations_df)
+
+    annotations_df = pd.concat(annotations_df_list)
+
+    return annotations_df[annotations_df["dataset"].isin(datasets)]
+
 
 
 def get_file_infos(
@@ -167,7 +275,8 @@ def get_file_paths_for_set_dataset(
                 "annotation path": get_path_of_annotation_file(
                     dataset, set_name, row["annotation_filename"]
                 ),
-                "recording path": project.get_recording_path(row["recording_filename"]),
+                "recording path": (project.path / "recordings" / "converted" / "standard" / row["recording_filename"]).with_suffix(".wav"),    # checked that this is always there :)
+                "recording path raw": project.get_recording_path(row["recording_filename"]),
                 "dataset": dataset,
                 "set": row["set"],
                 "annotation start (ms)": start,
@@ -176,6 +285,8 @@ def get_file_paths_for_set_dataset(
                 "recording duration (ms)": row["duration"],
                 "format": row["format"],
                 "child_id": row["child_id"],
+                "annotation_filename": row["annotation_filename"],
+                "recording_filename": row["recording_filename"],
             }
         )
 
@@ -196,4 +307,4 @@ def get_path_of_annotation_file(dataset: str, set_name: str, filename: str) -> P
 
 
 if __name__ == "__main__":
-    find_files()
+    find_files_and_save()
