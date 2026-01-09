@@ -191,7 +191,9 @@ def get_column_info(
                 "values": values,
                 "annotated_duration_ms": get_annotated_ms(segments, col),
                 "duration_from_samples_ms": (
-                    get_sampled_duration(metannots_dict) if metannots_dict else -1
+                    get_sampled_duration(metannots_dict, gold_std_annotations)
+                    if metannots_dict
+                    else -1
                 ),
             }
         )

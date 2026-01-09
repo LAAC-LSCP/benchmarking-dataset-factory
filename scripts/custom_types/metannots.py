@@ -2,6 +2,7 @@ from datetime import date
 from pathlib import Path
 from typing import Dict, Literal, Optional
 
+import pandas as pd
 import yaml
 from pydantic import BaseModel
 
@@ -77,11 +78,25 @@ def get_metannots_dict(
     return data
 
 
-def get_sampled_duration(metannots_dict: Dict) -> Optional[int]:
+def get_sampled_duration(
+    metannots_dict: Dict, annotations: pd.DataFrame
+) -> Optional[int]:
     sampling_count = metannots_dict.get("sampling_count")
     sampling_unit_duration = metannots_dict.get("sampling_unit_duration")
 
     if not sampling_count or not sampling_unit_duration:
-        return None
+        return calculate_sampled_duration(annotations)
 
     return sampling_count * sampling_unit_duration
+
+
+def calculate_sampled_duration(annotations: pd.DataFrame) -> int:
+    return sum(annotations["annotation_filename"].map(extract_duration_from_filename))
+
+
+def extract_duration_from_filename(filename: str) -> int:
+    parts = filename.split("_")
+    start = int(parts[-2])
+    end = int(parts[-1].split(".")[0])
+
+    return end - start
