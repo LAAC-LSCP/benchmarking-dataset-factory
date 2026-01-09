@@ -15,28 +15,7 @@
             "MOT says bye on the phone ."
           ],
           "annotated_duration_ms": 10217,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "transcription",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "gra",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 945638554,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "words",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
         },
         {
           "column": "err",
@@ -47,7 +26,14 @@
             "missing auxiliary question form ."
           ],
           "annotated_duration_ms": 3342,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
+        },
+        {
+          "column": "mor",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 945638554,
+          "duration_from_samples_ms": 1470645426
         },
         {
           "column": "speaker_type",
@@ -59,14 +45,36 @@
             "MAL"
           ],
           "annotated_duration_ms": 931950138,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
         },
         {
-          "column": "mor",
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "INV",
+            "MOT",
+            "CHI",
+            "FAT",
+            "DAD",
+            "NAN",
+            "GRA",
+            "VI1",
+            "VI2",
+            "MAN",
+            "VIS",
+            "ADU",
+            "OBS",
+            "AUN"
+          ],
+          "annotated_duration_ms": 987629137,
+          "duration_from_samples_ms": 1470645426
+        },
+        {
+          "column": "transcription",
           "categorical": false,
           "values": null,
-          "annotated_duration_ms": 945638554,
-          "duration_from_samples_ms": null
+          "annotated_duration_ms": 987629137,
+          "duration_from_samples_ms": 1470645426
         },
         {
           "column": "act",
@@ -86,7 +94,7 @@
             "CHI hammering"
           ],
           "annotated_duration_ms": 26005,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
         },
         {
           "column": "add",
@@ -112,7 +120,25 @@
             "Aunt"
           ],
           "annotated_duration_ms": 934837,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "A",
+            "<NA>",
+            "A,NA"
+          ],
+          "annotated_duration_ms": 825779,
+          "duration_from_samples_ms": 1470645426
+        },
+        {
+          "column": "words",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 987629137,
+          "duration_from_samples_ms": 1470645426
         },
         {
           "column": "speaker_role",
@@ -129,47 +155,21 @@
             "Relative"
           ],
           "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "speaker_id",
-          "categorical": true,
-          "values": [
-            "INV",
-            "MOT",
-            "CHI",
-            "FAT",
-            "DAD",
-            "NAN",
-            "GRA",
-            "VI1",
-            "VI2",
-            "MAN",
-            "VIS",
-            "ADU",
-            "OBS",
-            "AUN"
-          ],
-          "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
         },
         {
           "column": "com",
           "categorical": false,
           "values": null,
           "annotated_duration_ms": 14997342,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 1470645426
         },
         {
-          "column": "addressee",
-          "categorical": true,
-          "values": [
-            "A",
-            "<NA>",
-            "A,NA"
-          ],
-          "annotated_duration_ms": 825779,
-          "duration_from_samples_ms": null
+          "column": "gra",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 945638554,
+          "duration_from_samples_ms": 1470645426
         }
       ]
     }

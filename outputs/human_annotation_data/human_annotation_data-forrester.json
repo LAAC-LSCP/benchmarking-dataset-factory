@@ -5,11 +5,25 @@
       "name": "cha",
       "columns": [
         {
-          "column": "words",
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "FAT",
+            "CHI",
+            "EV",
+            "MOT",
+            "L",
+            "J"
+          ],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678
+        },
+        {
+          "column": "gpx",
           "categorical": false,
           "values": null,
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": null
+          "annotated_duration_ms": 2125668,
+          "duration_from_samples_ms": 42471678
         },
         {
           "column": "speaker_type",
@@ -22,7 +36,35 @@
             "<NA>"
           ],
           "annotated_duration_ms": 38429694,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 42471678
+        },
+        {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Father",
+            "Target_Child",
+            "Sister",
+            "Mother",
+            "Adult",
+            "Child"
+          ],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678
+        },
+        {
+          "column": "words",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678
         },
         {
           "column": "com",
@@ -44,49 +86,7 @@
             "singing #1_8"
           ],
           "annotated_duration_ms": 43221,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "transcription",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "gpx",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 2125668,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "speaker_role",
-          "categorical": true,
-          "values": [
-            "Father",
-            "Target_Child",
-            "Sister",
-            "Mother",
-            "Adult",
-            "Child"
-          ],
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "speaker_id",
-          "categorical": true,
-          "values": [
-            "FAT",
-            "CHI",
-            "EV",
-            "MOT",
-            "L",
-            "J"
-          ],
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 42471678
         }
       ]
     }

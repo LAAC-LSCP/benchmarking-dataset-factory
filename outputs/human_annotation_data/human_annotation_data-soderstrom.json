@@ -5,6 +5,56 @@
       "name": "cha",
       "columns": [
         {
+          "column": "transcription",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 59096973,
+          "duration_from_samples_ms": 93588984
+        },
+        {
+          "column": "com",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 4089152,
+          "duration_from_samples_ms": 93588984
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "FEM",
+            "MAL",
+            "OCH",
+            "CHI",
+            "<NA>"
+          ],
+          "annotated_duration_ms": 58784250,
+          "duration_from_samples_ms": 93588984
+        },
+        {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Mother",
+            "Father",
+            "Sister",
+            "Brother",
+            "Target_Child",
+            "Unidentified",
+            "Grandmother",
+            "Media"
+          ],
+          "annotated_duration_ms": 59096973,
+          "duration_from_samples_ms": 93588984
+        },
+        {
+          "column": "mor",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 51798589,
+          "duration_from_samples_ms": 93588984
+        },
+        {
           "column": "sit",
           "categorical": true,
           "values": [
@@ -12,7 +62,7 @@
             "clatter in background"
           ],
           "annotated_duration_ms": 755,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 93588984
         },
         {
           "column": "act",
@@ -40,72 +90,7 @@
             "more music"
           ],
           "annotated_duration_ms": 78786,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "FEM",
-            "MAL",
-            "OCH",
-            "CHI",
-            "<NA>"
-          ],
-          "annotated_duration_ms": 58784250,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "addressee",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "A",
-            "T",
-            "C,C",
-            "C",
-            "A,C",
-            "U"
-          ],
-          "annotated_duration_ms": 4735390,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "speaker_role",
-          "categorical": true,
-          "values": [
-            "Mother",
-            "Father",
-            "Sister",
-            "Brother",
-            "Target_Child",
-            "Unidentified",
-            "Grandmother",
-            "Media"
-          ],
-          "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "words",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "com",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 4089152,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "mor",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 51798589,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 93588984
         },
         {
           "column": "speaker_id",
@@ -121,28 +106,43 @@
             "TOY"
           ],
           "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 93588984
         },
         {
-          "column": "gra",
-          "categorical": false,
-          "values": null,
-          "annotated_duration_ms": 51798589,
-          "duration_from_samples_ms": null
-        },
-        {
-          "column": "transcription",
+          "column": "words",
           "categorical": false,
           "values": null,
           "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 93588984
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "A",
+            "T",
+            "C,C",
+            "C",
+            "A,C",
+            "U"
+          ],
+          "annotated_duration_ms": 4735390,
+          "duration_from_samples_ms": 93588984
         },
         {
           "column": "add",
           "categorical": false,
           "values": null,
           "annotated_duration_ms": 5562672,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 93588984
+        },
+        {
+          "column": "gra",
+          "categorical": false,
+          "values": null,
+          "annotated_duration_ms": 51798589,
+          "duration_from_samples_ms": 93588984
         }
       ]
     }

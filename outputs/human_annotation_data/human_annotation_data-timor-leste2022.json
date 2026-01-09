@@ -5,24 +5,6 @@
       "name": "eaf_periodic/CC",
       "columns": [
         {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2700000
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2700000
-        },
-        {
           "column": "speaker_type",
           "categorical": true,
           "values": [
@@ -33,6 +15,24 @@
             "notes"
           ],
           "annotated_duration_ms": 2127301,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
           "duration_from_samples_ms": 2700000
         },
         {
@@ -53,6 +53,24 @@
             "MA3"
           ],
           "annotated_duration_ms": 2127301,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2700000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
           "duration_from_samples_ms": 2700000
         },
         {
@@ -89,48 +107,12 @@
           ],
           "annotated_duration_ms": 1163670,
           "duration_from_samples_ms": 2700000
-        },
-        {
-          "column": "addressee",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2700000
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2700000
         }
       ]
     },
     {
       "name": "eaf_periodic/DJ",
       "columns": [
-        {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 4500000
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 4500000
-        },
         {
           "column": "speaker_type",
           "categorical": true,
@@ -142,6 +124,24 @@
             "notes"
           ],
           "annotated_duration_ms": 4960728,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
           "duration_from_samples_ms": 4500000
         },
         {
@@ -163,6 +163,24 @@
           "duration_from_samples_ms": 4500000
         },
         {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 4500000
+        },
+        {
           "column": "lex_type",
           "categorical": true,
           "values": [
@@ -177,48 +195,12 @@
           "values": null,
           "annotated_duration_ms": 3388519,
           "duration_from_samples_ms": 4500000
-        },
-        {
-          "column": "addressee",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 4500000
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 4500000
         }
       ]
     },
     {
       "name": "eaf_periodic/LL",
       "columns": [
-        {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2460000
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2460000
-        },
         {
           "column": "speaker_type",
           "categorical": true,
@@ -230,6 +212,24 @@
             "MAL"
           ],
           "annotated_duration_ms": 2041557,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
           "duration_from_samples_ms": 2460000
         },
         {
@@ -247,6 +247,24 @@
             "MA1"
           ],
           "annotated_duration_ms": 2041557,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2460000
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
           "duration_from_samples_ms": 2460000
         },
         {
@@ -281,24 +299,6 @@
             "Children noise far away  in the background "
           ],
           "annotated_duration_ms": 1341473,
-          "duration_from_samples_ms": 2460000
-        },
-        {
-          "column": "addressee",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2460000
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
           "duration_from_samples_ms": 2460000
         }
       ]

@@ -17,14 +17,14 @@
             "FA2"
           ],
           "annotated_duration_ms": 4712366,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 3315793
         },
         {
           "column": "transcription",
           "categorical": false,
           "values": null,
           "annotated_duration_ms": 4709479,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 3315793
         },
         {
           "column": "speaker_type",
@@ -36,7 +36,7 @@
             "FEM"
           ],
           "annotated_duration_ms": 4712366,
-          "duration_from_samples_ms": null
+          "duration_from_samples_ms": 3315793
         }
       ]
     }
