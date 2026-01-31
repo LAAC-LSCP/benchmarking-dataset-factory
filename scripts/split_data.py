@@ -100,16 +100,27 @@ def split_data(
     tot_duration = file_infos["annotation duration (ms)"].sum()
 
     if same_child:
-        file_infos_with_split = reassign_split_by_child(file_infos_with_split, train, test, validate, seed)
+        file_infos_with_split = reassign_split_by_child(
+            file_infos_with_split, train, test, validate, seed
+        )
 
     train_set = set(
-        tuple(x) for x in file_infos_with_split[file_infos_with_split["split"] == "train"][["child_id", "dataset"]].to_records(index=False)
+        tuple(x)
+        for x in file_infos_with_split[file_infos_with_split["split"] == "train"][
+            ["child_id", "dataset"]
+        ].to_records(index=False)
     )
     test_set = set(
-        tuple(x) for x in file_infos_with_split[file_infos_with_split["split"] == "test"][["child_id", "dataset"]].to_records(index=False)
+        tuple(x)
+        for x in file_infos_with_split[file_infos_with_split["split"] == "test"][
+            ["child_id", "dataset"]
+        ].to_records(index=False)
     )
     validate_set = set(
-        tuple(x) for x in file_infos_with_split[file_infos_with_split["split"] == "validate"][["child_id", "dataset"]].to_records(index=False)
+        tuple(x)
+        for x in file_infos_with_split[file_infos_with_split["split"] == "validate"][
+            ["child_id", "dataset"]
+        ].to_records(index=False)
     )
 
     assert not train_set & test_set
@@ -180,7 +191,13 @@ def train_test_split(
     return train_df, test_df, validate_df
 
 
-def reassign_split_by_child(file_infos_with_splits: pd.DataFrame, train: float, test: float, validate: float, seed: int):
+def reassign_split_by_child(
+    file_infos_with_splits: pd.DataFrame,
+    train: float,
+    test: float,
+    validate: float,
+    seed: int,
+):
     group_cols = ["child_id", "dataset"]
     groups = list(file_infos_with_splits.groupby(group_cols))
     rng = pd.Series(range(len(groups))).sample(frac=1, random_state=seed).tolist()
@@ -197,7 +214,7 @@ def reassign_split_by_child(file_infos_with_splits: pd.DataFrame, train: float, 
 
     for _, group in groups:
         gaps = {k: targets[k] - current[k] for k in targets}
-        split = max(gaps, key=gaps.get)
+        split = max(gaps, key=gaps.get)  # type: ignore
         group = group.copy()
         group["split"] = split
         current[split] += group["annotation duration (ms)"].sum()

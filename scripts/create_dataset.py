@@ -1,24 +1,24 @@
+import logging
 import os
 from pathlib import Path
-import shutil
-import subprocess
-import tempfile
-from typing import Dict, List, Set, Tuple
+from typing import List, Tuple
+
 import click
 import pandas as pd
 from dotenv import load_dotenv
-import logging
 
-from find_files_on_filter_expression import find_files
-from helpers.constants import DATASETS_FOLDER
-from helpers.dataset_type import DatasetType
+from scripts.src.steps.split_recordings import SplitRecordings
 
-
+from .find_files_on_filter_expression import find_files
+from .src.custom_types import DatasetType
+from .src.dataset_pipeline import DatasetPipeline
+from .src.steps.add_annotations import AddAnnotations
+from .src.steps.add_boilerplate import AddBoilerplate
+from .src.steps.add_metadata import AddMetadata
+from .src.steps.add_recordings import AddRecordings
+from .src.steps.step import EnvConfig, Step, StepName
 
 load_dotenv()
-ORGANIZATION_REPO = os.getenv("ORGANIZATION_REPO")
-CONDA_ACTIVATE_FILE = os.getenv("CONDA_ACTIVATE_FILE")
-CONDA_CHILDPROJECT_ENV = os.getenv("CONDA_CHILDPROJECT_ENV")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -34,22 +34,35 @@ logger = logging.getLogger(__name__)
     help="Output path for this new dataset",
 )
 @click.option(
-    "--source",
-    "-d",
-    multiple=True,
-    help="datasets to source from. If not specified, will use all datasets",
-)
-@click.option(
-    "--rewrite",
+    "--overwrite",
     is_flag=True,
     default=False,
-    help="Whether to rewrite an existing output folder",
+    help="Whether to overwrite existing files",
+)
+@click.option(
+    "--split-recordings",
+    is_flag=True,
+    default=False,
+    help="Whether to split recordings and keep only sampled parts",
 )
 @click.option(
     "--type",
     type=click.Choice(["vtc", "addressee, transcription, vcm"], case_sensitive=False),
     required=True,
     help="Type of dataset to create",
+)
+@click.option(
+    "--source",
+    "-d",
+    multiple=True,
+    help="datasets to source from. If not specified, will use all datasets",
+)
+@click.option(
+    "--step",
+    "-s",
+    type=click.Choice([s.value for s in StepName], case_sensitive=False),
+    multiple=True,
+    help="steps to run. If not specified, run all steps in the pipeline",
 )
 @click.option(
     "--children-filter-expr",
@@ -60,207 +73,86 @@ like 'child_sex == 'F'' (see Pandas + \
 ChildProject docs)",
 )
 def create_dataset(
-    output_path: str, source: Tuple[str], rewrite: bool, type: str, children_filter_expr: str | None
+    output_path: str,
+    overwrite: bool,
+    split_recordings: bool,
+    type: str,
+    source: Tuple[str],
+    step: Tuple[str],
+    children_filter_expr: str | None,
 ) -> None:
-    logger.info(f"Starting dataset creation: output_path={output_path}, rewrite={rewrite}, type={type}, sources={source}")
+    output_dir, dataset_type, steps = validate(output_path, type, step)
+
+    activate_file = get_from_env("CONDA_ACTIVATE_FILE")
+    childproject_env = get_from_env("CONDA_CHILDPROJECT_ENV")
+
     try:
-        output_dir, rewrite, dataset_type = _validate(output_path, rewrite, type)
+        logger.info("Finding files, annotations, and metadata (may take a while)...")
+        file_infos, children_df, recordings_df, annotations_df = get_file_paths(
+            source, children_filter_expr, dataset_type
+        )
 
-        logger.info("Finding matching files and metadata (may take a while)...")
-        file_infos, children_df, recordings_df, annotations_df = _get_file_paths(source, children_filter_expr, dataset_type)
-        logger.info("Creating dataset boilerplate...")
-        _create_dataset(output_dir, rewrite)
-        logger.info("Adding metadata...")
-        _add_metadata(output_dir, children_df, recordings_df, annotations_df)
-        logger.info("Adding annotations (this may take some time)...")
-        _add_annotations(output_dir, file_infos, rewrite)
-        logger.info("Adding recordings (this may take some time)...")
-        _add_recordings(output_dir, file_infos, rewrite)
+        env = EnvConfig(
+            conda_activate_file=Path(activate_file),
+            conda_childproject_env=childproject_env,
+        )
 
-        logger.info(f"Dataset creation completed: {output_dir}")
+        pipeline_steps: List[Step] = [
+            AddBoilerplate(env),
+            AddMetadata(
+                env,
+                children=children_df,
+                recordings=recordings_df,
+                annotations=annotations_df,
+            ),
+            AddAnnotations(env, file_infos=file_infos),
+            AddRecordings(env, file_infos=file_infos),
+        ]
+
+        if split_recordings:
+            pipeline_steps += [
+                SplitRecordings(env),
+            ]
+
+        if len(steps) != 0:
+            pipeline_steps = [s for s in pipeline_steps if s.name.value in steps]
+
+        pipeline = DatasetPipeline(
+            output_path=output_dir,
+            steps=pipeline_steps,
+            overwrite=overwrite,
+        )
+
+        pipeline.run()
     except Exception as e:
         logger.error(f"Error during dataset creation: {e}")
         raise
 
 
-def _create_dataset(output_path: Path, rewrite: bool) -> None:
-    logger.info(f"Preparing output directory: {output_path}")
+def validate(
+    output_path: str,
+    dataset_type: str,
+    steps: Tuple[str],
+) -> Tuple[Path, DatasetType, Tuple[str]]:
+    output_dir = Path(output_path)
 
-    if output_path.exists() and rewrite:
-        logger.info(f"Output directory exists, removing: {output_path}")
+    dataset_type = dataset_type.lower()
 
-        _remove_dataset(output_path)
-
-    if not output_path.exists():
-        output_path.mkdir(parents=True, exist_ok=True)
-        logger.info(f"Output directory created: {output_path}")
-
-        _initialise_childproject(output_path)
-        _initialise_datalad(output_path)
-
-    return
+    return output_dir, DatasetType(dataset_type), steps
 
 
-def _remove_dataset(output_path: Path) -> None:
-    if not any(
-        f.is_file() and not any(x in f.parts for x in [".git", ".datalad", ".gitattributes"])
-        for f in output_path.rglob("*")
-    ):
-        shutil.rmtree(output_path)
+def get_from_env(key: str) -> str:
+    value = os.getenv(key)
 
-        return
+    if not value:
+        raise ValueError(f"env var with key '{key}' not set")
 
-    is_git_repo = (output_path / ".git").exists()
-    is_datalad_repo = (output_path / ".datalad").exists()
-
-    commands = [
-        f"source {CONDA_ACTIVATE_FILE}",
-        f"conda activate {CONDA_CHILDPROJECT_ENV}",
-        "git add ." if is_git_repo else None,
-        "git reset --hard HEAD" if is_git_repo else None,
-        "datalad drop --recursive . --reckless kill" if is_datalad_repo else None,
-        "datalad remove --recursive *" if is_datalad_repo else None,
-    ]
-    commands = [c for c in commands if c is not None]
-    shell_command = " && ".join(commands)
-
-    logger.info(f"Running shell command: {shell_command} (cwd={output_path})")
-    try:
-        subprocess.run(shell_command, shell=True, check=True, cwd=output_path)
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Subprocess failed: {e}")
-        logger.error(f"Subprocess stdout: {e.stdout}")
-        logger.error(f"Subprocess stderr: {e.stderr}")
-        raise
-    shutil.rmtree(output_path)
+    return value
 
 
-def _initialise_childproject(output_path: Path) -> None:
-    commands = [
-        f"source {CONDA_ACTIVATE_FILE}",
-        f"conda activate {CONDA_CHILDPROJECT_ENV}",
-        f"child-project init ."
-    ]
-    shell_command = " && ".join(commands)
-
-    logger.info(f"Running shell command: {shell_command} (cwd={output_path})")
-    try:
-        subprocess.run(shell_command, shell=True, check=True, cwd=output_path)
-        logger.info("childproject dataset initialized successfully.")
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Subprocess failed: {e}")
-        logger.error(f"Subprocess stdout: {e.stdout}")
-        logger.error(f"Subprocess stderr: {e.stderr}")
-        raise
-
-
-def _initialise_datalad(output_path: Path) -> None:
-    commands = [
-        f"source {CONDA_ACTIVATE_FILE}",
-        f"conda activate {CONDA_CHILDPROJECT_ENV}",
-        f"datalad create --force"
-    ]
-    shell_command = " && ".join(commands)
-
-    logger.info(f"Running shell command: {shell_command} (cwd={output_path})")
-    try:
-        subprocess.run(shell_command, shell=True, check=True, cwd=output_path)
-        logger.info("childproject dataset initialized successfully.")
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Subprocess failed: {e}")
-        logger.error(f"Subprocess stdout: {e.stdout}")
-        logger.error(f"Subprocess stderr: {e.stderr}")
-        raise
-
-
-def _add_metadata(output_dir: Path, children: pd.DataFrame, recordings: pd.DataFrame, annotations_df: pd.DataFrame) -> None:
-    logger.info("Adding children.csv...")
-    children["experiment"] = "benchmarking"
-    children.to_csv(output_dir / "metadata" / "children.csv", index=False)
-    logger.info("Adding recordings.csv...")
-    recordings["experiment"] = "benchmarking"
-    recordings.to_csv(output_dir / "metadata" / "recordings.csv", index=False)
-    logger.info("Adding annotations.csv...")
-    annotations_df.to_csv(output_dir / "metadata" / "annotations.csv", index=False)
-
-    return
-
-
-def _add_annotations(output_dir: Path, file_paths: pd.DataFrame, rewrite: bool) -> None:
-    file_pairs: Set[Tuple[Path, Path]] = set()
-    dataset_file_map: Dict[str, Set[Tuple[Path, Path]]] = {d: set() for d in file_paths["dataset"].unique()}
-    for _, row in file_paths.iterrows():
-        src = row["annotation path"]
-
-        dst = _get_dst_annotation(src, output_dir, row["dataset"])
-
-        file_pairs.add((src, dst))
-        dataset_file_map[row["dataset"]].add((src, dst))
-
-    if rewrite == False:
-        # skip things that are already added
-        file_pairs = {(src, dst) for (src, dst) in file_pairs if not dst.exists()}
-        dataset_file_map = {dataset: {(src, dst) for (src, dst) in files if not dst.exists()} for (dataset, files) in dataset_file_map.items()}
-
-    if len(file_pairs) != 0:
-        _fetch_files(dataset_file_map)
-        _copy_files(file_pairs, output_dir)
-
-    return
-
-
-def _fetch_files(dataset_file_map: Dict[str, Set[Tuple[Path, Path]]]) -> None:
-    for dataset, files in dataset_file_map.items():
-        if len(files) == 0:
-            continue
-
-        commands = [
-            f"source {CONDA_ACTIVATE_FILE}",
-            f"conda activate {CONDA_CHILDPROJECT_ENV}",
-            f"datalad get {' '.join(str(src) for (src, _) in files)} -J 10"
-            ]
-        shell_command = " && ".join(commands)
-        try:
-            logger.info(f"Fetching {len(files)} files in {dataset}...")
-            subprocess.run(shell_command, shell=True, check=True, cwd=DATASETS_FOLDER / dataset)
-            logger.info(f"Fetched {len(files)} files in {dataset}")
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to fetch file with datalad: {e}")
-            logger.error(f"Subprocess stdout: {e.stdout}")
-            logger.error(f"Subprocess stderr: {e.stderr}")
-            raise
-
-    return
-
-
-def _add_recordings(output_dir: Path, file_paths: pd.DataFrame, rewrite: bool) -> None:
-    file_pairs: Set[Tuple[Path, Path]] = set()
-    dataset_file_map: Dict[str, Set[Tuple[Path, Path]]] = {d: set() for d in file_paths["dataset"].unique()}
-    for _, row in file_paths.iterrows():
-        src_converted = row["recording path"]
-        src_raw = row["recording path raw"]
-
-        dst_converted = _get_dst_recording_converted_standard(src_converted, output_dir, row["dataset"])
-        dst_raw = _get_dst_recording_raw(src_raw, output_dir, row["dataset"])
-
-        file_pairs.add((src_converted, dst_converted))
-        file_pairs.add((src_raw, dst_raw))
-        dataset_file_map[row["dataset"]].add((src_converted, dst_converted))
-        dataset_file_map[row["dataset"]].add((src_raw, dst_raw))
-
-    if rewrite == False:
-        # skip things that are already added
-        file_pairs = {(src, dst) for (src, dst) in file_pairs if not dst.exists()}
-        dataset_file_map = {dataset: {(src, dst) for (src, dst) in files if not dst.exists()} for (dataset, files) in dataset_file_map.items()}
-
-    if len(file_pairs) != 0:
-        _fetch_files(dataset_file_map)
-        _copy_files(file_pairs, output_dir)
-
-    return
-
-
-def _get_file_paths(datasets: Tuple[str], children_filter_expr: str | None, dataset_type: DatasetType) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def get_file_paths(
+    datasets: Tuple[str], children_filter_expr: str | None, dataset_type: DatasetType
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     metannots_filter_expr: str
     if dataset_type == DatasetType.VTC:
         metannots_filter_expr = "has_speaker_type == 'Y'"
@@ -279,70 +171,6 @@ def _get_file_paths(datasets: Tuple[str], children_filter_expr: str | None, data
         children_filter_expr=children_filter_expr,
     )
 
-
-def _copy_files(file_pairs: Set[Tuple[Path, Path]], dataset: Path) -> None:
-    logger.info(f"Copying {len(file_pairs)} files with datalad specfile in dataset {dataset}")
-    # We use a specfile because
-    # (1) copying files one by one creates numerous commits (generated by DataLad)
-    # (2) copying recursively isn't the best strategy, as you can't filter
-    spec_lines = [
-        f"{os.path.relpath(src, start=dataset)}\0{os.path.relpath(dst, start=dataset)}"
-        for (src, dst) in file_pairs
-    ]
-
-    if len(spec_lines) == 0:
-        return
-
-    specfile_path: Path
-
-    with tempfile.NamedTemporaryFile("w", delete=False) as specfile:
-        specfile.write("\n".join(spec_lines))
-        specfile_path = specfile.name
-
-    commands = [
-        f"source {CONDA_ACTIVATE_FILE}",
-        f"conda activate {CONDA_CHILDPROJECT_ENV}",
-        f"datalad copy-file --specs-from {specfile_path} -d ."
-    ]
-    shell_command = " && ".join(commands)
-    try:
-        subprocess.run(shell_command, shell=True, check=True, cwd=dataset)
-        logger.info(f"Copied files using specfile in dataset {dataset}")
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to copy file with datalad: {e}")
-        logger.error(f"Subprocess stdout: {e.stdout}")
-        logger.error(f"Subprocess stderr: {e.stderr}")
-        raise
-    finally:
-        os.remove(specfile_path)
-
-
-def _validate(
-    output_path: str, rewrite: bool, dataset_type: str
-) -> Tuple[Path, bool, DatasetType]:
-    output_dir = Path(output_path)
-
-    dataset_type = dataset_type.lower()
-
-    return output_dir, rewrite, DatasetType(dataset_type)
-
-
-def _get_dst_annotation(source: Path, output_dir: Path, dataset: str) -> Path:
-    parts = source.parts
-    idx = parts.index("annotations")
-    return output_dir / "annotations" / dataset / Path(*parts[idx + 1:])
-
-
-def _get_dst_recording_converted_standard(source: Path, output_dir: Path, dataset: str) -> Path:
-    parts = source.parts
-    idx = parts.index("standard")
-    return output_dir / "recordings" / "converted" / "standard" / dataset / Path(*parts[idx+1:])
-
-
-def _get_dst_recording_raw(source: Path, output_dir: Path, dataset: str) -> Path:
-    parts = source.parts
-    idx = parts.index("raw")
-    return output_dir / "recordings" / "raw" / dataset / Path(*parts[idx+1:])
 
 if __name__ == "__main__":
     create_dataset()

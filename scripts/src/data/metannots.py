@@ -78,9 +78,7 @@ def get_metannots_dict(
     return data
 
 
-def get_sampled_duration(
-    metannots_dict: Dict, annotations: pd.DataFrame
-) -> Optional[int]:
+def get_sampled_duration(metannots_dict: Dict, annotations: pd.DataFrame) -> int:
     sampling_count = metannots_dict.get("sampling_count")
     sampling_unit_duration = metannots_dict.get("sampling_unit_duration")
 

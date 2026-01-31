@@ -10,7 +10,7 @@ I decided to use `uv`. Things will probably work with the `ChildProject` conda e
 But if you want to use `uv` instead, simply use `uv run`, e.g.,
 
 ```bash
-uv run scripts/get_human_annotation_metadata.py --dataset-name vanuatu
+uv run -m scripts.get_human_annotation_metadata --dataset-name vanuatu
 ```
 
 The use of `uv` is encouraged over `conda` as it allows locking of dependencies, and therefore correct reproducibility, at least as far as Python packages are concerned.
@@ -46,7 +46,7 @@ This script lets you find files matching certain conditions. See the Pandas docu
 Note that ChildProject does not parse dates or anything like that, so all columns, like `child_dob` for example, are interpreted as strings. Luckily this turns out to be okay for comparisons of the sort below.
 
 ```bash
-uv run scripts/find_files_on_filter_expression.py --metannots-filter-expr "has_addressee == 'Y'" --children-filter-expr "child_dob < '2006-06-06'"
+uv run -m scripts.find_files_on_filter_expression --metannots-filter-expr "has_addressee == 'Y'" --children-filter-expr "child_dob < '2006-06-06'"
 ```
 
 Note that if values are missing in the metadata–which is very often the case except on required columns–the filter expression will typically jump over them (these values are `<NA>`) and ignored.
@@ -74,7 +74,7 @@ This script lets you pass in a filter expression and prints out the dataset and 
 
 Example:
 ```bash
-uv run scripts/find_on_filter_expression.py --filter-expr "has_vcm_type == 'Y'" --no-info-output
+uv run -m scripts.find_on_filter_expression --filter-expr "has_vcm_type == 'Y'" --no-info-output
 ```
 
 Output (stdout):
@@ -104,13 +104,13 @@ Can be run simply with
 Prints out validation errors. Usage:
 
 ```bash
-uv run scripts/validate_metannots.py
+uv run -m scripts.validate_metannots
 ```
 
 Or more practically, with output redirection:
 
 ```bash
-uv run scripts/validate_metannots.py > validation_errors.txt
+uv run -m scripts.validate_metannots > validation_errors.txt
 ```
 
 ### get_human_annotation_metadata.py
@@ -135,7 +135,7 @@ Since models, for training, testing and validation, have to compare against anno
 
 Example:
 ```bash
-uv run scripts/get_human_annotation_metadata.py --dataset-name "vanuatu"
+uv run -m scripts.get_human_annotation_metadata --dataset-name "vanuatu"
 ```
 
 Output (to `outputs/human_annotation_data/human_annotation_data-vanuatu.json` file):
@@ -215,7 +215,7 @@ This is a generic graphing script that gives you a basic outline of how much dat
 
 The following is some example output for the following command:
 ```bash
-uv run scripts/graph_dataset_distribution.py -d vanuatu -d fausey-trio -x speaker_type -y segment --metric duration_total
+uv run -m scripts.graph_dataset_distribution -d vanuatu -d fausey-trio -x speaker_type -y segment --metric duration_total
 ```
 
 ![Example age distribution](static/images/segment-duration-over-speaker-type.png)

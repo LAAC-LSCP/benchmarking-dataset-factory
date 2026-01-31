@@ -27,14 +27,13 @@ use_parentheses = true
 ensure_newline_before_comments = true
 
 
+[tool.mypy]
+exclude = '^datasets/'
+
+
 [[tool.mypy.overrides]]
 module = [
     'ChildProject.projects',
     'ChildProject.annotations',
-    'custom_types.metannots',
-    'custom_types.datasets_json',
-    'helpers.gold_standard_data',
-    'find_on_filter_expression',
-    'helpers.constants',
 ]
 ignore_missing_imports = true

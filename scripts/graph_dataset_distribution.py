@@ -12,7 +12,9 @@ import numpy as np
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
-from helpers.constants import DATASETS_FOLDER
+
+from .src.utils.constants import DATASETS, DATASETS_FOLDER
+from .src.utils.logger import get_logger
 
 
 class XValue(StrEnum):
@@ -37,6 +39,9 @@ class MetricValue(StrEnum):
 
 CHILD_PROPS: List[XValue] = [XValue.CHILD_ID, XValue.CHILD_AGE, XValue.CHILD_SEX]
 SEGMENT_PROPS: List[XValue] = [XValue.SPEAKER_TYPE, XValue.SPEAKER_ID]
+
+
+logger = get_logger(__name__)
 
 
 @click.command()
@@ -104,7 +109,7 @@ def graph(
     datasets: Set[str]
 
     if len(dataset) == 0:
-        datasets = {d.name for d in DATASETS_FOLDER.iterdir() if d.is_dir()}
+        datasets = DATASETS
     else:
         datasets = {d for d in dataset}
 
@@ -134,9 +139,7 @@ def graph(
         counts.append((count_data, d))
 
     if aggregate:
-        datas = [
-            (aggregate_data(datas, counts, metric, x_axis, y_axis), "all datasets")
-        ]
+        datas = [(aggregate_data(datas, counts, metric, x_axis), "all datasets")]
 
     datas = sorted(datas, key=lambda x: x[1])
 
@@ -303,7 +306,6 @@ def aggregate_data(
     counts: List[Tuple[pd.Series, str]],
     metric: MetricValue,
     x_axis: XValue,
-    y_axis: YValue,
 ) -> pd.Series:
     df = get_aggregate_df(datas, counts, x_axis, metric)
 
@@ -388,7 +390,7 @@ def save_data(
         df.index.name = x_axis
 
         df.to_csv(output_path)
-        print(f"Saved data to: {output_path}")
+        logger.info(f"Saved data to: {output_path}")
 
     return
 

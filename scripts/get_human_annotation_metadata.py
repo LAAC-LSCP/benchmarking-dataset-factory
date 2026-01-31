@@ -61,20 +61,25 @@ import click
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
-from custom_types.datasets_json import get_datasets
-from custom_types.metannots import (
+from pydantic import ValidationError
+
+from .src.data.get_datasets import get_dataset_info
+from .src.data.gold_standard_data import (
+    STANDARD_COLUMNS,
+    get_annotated_ms,
+    is_categorical,
+)
+from .src.data.metannots import (
     MetaAnnotations,
     get_metannots,
     get_metannots_dict,
     get_sampled_duration,
 )
-from helpers.constants import DATASETS_FOLDER, OUTPUTS_FOLDER
-from helpers.gold_standard_data import (
-    STANDARD_COLUMNS,
-    get_annotated_ms,
-    is_categorical,
-)
-from pydantic import ValidationError
+from .src.utils.constants import DATASETS_FOLDER, OUTPUTS_FOLDER
+from .src.utils.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 CATEGORICAL_CUTOFF: int = 20
 
@@ -102,7 +107,7 @@ class DatasetInfo(TypedDict):
 def get_human_annotation_metadata(dataset_name: str) -> None:
     """Aggregates human annotation metadata for a given dataset \
 (mostly duration-related) and saves it"""
-    datasets = get_datasets(DATASETS_FOLDER, dataset_names=[dataset_name])
+    datasets = get_dataset_info(DATASETS_FOLDER, dataset_names={dataset_name})
 
     dataset = next((d for d in datasets["datasets"] if d["name"] == dataset_name), None)
 
@@ -146,7 +151,7 @@ def save_dataset_info(dataset_info: DatasetInfo, dataset_name: str) -> None:
     with open(output_location, "w") as f:
         json.dump(dataset_info, f, indent=2)
 
-    print(f"Finished running script. Outputs at {str(output_location)}")
+    logger.info(f"Finished running script. Outputs at {str(output_location)}")
 
 
 def get_column_info(
@@ -177,7 +182,7 @@ def get_column_info(
 
             metannots_dict = metannots.model_dump()
         except ValidationError as e:
-            print(f"Validation warnings: {e}")
+            logger.warning(f"Validation warnings: {e}")
 
             metannots_dict = get_metannots_dict(DATASETS_FOLDER, dataset_name, set_name)
 
@@ -188,7 +193,7 @@ def get_column_info(
             {
                 "column": col,
                 "categorical": categorical,
-                "values": values,
+                "values": values or [],
                 "annotated_duration_ms": get_annotated_ms(segments, col),
                 "duration_from_samples_ms": (
                     get_sampled_duration(metannots_dict, gold_std_annotations)

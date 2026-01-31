@@ -11,19 +11,19 @@ Or with output redirection:
 `python3 scripts/validate_metannots.py > validation_errors.txt`
 """
 
-from pathlib import Path
-
 import click
-from custom_types.datasets_json import Datasets, get_datasets
-from custom_types.metannots import get_metannots
 from pydantic import ValidationError
 
-CURRENT_FILE: Path = Path(__file__)
-SCRIPT_FOLDER: Path = CURRENT_FILE.parent
-METADATA_FOLDER: Path = (SCRIPT_FOLDER / ".." / "metadata").resolve()
-DATASETS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "datasets").resolve()
-OUTPUTS_FOLDER: Path = (SCRIPT_FOLDER / ".." / "outputs").resolve()
+from .src.custom_types import Datasets
+from .src.data.get_datasets import get_dataset_info
+from .src.data.metannots import get_metannots
+from .src.utils.constants import DATASETS_FOLDER
+from .src.utils.logger import get_logger
+
 CATEGORICAL_CUTOFF: int = 20
+
+
+logger = get_logger(__name__)
 
 
 @click.command()
@@ -39,9 +39,9 @@ def validate_metannots(dataset_name: str | None) -> None:
     datasets: Datasets
 
     if dataset_name is not None:
-        datasets = get_datasets(DATASETS_FOLDER, dataset_names=[dataset_name])
+        datasets = get_dataset_info(DATASETS_FOLDER, dataset_names={dataset_name})
     else:
-        datasets = get_datasets(DATASETS_FOLDER)
+        datasets = get_dataset_info(DATASETS_FOLDER)
 
     print("Printing out validation errors...")
     for dataset in datasets["datasets"]:

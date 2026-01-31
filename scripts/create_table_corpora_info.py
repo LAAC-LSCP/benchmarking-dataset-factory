@@ -5,38 +5,19 @@ and creates a table with the various sets, and totals
 
 import json
 from pathlib import Path
-from typing import Any, List, TypedDict
+from typing import List
 
 import click
 import pandas as pd
 
-from find_on_filter_expression import get_metannots_df
-from helpers.constants import DATASETS_FOLDER
-from helpers.dataset_type import DatasetType
-
+from .src.custom_types import Data, DatasetType
+from .src.data.get_metannots_df import get_metannots_df
+from .src.utils.constants import DATASETS
 
 CURRENT_FILE: Path = Path(__file__)
 HUMAN_ANNOTATION_METADATA_OUTPUT: Path = (
     CURRENT_FILE.parent / ".." / "outputs" / "human_annotation_data"
 ).resolve()
-
-
-class ColumnInfo(TypedDict):
-    column: str
-    categorical: bool
-    values: List[Any]
-    annotation_duration_ms: int
-    duration_from_samples_ms: int
-
-
-class CPSet(TypedDict):
-    name: str
-    columns: List[ColumnInfo]
-
-
-class Data(TypedDict):
-    name: str
-    sets: List[CPSet]
 
 
 @click.command()
@@ -47,7 +28,9 @@ class Data(TypedDict):
 )
 @click.option(
     "--type",
-    type=click.Choice(["vtc", "addressee", "transcription", "vcm"], case_sensitive=False),
+    type=click.Choice(
+        ["vtc", "addressee", "transcription", "vcm"], case_sensitive=False
+    ),
     required=True,
     help="Type of dataset to create",
 )
@@ -57,38 +40,38 @@ def create_table_corpora_info(output_path: str, type: str):
     """
     dataset_type = DatasetType(type)
     relevant_column: str
-    # if dataset_type == DatasetType.ADDRESSEE:
-    #     relevant_column = "has_addressee"
-    # elif dataset_type == DatasetType.TRANSCRIPTION:
-    #     relevant_column = "has_transcription"
-    # elif dataset_type == DatasetType.VOCAL_MATURITY:
-    #     relevant_column = "has_vcm_type"
-    # elif dataset_type == DatasetType.VTC:
-    #     relevant_column = "has_speaker_type"
-    # else:
-    #     raise ValueError("dataset type not correct")
+    if dataset_type == DatasetType.ADDRESSEE:
+        relevant_column = "has_addressee"
+    elif dataset_type == DatasetType.TRANSCRIPTION:
+        relevant_column = "has_transcription"
+    elif dataset_type == DatasetType.VOCAL_MATURITY:
+        relevant_column = "has_vcm_type"
+    elif dataset_type == DatasetType.VTC:
+        relevant_column = "has_speaker_type"
+    else:
+        raise ValueError("dataset type not valid")
 
     duration_data = get_datasets_duration_metadata(HUMAN_ANNOTATION_METADATA_OUTPUT)
     metannots_df: pd.DataFrame = get_metannots_df(
-        print_errors=False, dataset_names=[d.name for d in DATASETS_FOLDER.iterdir() if d.is_dir()]
+        print_errors=False,
+        dataset_names=DATASETS,
     )
 
     df = get_datasets_duration_table(duration_data)
 
-    for relevant_column in ["has_addressee", "has_transcription", "has_vcm_type", "has_speaker_type"]:
-        merged = pd.merge(
-            df,
-            metannots_df[["dataset", "segmentation", relevant_column]],
-            left_on=["dataset", "set"],
-            right_on=["dataset", "segmentation"],
-            how="left"
-        )
-            
-        merged = merged[merged[relevant_column] == "Y"]
+    merged = pd.merge(
+        df,
+        metannots_df[["dataset", "segmentation", relevant_column]],
+        left_on=["dataset", "set"],
+        right_on=["dataset", "segmentation"],
+        how="left",
+    )
 
-        merged = merged.drop([relevant_column, "segmentation"], axis=1)
+    merged = merged[merged[relevant_column] == "Y"]
 
-        merged.to_csv(Path(str(output_path) + f"_{relevant_column}"), index=False)
+    merged = merged.drop([relevant_column, "segmentation"], axis=1)
+
+    merged.to_csv(Path(str(output_path) + f"_{relevant_column}"), index=False)
 
     return
 
@@ -108,9 +91,11 @@ def get_dataset_duration_metadata(f: Path) -> Data:
 
 
 def get_datasets_duration_table(data: List[Data]) -> pd.DataFrame:
-    data = [row for dataset in data for row in get_dataset_duration_table_data(dataset)]
+    datas = [
+        row for dataset in data for row in get_dataset_duration_table_data(dataset)
+    ]
 
-    return pd.DataFrame(data)
+    return pd.DataFrame(datas)
 
 
 def get_dataset_duration_table_data(dataset: Data) -> List[dict]:
@@ -122,7 +107,7 @@ def get_dataset_duration_table_data(dataset: Data) -> List[dict]:
                 s["columns"][0]["duration_from_samples_ms"]
             ),
             "duration_annotated_minutes": ms_to_min(
-                s["columns"][0]["annotated_duration_ms"]
+                s["columns"][0]["annotation_duration_ms"]
             ),
         }
         for s in dataset["sets"]
