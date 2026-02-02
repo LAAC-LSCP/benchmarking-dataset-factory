@@ -9,6 +9,8 @@ ChildProject documentation
 import click
 import pandas as pd
 
+from scripts.src.utils.constants import DATASETS_FOLDER
+
 from .src.data.get_metannots_df import get_metannots_df
 from .src.utils.logger import get_logger
 
@@ -30,7 +32,7 @@ logger = get_logger(__name__)
 )
 def filter_metannots(filter_expr: str | None, no_info_output: bool) -> pd.DataFrame:
     """Find datasets and sets matching a filter expression on the metannots metadata"""
-    df = get_metannots_df(print_errors=(not no_info_output))
+    df = get_metannots_df(DATASETS_FOLDER, print_errors=(not no_info_output))
 
     if filter_expr is not None:
         try:

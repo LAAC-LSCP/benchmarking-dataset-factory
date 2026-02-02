@@ -12,7 +12,7 @@ import pandas as pd
 
 from .src.custom_types import Data, DatasetType
 from .src.data.get_metannots_df import get_metannots_df
-from .src.utils.constants import DATASETS
+from .src.utils.constants import DATASETS, DATASETS_FOLDER
 
 CURRENT_FILE: Path = Path(__file__)
 HUMAN_ANNOTATION_METADATA_OUTPUT: Path = (
@@ -53,6 +53,7 @@ def create_table_corpora_info(output_path: str, type: str):
 
     duration_data = get_datasets_duration_metadata(HUMAN_ANNOTATION_METADATA_OUTPUT)
     metannots_df: pd.DataFrame = get_metannots_df(
+        DATASETS_FOLDER,
         print_errors=False,
         dataset_names=DATASETS,
     )

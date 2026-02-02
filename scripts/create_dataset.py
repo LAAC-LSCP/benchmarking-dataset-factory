@@ -8,6 +8,7 @@ import pandas as pd
 from dotenv import load_dotenv
 
 from scripts.src.steps.split_recordings import SplitRecordings
+from scripts.src.utils.constants import DATASETS_FOLDER
 
 from .find_files_on_filter_expression import find_files
 from .src.custom_types import DatasetType
@@ -72,6 +73,14 @@ logger = logging.getLogger(__name__)
 like 'child_sex == 'F'' (see Pandas + \
 ChildProject docs)",
 )
+@click.option(
+    "--datasets-folder",
+    required=False,
+    type=click.Path(exists=True),
+    default=None,
+    help="Folder with available datasets (note: compares against the \
+subfolder in this repo to filter on potential dataset names)",
+)
 def create_dataset(
     output_path: str,
     overwrite: bool,
@@ -80,8 +89,11 @@ def create_dataset(
     source: Tuple[str],
     step: Tuple[str],
     children_filter_expr: str | None,
+    datasets_folder: Path | None,
 ) -> None:
-    output_dir, dataset_type, steps = validate(output_path, type, step)
+    output_dir, dataset_type, steps, datasets_dir = validate(
+        output_path, type, step, datasets_folder
+    )
 
     activate_file = get_from_env("CONDA_ACTIVATE_FILE")
     childproject_env = get_from_env("CONDA_CHILDPROJECT_ENV")
@@ -89,7 +101,10 @@ def create_dataset(
     try:
         logger.info("Finding files, annotations, and metadata (may take a while)...")
         file_infos, children_df, recordings_df, annotations_df = get_file_paths(
-            source, children_filter_expr, dataset_type
+            source,
+            children_filter_expr,
+            dataset_type,
+            datasets_dir,
         )
 
         env = EnvConfig(
@@ -119,6 +134,7 @@ def create_dataset(
 
         pipeline = DatasetPipeline(
             output_path=output_dir,
+            datasets_dir=datasets_dir,
             steps=pipeline_steps,
             overwrite=overwrite,
         )
@@ -133,12 +149,18 @@ def validate(
     output_path: str,
     dataset_type: str,
     steps: Tuple[str],
-) -> Tuple[Path, DatasetType, Tuple[str]]:
+    datasets_folder: Path | None,
+) -> Tuple[Path, DatasetType, Tuple[str], Path]:
     output_dir = Path(output_path)
 
     dataset_type = dataset_type.lower()
 
-    return output_dir, DatasetType(dataset_type), steps
+    return (
+        output_dir,
+        DatasetType(dataset_type),
+        steps,
+        datasets_folder or DATASETS_FOLDER,
+    )
 
 
 def get_from_env(key: str) -> str:
@@ -151,7 +173,10 @@ def get_from_env(key: str) -> str:
 
 
 def get_file_paths(
-    datasets: Tuple[str], children_filter_expr: str | None, dataset_type: DatasetType
+    datasets: Tuple[str],
+    children_filter_expr: str | None,
+    dataset_type: DatasetType,
+    datasets_dir: Path,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     metannots_filter_expr: str
     if dataset_type == DatasetType.VTC:
@@ -160,7 +185,7 @@ def get_file_paths(
         metannots_filter_expr = "has_addressee == 'Y'"
     elif dataset_type == DatasetType.VOCAL_MATURITY:
         metannots_filter_expr = "has_vcm_type == 'Y'"
-    elif dataset_type == DatasetType.VOCAL_MATURITY:
+    elif dataset_type == DatasetType.TRANSCRIPTION:
         metannots_filter_expr = "has_transcription == 'Y'"
     else:
         raise ValueError("dataset type not valid")
@@ -169,6 +194,7 @@ def get_file_paths(
         dataset=datasets,
         metannots_filter_expr=metannots_filter_expr,
         children_filter_expr=children_filter_expr,
+        datasets_dir=datasets_dir,
     )
 
 

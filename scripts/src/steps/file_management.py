@@ -6,13 +6,14 @@ from typing import Dict, Set, Tuple
 from venv import logger
 
 from scripts.src.steps.step import EnvConfig
-from scripts.src.utils.constants import DATASETS_FOLDER
 
 CONCURRENT_FETCHES: int = 10
 
 
 def fetch_files(
-    env: EnvConfig, dataset_file_map: Dict[str, Set[Tuple[Path, Path]]]
+    env: EnvConfig,
+    dataset_file_map: Dict[str, Set[Tuple[Path, Path]]],
+    datasets_folder: Path,
 ) -> None:
     for dataset, files in dataset_file_map.items():
         if len(files) == 0:
@@ -28,7 +29,7 @@ def fetch_files(
         try:
             logger.info(f"Fetching {len(files)} files in {dataset}...")
             subprocess.run(
-                shell_command, shell=True, check=True, cwd=DATASETS_FOLDER / dataset
+                shell_command, shell=True, check=True, cwd=datasets_folder / dataset
             )
             logger.info(f"Fetched {len(files)} files in {dataset}")
         except subprocess.CalledProcessError as e:

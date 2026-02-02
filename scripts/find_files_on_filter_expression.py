@@ -59,7 +59,9 @@ def find_files_and_save(
 ) -> None:
     """Save file paths matching filter expressions on metannots \
 and children metadata (specified separately)"""
-    file_infos = find_files(dataset, metannots_filter_expr, children_filter_expr)[0]
+    file_infos = find_files(
+        dataset, metannots_filter_expr, children_filter_expr, DATASETS_FOLDER
+    )[0]
 
     save_file_paths(file_infos, output_csv)
 
@@ -70,6 +72,7 @@ def find_files(
     dataset: Tuple[str],
     metannots_filter_expr: str | None,
     children_filter_expr: str | None,
+    datasets_dir: Path,
 ) -> Tuple[
     Annotated[pd.DataFrame, "file csv"],
     Annotated[pd.DataFrame, "children"],
@@ -82,7 +85,9 @@ def find_files(
         datasets = DATASETS
 
     metannots_df: pd.DataFrame = get_metannots_df(
-        print_errors=False, dataset_names=(datasets if len(datasets) else None)
+        datasets_dir,
+        print_errors=False,
+        dataset_names=(datasets if len(datasets) else None),
     )
     children_df = get_children_df(datasets)
     recordings_df = get_recordings_df(datasets)

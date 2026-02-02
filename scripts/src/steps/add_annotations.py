@@ -22,7 +22,7 @@ class AddAnnotations(Step):
 
         super().__init__(env=env, name=StepName.ADD_ANNOTATIONS)
 
-    def _run(self, _: Path, dest_dataset: Path, overwrite: bool) -> None:
+    def _run(self, datasets_dir: Path, dest_dataset: Path, overwrite: bool) -> None:
         file_pairs: Set[Tuple[Path, Path]] = set()
         dataset_file_map: Dict[str, Set[Tuple[Path, Path]]] = {
             d: set() for d in self._file_infos["dataset"].unique()
@@ -44,7 +44,7 @@ class AddAnnotations(Step):
             }
 
         if len(file_pairs) != 0:
-            fetch_files(self._env, dataset_file_map)
+            fetch_files(self._env, dataset_file_map, datasets_dir)
             copy_files(self._env, file_pairs, dest_dataset)
 
         git_unannex_and_save(
