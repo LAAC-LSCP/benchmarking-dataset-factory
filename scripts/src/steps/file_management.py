@@ -3,11 +3,14 @@ import subprocess
 import tempfile
 from pathlib import Path
 from typing import Dict, Set, Tuple
-from venv import logger
 
 from scripts.src.steps.step import EnvConfig
+from scripts.src.utils.logger import get_logger
 
 CONCURRENT_FETCHES: int = 10
+
+
+logger = get_logger(__name__)
 
 
 def fetch_files(
@@ -20,8 +23,7 @@ def fetch_files(
             continue
 
         commands = [
-            f"source {env.conda_activate_file!s}",
-            f"conda activate {env.conda_childproject_env!s}",
+            env.conda_activation_str,
             f"datalad get {' '.join(str(src) for (src, _) in files)} \
 -J {CONCURRENT_FETCHES}",
         ]
@@ -63,8 +65,7 @@ def copy_files(
         specfile_path = Path(specfile.name)
 
     commands = [
-        f"source {env.conda_activate_file!s}",
-        f"conda activate {env.conda_childproject_env!s}",
+        env.conda_activation_str,
         f"datalad copy-file --specs-from {specfile_path} -d . \
 -m 'Copied {len(file_pairs)} files'",
     ]
@@ -83,8 +84,7 @@ def copy_files(
 
 def datalad_save(env: EnvConfig, dest_dataset: Path, message: str) -> None:
     commands = [
-        f"source {env.conda_activate_file!s}",
-        f"conda activate {env.conda_childproject_env}",
+        env.conda_activation_str,
         f"datalad save -m '{message}'",
     ]
     shell_command = " && ".join(commands)
@@ -105,8 +105,7 @@ def git_unannex_and_save(
     env: EnvConfig, dest_dataset: Path, unannex_match: str, message: str
 ) -> None:
     commands = [
-        f"source {env.conda_activate_file!s}",
-        f"conda activate {env.conda_childproject_env}",
+        env.conda_activation_str,
         f"git annex unannex {unannex_match}",
         f"datalad save -m '{message}'",
     ]

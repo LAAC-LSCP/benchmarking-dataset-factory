@@ -40,8 +40,7 @@ class AddBoilerplate(Step):
 
     def _initialise_childproject(self, dest_dataset: Path) -> None:
         commands = [
-            f"source {self._env.conda_activate_file!s}",
-            f"conda activate {self._env.conda_childproject_env}",
+            self._env.conda_activation_str,
             "child-project init .",
         ]
         shell_command = " && ".join(commands)
@@ -58,8 +57,7 @@ class AddBoilerplate(Step):
 
     def _initialise_datalad(self, dest_dataset: Path) -> None:
         commands = [
-            f"source {self._env.conda_activate_file!s}",
-            f"conda activate {self._env.conda_childproject_env!s}",
+            self._env.conda_activation_str,
             "datalad create --force",
         ]
         shell_command = " && ".join(commands)

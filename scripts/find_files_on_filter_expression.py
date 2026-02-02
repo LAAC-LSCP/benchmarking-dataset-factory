@@ -89,9 +89,9 @@ def find_files(
         print_errors=False,
         dataset_names=(datasets if len(datasets) else None),
     )
-    children_df = get_children_df(datasets)
-    recordings_df = get_recordings_df(datasets)
-    annotations_df = get_annotations_df(datasets)
+    children_df = get_children_df(datasets, datasets_dir)
+    recordings_df = get_recordings_df(datasets, datasets_dir)
+    annotations_df = get_annotations_df(datasets, datasets_dir)
 
     if metannots_filter_expr is not None:
         try:
@@ -113,7 +113,7 @@ children dataframe: {e}")
 
             children_filter_expr = ""
 
-    file_infos = get_file_infos(children_df, metannots_df)
+    file_infos = get_file_infos(children_df, metannots_df, datasets_dir)
     filtered_children = get_children_from_files(file_infos, children_df)
     filtered_recordings = get_recordings_from_files(file_infos, recordings_df)
     filtered_annotations = get_annotations_from_files(file_infos, annotations_df)
@@ -125,10 +125,12 @@ def save_file_paths(file_paths: pd.DataFrame, output_path: Path) -> None:
     file_paths.to_csv(output_path, index=False)
 
 
-def get_children_df(datasets: Set[str]) -> pd.DataFrame:
+def get_children_df(datasets: Set[str], datasets_dir: Path) -> pd.DataFrame:
     children_df_list: List[pd.DataFrame] = []
 
-    for dataset in [d for d in DATASETS_FOLDER.iterdir() if d.is_dir()]:
+    for dataset in [
+        d for d in datasets_dir.iterdir() if d.is_dir() and d.name in datasets
+    ]:
         project = ChildProject(dataset)
         project.read()
 
@@ -145,10 +147,12 @@ def get_children_df(datasets: Set[str]) -> pd.DataFrame:
     return children_df[children_df["dataset"].isin(datasets)]
 
 
-def get_recordings_df(datasets: Set[str]) -> pd.DataFrame:
+def get_recordings_df(datasets: Set[str], datasets_dir: Path) -> pd.DataFrame:
     recordings_df_list: List[pd.DataFrame] = []
 
-    for dataset in [d for d in DATASETS_FOLDER.iterdir() if d.is_dir()]:
+    for dataset in [
+        d for d in datasets_dir.iterdir() if d.is_dir() and d.name in datasets
+    ]:
         project = ChildProject(dataset)
         project.read()
 
@@ -165,11 +169,13 @@ def get_recordings_df(datasets: Set[str]) -> pd.DataFrame:
     return recordings_df[recordings_df["dataset"].isin(datasets)]
 
 
-def get_annotations_df(datasets: Set[str]) -> pd.DataFrame:
+def get_annotations_df(datasets: Set[str], datasets_dir: Path) -> pd.DataFrame:
     # NOTE: I'm deliberately avoiding using annotation manager (it's slow)
     annotations_df_list: List[pd.DataFrame] = []
 
-    for dataset in [d for d in DATASETS_FOLDER.iterdir() if d.is_dir()]:
+    for dataset in [
+        d for d in datasets_dir.iterdir() if d.is_dir() and d.name in datasets
+    ]:
         annotations_df = pd.read_csv(dataset / "metadata" / "annotations.csv")
 
         annotations_df["dataset"] = dataset.name
@@ -182,7 +188,9 @@ def get_annotations_df(datasets: Set[str]) -> pd.DataFrame:
 
 
 def get_file_infos(
-    children_df: pd.DataFrame, metannots_df: pd.DataFrame
+    children_df: pd.DataFrame,
+    metannots_df: pd.DataFrame,
+    datasets_dir: Path,
 ) -> pd.DataFrame:
     file_infos: List[pd.DataFrame] = []
 
@@ -191,18 +199,23 @@ def get_file_infos(
         dataset: str = metannot["dataset"]
 
         file_infos.append(
-            get_file_paths_for_set_dataset(gold_std_set, dataset, children_df)
+            get_file_paths_for_set_dataset(
+                gold_std_set, dataset, children_df, datasets_dir
+            )
         )
 
     return pd.concat(file_infos, axis=0)
 
 
 def get_file_paths_for_set_dataset(
-    set_name: str, dataset: str, children_df: pd.DataFrame
+    set_name: str,
+    dataset: str,
+    children_df: pd.DataFrame,
+    datasets_dir: Path,
 ) -> pd.DataFrame:
     file_infos: List[Dict] = []
 
-    project = ChildProject(DATASETS_FOLDER / dataset)
+    project = ChildProject(datasets_dir / dataset)
     am: AnnotationManager = AnnotationManager(project)
 
     recordings: pd.DataFrame = project.recordings
@@ -231,7 +244,7 @@ def get_file_paths_for_set_dataset(
         file_infos.append(
             {
                 "annotation path": get_path_of_annotation_file(
-                    dataset, set_name, row["annotation_filename"]
+                    datasets_dir, dataset, set_name, row["annotation_filename"]
                 ),
                 "recording path": (
                     project.path
@@ -339,8 +352,10 @@ def get_annotation_duration(annotation_filename: str) -> Tuple[int, int, int]:
     return start, end, end - start
 
 
-def get_path_of_annotation_file(dataset: str, set_name: str, filename: str) -> Path:
-    return DATASETS_FOLDER / dataset / "annotations" / set_name / "converted" / filename
+def get_path_of_annotation_file(
+    datasets_dir: Path, dataset: str, set_name: str, filename: str
+) -> Path:
+    return datasets_dir / dataset / "annotations" / set_name / "converted" / filename
 
 
 if __name__ == "__main__":

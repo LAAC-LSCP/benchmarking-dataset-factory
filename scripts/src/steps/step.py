@@ -12,8 +12,7 @@ logger = get_logger(__name__)
 
 @dataclass
 class EnvConfig:
-    conda_activate_file: Path
-    conda_childproject_env: str
+    conda_activation_str: str
 
 
 class StepName(StrEnum):
@@ -34,7 +33,7 @@ class Step(ABC):
 
     def __init__(self, name: StepName, env: Optional[EnvConfig] = None) -> None:
         self._name = name
-        self._env = env or EnvConfig(Path("."), "")
+        self._env = env or EnvConfig(conda_activation_str="")
 
     def run(self, datasets_dir: Path, dest_dataset: Path, overwrite: bool) -> None:
         try:

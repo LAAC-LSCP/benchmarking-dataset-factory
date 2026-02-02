@@ -41,6 +41,12 @@ logger = logging.getLogger(__name__)
     help="Whether to overwrite existing files",
 )
 @click.option(
+    "--fetch-files",
+    is_flag=True,
+    default=False,
+    help="Whether to fetch datalad files",
+)
+@click.option(
     "--split-recordings",
     is_flag=True,
     default=False,
@@ -48,7 +54,9 @@ logger = logging.getLogger(__name__)
 )
 @click.option(
     "--type",
-    type=click.Choice(["vtc", "addressee, transcription, vcm"], case_sensitive=False),
+    type=click.Choice(
+        ["vtc", "addressee", "transcription", "vcm"], case_sensitive=False
+    ),
     required=True,
     help="Type of dataset to create",
 )
@@ -84,19 +92,19 @@ subfolder in this repo to filter on potential dataset names)",
 def create_dataset(
     output_path: str,
     overwrite: bool,
+    fetch_files: bool,
     split_recordings: bool,
     type: str,
     source: Tuple[str],
     step: Tuple[str],
     children_filter_expr: str | None,
-    datasets_folder: Path | None,
+    datasets_folder: str | None,
 ) -> None:
     output_dir, dataset_type, steps, datasets_dir = validate(
         output_path, type, step, datasets_folder
     )
 
-    activate_file = get_from_env("CONDA_ACTIVATE_FILE")
-    childproject_env = get_from_env("CONDA_CHILDPROJECT_ENV")
+    activation_str = get_from_env("CONDA_ACTIVATION_STR")
 
     try:
         logger.info("Finding files, annotations, and metadata (may take a while)...")
@@ -108,8 +116,7 @@ def create_dataset(
         )
 
         env = EnvConfig(
-            conda_activate_file=Path(activate_file),
-            conda_childproject_env=childproject_env,
+            conda_activation_str=activation_str,
         )
 
         pipeline_steps: List[Step] = [
@@ -120,8 +127,8 @@ def create_dataset(
                 recordings=recordings_df,
                 annotations=annotations_df,
             ),
-            AddAnnotations(env, file_infos=file_infos),
-            AddRecordings(env, file_infos=file_infos),
+            AddAnnotations(env, file_infos=file_infos, fetch_files=fetch_files),
+            AddRecordings(env, file_infos=file_infos, fetch_files=fetch_files),
         ]
 
         if split_recordings:
@@ -149,7 +156,7 @@ def validate(
     output_path: str,
     dataset_type: str,
     steps: Tuple[str],
-    datasets_folder: Path | None,
+    datasets_folder: str | None,
 ) -> Tuple[Path, DatasetType, Tuple[str], Path]:
     output_dir = Path(output_path)
 
@@ -159,7 +166,7 @@ def validate(
         output_dir,
         DatasetType(dataset_type),
         steps,
-        datasets_folder or DATASETS_FOLDER,
+        Path(datasets_folder) if datasets_folder else DATASETS_FOLDER,
     )
 
 

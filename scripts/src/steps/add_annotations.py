@@ -16,9 +16,13 @@ logger = get_logger(__name__)
 
 class AddAnnotations(Step):
     _file_infos: pd.DataFrame
+    _fetch_files: bool
 
-    def __init__(self, env: EnvConfig, *, file_infos: pd.DataFrame) -> None:
+    def __init__(
+        self, env: EnvConfig, *, file_infos: pd.DataFrame, fetch_files: bool
+    ) -> None:
         self._file_infos = file_infos
+        self._fetch_files = fetch_files
 
         super().__init__(env=env, name=StepName.ADD_ANNOTATIONS)
 
@@ -44,7 +48,8 @@ class AddAnnotations(Step):
             }
 
         if len(file_pairs) != 0:
-            fetch_files(self._env, dataset_file_map, datasets_dir)
+            if self._fetch_files:
+                fetch_files(self._env, dataset_file_map, datasets_dir)
             copy_files(self._env, file_pairs, dest_dataset)
 
         git_unannex_and_save(

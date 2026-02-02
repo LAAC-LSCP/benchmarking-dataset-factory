@@ -28,7 +28,7 @@ class AddMetadata(Step):
 
         super().__init__(env=env, name=StepName.ADD_METADATA)
 
-    def _run(self, _: Path, dest_dataset: Path, overwrite: bool) -> None:
+    def _run(self, _: Path, dest_dataset: Path, __: bool) -> None:
         metadata = dest_dataset / "metadata"
         metadata.mkdir(parents=True, exist_ok=True)
 

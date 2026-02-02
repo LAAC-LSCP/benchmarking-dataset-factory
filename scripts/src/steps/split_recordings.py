@@ -117,8 +117,7 @@ class SplitRecordings(Step):
             return
 
         shell_commands = [
-            f"source {self._env.conda_activate_file!s}",
-            f"conda activate {self._env.conda_childproject_env}",
+            self._env.conda_activation_str,
         ]
         shell_commands.extend(sox_commands)
         shell_command = " && ".join(shell_commands)
@@ -209,8 +208,7 @@ class SplitRecordings(Step):
         files_str = " ".join(files)
 
         commands = [
-            f"source {self._env.conda_activate_file!s}",
-            f"conda activate {self._env.conda_childproject_env}",
+            self._env.conda_activation_str,
             f"datalad drop {files_str} --reckless kill",
             f"datalad remove {files_str} --reckless kill -m \
 'removed {len(files)} recordings'",
