@@ -16,7 +16,9 @@
             "MA2"
           ],
           "annotated_duration_ms": 260618,
-          "duration_from_samples_ms": 4140000
+          "duration_from_samples_ms": 4140000,
+          "number_of_samples": 69,
+          "num_of_non_empty_segments": 182
         },
         {
           "column": "speaker_type",
@@ -28,7 +30,9 @@
             "FEM"
           ],
           "annotated_duration_ms": 260618,
-          "duration_from_samples_ms": 4140000
+          "duration_from_samples_ms": 4140000,
+          "number_of_samples": 69,
+          "num_of_non_empty_segments": 182
         }
       ]
     },
@@ -47,7 +51,9 @@
             "MA1"
           ],
           "annotated_duration_ms": 268101,
-          "duration_from_samples_ms": 720000
+          "duration_from_samples_ms": 720000,
+          "number_of_samples": 12,
+          "num_of_non_empty_segments": 199
         },
         {
           "column": "speaker_type",
@@ -59,7 +65,9 @@
             "MAL"
           ],
           "annotated_duration_ms": 268101,
-          "duration_from_samples_ms": 720000
+          "duration_from_samples_ms": 720000,
+          "number_of_samples": 12,
+          "num_of_non_empty_segments": 199
         }
       ]
     }

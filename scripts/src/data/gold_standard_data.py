@@ -37,9 +37,14 @@ def is_categorical(
     If categorical also returns the unique values
     """
     unique_vals: np.ndarray = segments[column].unique()
+    values = [
+        str(val)
+        for val in unique_vals
+        if str(val).upper() not in ["<NA>, NA, <NAN>, NAN"]
+    ]
 
     if len(unique_vals) <= n:
-        return True, list([str(val) for val in unique_vals])
+        return True, list(values)
 
     return False, None
 
@@ -53,3 +58,12 @@ def get_annotated_ms(segments: pd.DataFrame, column: str) -> int:
     return int(
         sum(non_na_segments["segment_offset"] - non_na_segments["segment_onset"])
     )
+
+
+def get_num_segments(segments: pd.DataFrame, column: str) -> int:
+    """
+    Get the number of segments that are not none
+    """
+    non_na_segments = segments[segments[column].notna()]
+
+    return len(non_na_segments)

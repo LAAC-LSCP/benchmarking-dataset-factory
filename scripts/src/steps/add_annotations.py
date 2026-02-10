@@ -26,7 +26,7 @@ class AddAnnotations(Step):
 
         super().__init__(env=env, name=StepName.ADD_ANNOTATIONS)
 
-    def _run(self, datasets_dir: Path, dest_dataset: Path, overwrite: bool) -> None:
+    def _run(self, datasets_dir: Path, dest_dataset: Path) -> None:
         file_pairs: Set[Tuple[Path, Path]] = set()
         dataset_file_map: Dict[str, Set[Tuple[Path, Path]]] = {
             d: set() for d in self._file_infos["dataset"].unique()
@@ -39,13 +39,33 @@ class AddAnnotations(Step):
             file_pairs.add((src, dst))
             dataset_file_map[row["dataset"]].add((src, dst))
 
-        if not overwrite:
-            # skip things that are already added
-            file_pairs = {(src, dst) for (src, dst) in file_pairs if not dst.exists()}
-            dataset_file_map = {
-                dataset: {(src, dst) for (src, dst) in files if not dst.exists()}
-                for (dataset, files) in dataset_file_map.items()
-            }
+        for _, row in (
+            self._file_infos[["dataset", "set"]].drop_duplicates().iterrows()
+        ):  # type: 
+            src: Path = (
+                datasets_dir
+                / row["dataset"]
+                / "annotations"
+                / row["set"]
+                / "metannots.yml"
+            )
+
+            if not src.exists():
+                continue
+
+            dst = AddAnnotations._get_dst_metannots(
+                dest_dataset, row["dataset"], row["set"]
+            )
+
+            file_pairs.add((src, dst))
+            dataset_file_map[row["dataset"]].add((src, dst))
+
+        # skip things that are already added
+        file_pairs = {(src, dst) for (src, dst) in file_pairs if not dst.exists()}
+        dataset_file_map = {
+            dataset: {(src, dst) for (src, dst) in files if not dst.exists()}
+            for (dataset, files) in dataset_file_map.items()
+        }
 
         if len(file_pairs) != 0:
             if self._fetch_files:
@@ -63,3 +83,13 @@ class AddAnnotations(Step):
         parts = source.parts
         idx = parts.index("annotations")
         return output_dir / "annotations" / dataset / Path(*parts[idx + 1 :])
+
+    @staticmethod
+    def _get_annotation_path(
+        dataset_dir: Path, set_name: str, annotation_name: str
+    ) -> Path:
+        return dataset_dir / "annotations" / set_name / "converted" / annotation_name
+
+    @staticmethod
+    def _get_dst_metannots(output_dir: Path, dataset: str, set_name: str) -> Path:
+        return output_dir / "annotations" / dataset / set_name / "metannots.yml"

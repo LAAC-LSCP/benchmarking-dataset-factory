@@ -1,14 +1,17 @@
+import functools
+import shutil
 import subprocess
 from functools import partial
 from itertools import batched
-from math import floor
 from pathlib import Path
 from typing import List, Set, Tuple
 
 import pandas as pd
 
+from scripts.src.steps.add_annotations import AddAnnotations
 from scripts.src.steps.file_management import datalad_save
 from scripts.src.steps.step import EnvConfig, Step, StepName
+from scripts.src.utils.audio_splitter import AudioSplitter
 from scripts.src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -16,76 +19,98 @@ logger = get_logger(__name__)
 
 class SplitRecordings(Step):
     _remove_full_recordings: bool
+    _annotations: pd.DataFrame
+    _recordings: pd.DataFrame
 
-    def __init__(self, env: EnvConfig, remove_full_recordings: bool = True) -> None:
+    def __init__(
+        self,
+        env: EnvConfig,
+        annotations: pd.DataFrame,
+        recordings: pd.DataFrame,
+        remove_full_recordings: bool = True,
+    ) -> None:
         self._remove_full_recordings = remove_full_recordings
+        self._annotations = annotations
+        self._recordings = recordings
 
         super().__init__(env=env, name=StepName.SPLIT_RECORDINGS)
 
-    def _run(self, _: Path, dest_dataset: Path, overwrite: bool) -> None:
-        annotations = SplitRecordings._get_annotations(dest_dataset)
-        recordings = SplitRecordings._get_recordings(dest_dataset)
+    def _run(self, _: Path, dest_dataset: Path) -> None:
+        annotations = self._annotations
+        recordings = self._recordings
 
-        logger.info(
-            "Calculating range offsets again... (annotations.csv can be mistaken)"
+        splitter = AudioSplitter(recordings, annotations, padding_ms=0)
+        recordings = splitter.get_recording_splits()
+        recordings["new_recording_filename"] = recordings.apply(
+            lambda row: SplitRecordings._get_final_rec_path(
+                Path(row["recording_filename"]), row["start"], row["end"], 0
+            ),
+            axis=1,
         )
-        # annotations.csv can't always be trusted with range_offsets. And we might
-        # end up with many duplicates of entire files for this reason
-        # NOTE: using converted recordings here as they are often shorter than raw
-        real_offsets = [
-            floor(
-                SplitRecordings._get_audio_duration(
-                    SplitRecordings._get_recording_paths(dest_dataset, rec_name)[1]
-                )
-                * 1000
-            )
-            - int(time_seek)
-            for rec_name, time_seek in zip(
-                annotations["recording_filename"], annotations["time_seek"]
-            )
-        ]
-
-        annotations["real_range_offset"] = [
-            min(annot_offset, real_offset)
-            for annot_offset, real_offset in zip(
-                annotations["range_offset"], real_offsets
-            )
-        ]
+        annotations = annotations.apply(
+            functools.partial(
+                splitter.set_annotation_from_split_recordings,
+                split_recordings=recordings,
+            ),
+            axis=1,
+        )
 
         unique_annots = annotations[
-            ["recording_filename", "range_onset", "real_range_offset", "time_seek"]
+            [
+                "recording_filename",
+                "original_recording_filename",
+                "range_onset",
+                "range_offset",
+                "time_seek",
+                "original_annotation_filename",
+            ]
         ].drop_duplicates()
 
         logger.info(f"Splitting a maximum of {len(unique_annots) * 2} times...")
         for batch in batched(unique_annots.iterrows(), 20):
-            commands: List[Tuple[Path, int, int, int, bool]] = []
+            commands: List[Tuple[Path, int, int, int]] = []
             for _, row in batch:  # type: ignore
-                rec_name, onset, offset, time_seek = row
+                _, original_rec_name, onset, offset, time_seek, _ = row
                 raw, converted = SplitRecordings._get_recording_paths(
-                    dest_dataset, rec_name
+                    dest_dataset, original_rec_name
                 )
 
-                commands.append(
-                    (converted, int(onset), int(offset), int(time_seek), overwrite)
-                )
-                commands.append(
-                    (raw, int(onset), int(offset), int(time_seek), overwrite)
-                )
+                commands.append((converted, int(onset), int(offset), int(time_seek)))
+                commands.append((raw, int(onset), int(offset), int(time_seek)))
 
             self._split_recordings(commands)
+
+        datalad_save(self._env, dest_dataset, "Saved recordings")
+
+        file_pairs = {
+            (
+                AddAnnotations._get_annotation_path(
+                    dest_dataset, row["set"], row["original_annotation_filename"]
+                ),
+                AddAnnotations._get_annotation_path(
+                    dest_dataset, row["set"], row["annotation_filename"]
+                ),
+            )
+            for _, row in annotations.iterrows()
+        }
+
+        for file_pair in file_pairs:
+            if not file_pair[0].exists():
+                continue
+
+            shutil.move(src=file_pair[0], dst=file_pair[1])
+
+        datalad_save(self._env, dest_dataset, "Renamed annotations")
+
+        self._update_annotations_csv(dest_dataset, annotations)
+        self._update_recordings_csv(dest_dataset, recordings)
 
         pairs: Set[Tuple[Path, Path]] = set(
             map(
                 partial(SplitRecordings._get_recording_paths, dest_dataset),
-                annotations["recording_filename"],
+                annotations["original_recording_filename"],
             )
         )
-
-        datalad_save(self._env, dest_dataset, "Saved recordings")
-
-        self._update_annotations(dest_dataset, annotations)
-        self._update_recordings(dest_dataset, recordings, annotations)
-
         if self._remove_full_recordings:
             for batch in batched(pairs, 100):  # type: ignore
                 self._remove_recordings(dest_dataset, batch)  # type: ignore
@@ -94,24 +119,23 @@ class SplitRecordings(Step):
 
     def _split_recordings(
         self,
-        jobs: List[Tuple[Path, int, int, int, bool]],
+        jobs: List[Tuple[Path, int, int, int]],
     ) -> None:
         sox_commands = []
-        for rec, onset_ms, offset_ms, time_seek, overwrite in jobs:
+        for rec, onset_ms, offset_ms, time_seek_ms in jobs:
             onset_s = onset_ms / 1000
             offset_s = offset_ms / 1000
-            time_seek_s = time_seek / 1000
             duration = offset_s - onset_s
 
             output_rec = SplitRecordings._get_final_rec_path(
-                rec, onset_s, offset_s, time_seek_s
+                rec, onset_ms, offset_ms, time_seek_ms
             )
 
-            if output_rec.exists() and not overwrite:
+            if output_rec.exists():
                 continue
 
             sox_commands.append(f"sox {rec!s} {output_rec!s} trim \
-{(onset_s + time_seek)!s} {duration!s}")
+{(onset_s + time_seek_ms)!s} {duration!s}")
 
         if not sox_commands:
             return
@@ -133,62 +157,36 @@ class SplitRecordings(Step):
 
         return
 
-    def _update_annotations(
-        self, dest_dataset: Path, original_annotations: pd.DataFrame
+    def _update_annotations_csv(
+        self, dest_dataset: Path, annotations: pd.DataFrame
     ) -> pd.DataFrame:
         logger.info("Updating annotations...")
-        annotations = original_annotations.copy()
-        annotations["recording_filename"] = annotations.apply(  # type: ignore
-            lambda row: SplitRecordings._get_final_rec_path(
-                rec=Path(row["recording_filename"]),
-                onset_s=int(row["range_onset"]) / 1000,
-                offset_s=int(row["real_range_offset"]) / 1000,
-                time_seek_s=int(row["time_seek"]) / 1000,
-            ),
-            axis=1,
+        annotations = annotations.copy()
+        annotations = annotations.drop(
+            ["original_recording_filename", "original_annotation_filename"], axis=1
         )
-        annotations["range_offset"] = annotations["real_range_offset"]
-        annotations["range_onset"] = 0
-        annotations["time_seek"] = 0
-
-        annotations = annotations.drop("real_range_offset", axis=1)
 
         annotations.to_csv(dest_dataset / "metadata" / "annotations.csv", index=False)
         datalad_save(self._env, dest_dataset, "Updated annotations.csv")
 
         return annotations
 
-    def _update_recordings(
+    def _update_recordings_csv(
         self,
         dest_dataset: Path,
-        recordings: pd.DataFrame,
-        original_annotations: pd.DataFrame,
+        recordings_index: pd.DataFrame,
     ) -> pd.DataFrame:
         logger.info("Updating recordings...")
+        recordings = self._recordings.copy()
 
         recordings = pd.merge(
-            recordings,
-            original_annotations[
-                ["recording_filename", "range_onset", "real_range_offset", "time_seek"]
-            ],
-            on="recording_filename",
-            how="left",
+            recordings, recordings_index, on="recording_filename", how="left"
         )
+        recordings["recording_filename"] = recordings["new_recording_filename"]
 
-        recordings["recording_filename"] = recordings.apply(  # type: ignore
-            lambda row: SplitRecordings._get_final_rec_path(
-                rec=Path(row["recording_filename"]),
-                onset_s=int(row["range_onset"]) / 1000,
-                offset_s=int(row["real_range_offset"]) / 1000,
-                time_seek_s=int(row["time_seek"]) / 1000,
-            ),
-            axis=1,
-        )
-
-        recordings = recordings.drop(
-            ["real_range_offset", "range_onset", "time_seek"], axis=1
-        )
+        recordings = recordings.drop(["start", "end", "new_recording_filename"], axis=1)
         recordings = recordings.drop_duplicates()
+        recordings["experiment"] = "benchmarking"
 
         recordings.to_csv(dest_dataset / "metadata" / "recordings.csv", index=False)
         datalad_save(self._env, dest_dataset, "Updated recordings.csv")
@@ -228,27 +226,12 @@ class SplitRecordings(Step):
 
     @staticmethod
     def _get_final_rec_path(
-        rec: Path, onset_s: float, offset_s: float, time_seek_s: float
+        rec: Path, onset_ms: float, offset_ms: float, time_seek_ms: float
     ) -> Path:
         return rec.parent / (
             rec.stem
-            + f"-{(onset_s + time_seek_s)!s}to{(offset_s + time_seek_s)!s}{rec.suffix}"
+            + f"-{(onset_ms + time_seek_ms)!s}to{(offset_ms + time_seek_ms)!s}{rec.suffix}"
         )
-
-    @staticmethod
-    def _get_audio_duration(path: Path) -> float:
-        result = subprocess.run(
-            ["sox", "--i", "-D", str(path)], capture_output=True, text=True, check=True
-        )
-        return float(result.stdout.strip())
-
-    @staticmethod
-    def _get_annotations(dest_dataset: Path) -> pd.DataFrame:
-        return pd.read_csv(dest_dataset / "metadata" / "annotations.csv")
-
-    @staticmethod
-    def _get_recordings(dest_dataset: Path) -> pd.DataFrame:
-        return pd.read_csv(dest_dataset / "metadata" / "recordings.csv")
 
     @staticmethod
     def _get_recording_paths(dest_dataset: Path, rec_name: str) -> Tuple[Path, Path]:

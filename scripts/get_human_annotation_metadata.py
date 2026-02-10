@@ -67,6 +67,7 @@ from .src.data.get_datasets import get_dataset_info
 from .src.data.gold_standard_data import (
     STANDARD_COLUMNS,
     get_annotated_ms,
+    get_num_segments,
     is_categorical,
 )
 from .src.data.metannots import (
@@ -74,8 +75,9 @@ from .src.data.metannots import (
     get_metannots,
     get_metannots_dict,
     get_sampled_duration,
+    get_sampling_count,
 )
-from .src.utils.constants import DATASETS_FOLDER, OUTPUTS_FOLDER
+from .src.utils.constants import DATASETS, DATASETS_FOLDER, OUTPUTS_FOLDER
 from .src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -103,10 +105,30 @@ class DatasetInfo(TypedDict):
 
 
 @click.command()
-@click.option("--dataset-name", help="Dataset name to process")
-def get_human_annotation_metadata(dataset_name: str) -> None:
+@click.option(
+    "--dataset-name",
+    required=False,
+    help="Dataset name to process. If not specified, use all datasets",
+)
+def get_human_annotation_metadata(dataset_name: Optional[str] = None) -> None:
     """Aggregates human annotation metadata for a given dataset \
 (mostly duration-related) and saves it"""
+    if dataset_name:
+        get_human_annotation_metadata_for_dataset(dataset_name)
+
+        return
+
+    for dataset in DATASETS:
+        logger.info(f"Processing {dataset}")
+        get_human_annotation_metadata_for_dataset(dataset)
+        logger.info(f"Done with dataset {dataset}")
+
+    logger.info("Done")
+
+    return
+
+
+def get_human_annotation_metadata_for_dataset(dataset_name: str) -> None:
     datasets = get_dataset_info(DATASETS_FOLDER, dataset_names={dataset_name})
 
     dataset = next((d for d in datasets["datasets"] if d["name"] == dataset_name), None)
@@ -138,6 +160,8 @@ def get_human_annotation_metadata(dataset_name: str) -> None:
         dataset_info["sets"].append(set_info)
 
     save_dataset_info(dataset_info, dataset_name)
+
+    return
 
 
 def save_dataset_info(dataset_info: DatasetInfo, dataset_name: str) -> None:
@@ -200,6 +224,10 @@ def get_column_info(
                     if metannots_dict
                     else -1
                 ),
+                "number_of_samples": get_sampling_count(
+                    metannots_dict, gold_std_annotations
+                ),
+                "num_of_non_empty_segments": get_num_segments(segments, col),
             }
         )
 

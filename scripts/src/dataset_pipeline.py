@@ -12,18 +12,15 @@ class DatasetPipeline:
     _output_path: Path
     _datasets_dir: Path
     _steps: List[Step]
-    _overwrite: bool
 
     def __init__(
         self,
         output_path: Path,
         datasets_dir: Path,
         steps: Optional[List[Step]] = None,
-        overwrite: Optional[bool] = None,
     ) -> None:
         self._output_path = output_path
         self._steps = steps or []
-        self._overwrite = overwrite or False
         self._datasets_dir = datasets_dir
 
         return
@@ -32,7 +29,7 @@ class DatasetPipeline:
         logger.info("Running pipeline...")
         for step in self._steps:
             try:
-                step.run(self._datasets_dir, self._output_path, self._overwrite)
+                step.run(self._datasets_dir, self._output_path)
             except StepFailedException as e:
                 logger.exception(f"Exception occured: {repr(e)} \
 Stopping and exciting...")

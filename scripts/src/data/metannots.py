@@ -88,6 +88,15 @@ def get_sampled_duration(metannots_dict: Dict, annotations: pd.DataFrame) -> int
     return sampling_count * sampling_unit_duration
 
 
+def get_sampling_count(metannots_dict: Dict, annotations: pd.DataFrame) -> int | None:
+    sampling_count = metannots_dict.get("sampling_count", None)
+
+    if sampling_count is None:
+        return len(annotations)
+
+    return sampling_count
+
+
 def calculate_sampled_duration(annotations: pd.DataFrame) -> int:
     return sum(annotations["annotation_filename"].map(extract_duration_from_filename))
 

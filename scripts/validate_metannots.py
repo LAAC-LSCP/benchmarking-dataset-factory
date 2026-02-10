@@ -43,16 +43,16 @@ def validate_metannots(dataset_name: str | None) -> None:
     else:
         datasets = get_dataset_info(DATASETS_FOLDER)
 
-    print("Printing out validation errors...")
+    logger.info("Printing out validation errors...")
     for dataset in datasets["datasets"]:
         for gold_std_set in dataset["gold_std_sets"]:
             try:
                 get_metannots(DATASETS_FOLDER, dataset["name"], gold_std_set)
             except ValidationError as e:
-                print(f"ERROR: validation error in \
+                logger.error(f"Validation error in \
 dataset '{dataset["name"]}', set '{gold_std_set}': {e}")
 
-    print("Done!")
+    logger.info("Done!")
 
     return
 

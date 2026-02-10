@@ -5,18 +5,6 @@
       "name": "eaf/2025",
       "columns": [
         {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "CHI",
-            "MAL",
-            "FEM",
-            "OCH"
-          ],
-          "annotated_duration_ms": 1858495,
-          "duration_from_samples_ms": 23400000
-        },
-        {
           "column": "speaker_id",
           "categorical": true,
           "values": [
@@ -26,7 +14,23 @@
             "Other child"
           ],
           "annotated_duration_ms": 1858495,
-          "duration_from_samples_ms": 23400000
+          "duration_from_samples_ms": 23400000,
+          "number_of_samples": 13,
+          "num_of_non_empty_segments": 1155
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "MAL",
+            "FEM",
+            "OCH"
+          ],
+          "annotated_duration_ms": 1858495,
+          "duration_from_samples_ms": 23400000,
+          "number_of_samples": 13,
+          "num_of_non_empty_segments": 1155
         }
       ]
     }

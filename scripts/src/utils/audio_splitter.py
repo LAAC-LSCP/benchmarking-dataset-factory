@@ -1,4 +1,6 @@
+from pathlib import Path
 from typing import Annotated, Dict
+
 import pandas as pd
 from pyannote.core import Annotation, Segment, Timeline
 
@@ -23,8 +25,51 @@ class AudioSplitter:
         self._annotations = annotations
         self._padding_ms = padding_ms
 
-    def get_recording_file_for_annotation(self) -> pd.DataFrame:
-        raise NotImplementedError
+    def set_annotation_from_split_recordings(
+        self, annotation: pd.Series, split_recordings: pd.DataFrame
+    ) -> pd.Series:
+        recording = next(
+            (
+                r
+                for _, r in split_recordings.iterrows()
+                if (r["recording_filename"] == annotation["recording_filename"])
+                and (r["start"] <= annotation["range_onset"] + annotation["time_seek"])
+                and (annotation["range_offset"] + annotation["time_seek"] <= r["end"])
+            ),
+            None,
+        )
+
+        assert recording is not None
+
+        new_rec_filename = recording["new_recording_filename"]
+
+        annotation["original_recording_filename"] = annotation["recording_filename"]
+        annotation["original_annotation_filename"] = annotation["annotation_filename"]
+
+        annotation["range_onset"] = (
+            annotation["range_onset"] + annotation["time_seek"] - recording["start"]
+        )
+        annotation["range_offset"] = (
+            annotation["range_offset"] + annotation["time_seek"] - recording["start"]
+        )
+        annotation["time_seek"] = 0
+        annotation["recording_filename"] = new_rec_filename
+
+        annotation_filename = Path(annotation["annotation_filename"])
+        annotation_filename = annotation_filename.with_stem(
+            Path(new_rec_filename).stem
+            + "_"
+            + str(annotation["range_onset"])
+            + "_"
+            + str(annotation["range_offset"])
+        )
+        annotation["annotation_filename"] = str(annotation_filename)
+
+        raw_filename = Path(annotation["raw_filename"])
+        raw_filename = raw_filename.with_stem(Path(new_rec_filename).stem)
+        annotation["raw_filename"] = str(raw_filename)
+
+        return annotation
 
     def get_recording_splits(self) -> pd.DataFrame:
         timelines: Dict[Annotated[str, "recording filename"], Timeline] = {}
@@ -68,7 +113,7 @@ class AudioSplitter:
         return int(
             self._recordings[self._recordings["recording_filename"] == rec_filename][
                 "duration"
-            ]
+            ].iloc[0]
         )
 
     @staticmethod

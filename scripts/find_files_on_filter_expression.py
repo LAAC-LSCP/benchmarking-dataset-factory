@@ -113,7 +113,7 @@ children dataframe: {e}")
 
             children_filter_expr = ""
 
-    file_infos = get_file_infos(children_df, metannots_df, datasets_dir)
+    file_infos = get_file_infos(children_df, recordings_df, metannots_df, datasets_dir)
     filtered_children = get_children_from_files(file_infos, children_df)
     filtered_recordings = get_recordings_from_files(file_infos, recordings_df)
     filtered_annotations = get_annotations_from_files(file_infos, annotations_df)
@@ -189,6 +189,7 @@ def get_annotations_df(datasets: Set[str], datasets_dir: Path) -> pd.DataFrame:
 
 def get_file_infos(
     children_df: pd.DataFrame,
+    recordings_df: pd.DataFrame,
     metannots_df: pd.DataFrame,
     datasets_dir: Path,
 ) -> pd.DataFrame:
@@ -200,7 +201,7 @@ def get_file_infos(
 
         file_infos.append(
             get_file_paths_for_set_dataset(
-                gold_std_set, dataset, children_df, datasets_dir
+                gold_std_set, dataset, children_df, recordings_df, datasets_dir
             )
         )
 
@@ -211,6 +212,7 @@ def get_file_paths_for_set_dataset(
     set_name: str,
     dataset: str,
     children_df: pd.DataFrame,
+    recordings_df: pd.DataFrame,
     datasets_dir: Path,
 ) -> pd.DataFrame:
     file_infos: List[Dict] = []
@@ -218,13 +220,10 @@ def get_file_paths_for_set_dataset(
     project = ChildProject(datasets_dir / dataset)
     am: AnnotationManager = AnnotationManager(project)
 
-    recordings: pd.DataFrame = project.recordings
+    recordings = recordings_df[recordings_df["dataset"] == dataset]
     recordings = recordings.reindex(
         columns=["recording_filename", "child_id", "discard", "duration"]
     )
-
-    if "discard" in recordings.columns:
-        recordings = recordings[recordings["discard"] != "1"]
 
     annotations: pd.DataFrame = am.annotations
     annotations = annotations[annotations["set"] == set_name]
@@ -284,12 +283,7 @@ def get_children_from_files(
         how="inner",
     )
 
-    children["child_id"] = (
-        children["dataset"].astype(str) + "_" + children["child_id"].astype(str)
-    )
-
     children = children.loc[:, ~children.isna().all()]
-    children = children.drop("dataset", axis=1)
 
     return children
 
@@ -304,19 +298,7 @@ def get_recordings_from_files(
         how="inner",
     )
 
-    recordings["child_id"] = (
-        recordings["dataset"].astype(str) + "_" + recordings["child_id"].astype(str)
-    )
-
     recordings = recordings.loc[:, ~recordings.isna().all()]
-
-    filename_cols = [col for col in recordings.columns if col.endswith("_filename")]
-    for col in filename_cols:
-        recordings[col] = (
-            recordings["dataset"].astype(str) + "/" + recordings[col].astype(str)
-        )
-
-    recordings = recordings.drop("dataset", axis=1)
 
     return recordings
 
@@ -326,19 +308,12 @@ def get_annotations_from_files(
 ) -> pd.DataFrame:
     annotations = original_annotations_df.copy()
     annotations = annotations.merge(
-        file_infos[["annotation_filename", "dataset"]].drop_duplicates(),
-        on=["annotation_filename", "dataset"],
+        file_infos[["annotation_filename", "set", "dataset"]].drop_duplicates(),
+        on=["annotation_filename", "set", "dataset"],
         how="inner",
     )
 
-    annotations["set"] = annotations["dataset"] + "/" + annotations["set"].astype(str)
-    annotations["recording_filename"] = (
-        annotations["dataset"] + "/" + annotations["recording_filename"].astype(str)
-    )
-
     annotations = annotations.loc[:, ~annotations.isna().all()]
-
-    annotations = annotations.drop("dataset", axis=1)
 
     return annotations
 

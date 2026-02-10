@@ -12,7 +12,7 @@ class AddBoilerplate(Step):
     def __init__(self, env: EnvConfig) -> None:
         super().__init__(env=env, name=StepName.ADD_BOILERPLATE)
 
-    def _run(self, _: Path, dest_dataset: Path, __: bool) -> None:
+    def _run(self, _: Path, dest_dataset: Path) -> None:
         logger.info(f"Preparing output directory: {dest_dataset}")
 
         if not dest_dataset.exists():

@@ -35,16 +35,16 @@ class Step(ABC):
         self._name = name
         self._env = env or EnvConfig(conda_activation_str="")
 
-    def run(self, datasets_dir: Path, dest_dataset: Path, overwrite: bool) -> None:
+    def run(self, datasets_dir: Path, dest_dataset: Path) -> None:
         try:
             logger.info(f"Running step '{self._name}'...")
-            self._run(datasets_dir, dest_dataset, overwrite)
+            self._run(datasets_dir, dest_dataset)
             logger.info(f"Finished running step '{self._name}'...")
         except Exception as e:
             raise StepFailedException(self._name, repr(e)) from e
 
     @abstractmethod
-    def _run(self, datasets_dir: Path, dest_dataset: Path, overwrite: bool) -> None:
+    def _run(self, datasets_dir: Path, dest_dataset: Path) -> None:
         return NotImplemented
 
     @property

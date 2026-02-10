@@ -5,18 +5,6 @@
       "name": "eaf_2025/AC",
       "columns": [
         {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "FEM",
-            "CHI",
-            "OCH",
-            "MAL"
-          ],
-          "annotated_duration_ms": 1158649,
-          "duration_from_samples_ms": 3900000
-        },
-        {
           "column": "speaker_id",
           "categorical": true,
           "values": [
@@ -30,25 +18,29 @@
             "FA3"
           ],
           "annotated_duration_ms": 1158649,
-          "duration_from_samples_ms": 3900000
+          "duration_from_samples_ms": 3900000,
+          "number_of_samples": 65,
+          "num_of_non_empty_segments": 939
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "FEM",
+            "CHI",
+            "OCH",
+            "MAL"
+          ],
+          "annotated_duration_ms": 1158649,
+          "duration_from_samples_ms": 3900000,
+          "number_of_samples": 65,
+          "num_of_non_empty_segments": 939
         }
       ]
     },
     {
       "name": "eaf_2025/PB",
       "columns": [
-        {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "OCH",
-            "FEM",
-            "CHI",
-            "MAL"
-          ],
-          "annotated_duration_ms": 597948,
-          "duration_from_samples_ms": 2340000
-        },
         {
           "column": "speaker_id",
           "categorical": true,
@@ -63,7 +55,23 @@
             "MA2"
           ],
           "annotated_duration_ms": 597948,
-          "duration_from_samples_ms": 2340000
+          "duration_from_samples_ms": 2340000,
+          "number_of_samples": 39,
+          "num_of_non_empty_segments": 639
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "FEM",
+            "CHI",
+            "MAL"
+          ],
+          "annotated_duration_ms": 597948,
+          "duration_from_samples_ms": 2340000,
+          "number_of_samples": 39,
+          "num_of_non_empty_segments": 639
         }
       ]
     }

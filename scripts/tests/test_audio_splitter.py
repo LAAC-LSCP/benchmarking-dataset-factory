@@ -1,7 +1,9 @@
 from typing import Dict
+
 import pandas as pd
 import pytest
-from scripts.src.steps.audio_splitter import AudioSplitter
+
+from scripts.src.utils.audio_splitter import AudioSplitter
 
 
 @pytest.mark.parametrize(

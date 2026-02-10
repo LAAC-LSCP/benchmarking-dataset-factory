@@ -19,7 +19,7 @@ class AddRecordings(Step):
 
         super().__init__(env=env, name=StepName.ADD_RECORDINGS)
 
-    def _run(self, datasets_dir: Path, dest_dataset: Path, overwrite: bool) -> None:
+    def _run(self, datasets_dir: Path, dest_dataset: Path) -> None:
         file_pairs: Set[Tuple[Path, Path]] = set()
         dataset_file_map: Dict[str, Set[Tuple[Path, Path]]] = {
             d: set() for d in self._file_infos["dataset"].unique()
@@ -40,13 +40,12 @@ class AddRecordings(Step):
             dataset_file_map[row["dataset"]].add((src_converted, dst_converted))
             dataset_file_map[row["dataset"]].add((src_raw, dst_raw))
 
-        if not overwrite:
-            # skip things that are already added
-            file_pairs = {(src, dst) for (src, dst) in file_pairs if not dst.exists()}
-            dataset_file_map = {
-                dataset: {(src, dst) for (src, dst) in files if not dst.exists()}
-                for (dataset, files) in dataset_file_map.items()
-            }
+        # skip things that are already added
+        file_pairs = {(src, dst) for (src, dst) in file_pairs if not dst.exists()}
+        dataset_file_map = {
+            dataset: {(src, dst) for (src, dst) in files if not dst.exists()}
+            for (dataset, files) in dataset_file_map.items()
+        }
 
         if len(file_pairs) != 0:
             if self._fetch_files:
