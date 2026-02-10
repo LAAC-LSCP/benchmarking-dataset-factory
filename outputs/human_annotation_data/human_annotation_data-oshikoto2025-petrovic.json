@@ -1,0 +1,38 @@
+{
+  "name": "oshikoto2025-petrovic",
+  "sets": [
+    {
+      "name": "eaf_2025/PB",
+      "columns": [
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "OCH",
+            "CHI",
+            "FEM",
+            "MAL"
+          ],
+          "annotated_duration_ms": 1157854,
+          "duration_from_samples_ms": 2760000
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "UC1",
+            "CHI",
+            "FA1",
+            "MA1",
+            "UC2",
+            "FA3",
+            "MA2",
+            "FA2"
+          ],
+          "annotated_duration_ms": 1157854,
+          "duration_from_samples_ms": 2760000
+        }
+      ]
+    }
+  ]
+}
