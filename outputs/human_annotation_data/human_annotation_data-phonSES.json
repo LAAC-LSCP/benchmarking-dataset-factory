@@ -1,0 +1,53 @@
+{
+  "name": "phonSES",
+  "sets": [
+    {
+      "name": "eaf_2025/PB",
+      "columns": [
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "FA1",
+            "MA1",
+            "FA2",
+            "MA2",
+            "UC1",
+            "UC2",
+            "<NA>"
+          ],
+          "annotated_duration_ms": 887023,
+          "duration_from_samples_ms": 3900000
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "CHI",
+            "FEM",
+            "MAL",
+            "OCH",
+            "<NA>"
+          ],
+          "annotated_duration_ms": 887023,
+          "duration_from_samples_ms": 3900000
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "T",
+            "U",
+            "A",
+            "O",
+            "C"
+          ],
+          "annotated_duration_ms": 549129,
+          "duration_from_samples_ms": 3900000
+        }
+      ]
+    }
+  ]
+}
