@@ -123,3 +123,14 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/winnipeg.git
 	datalad-id = dbd0c9ff-8304-49ef-98d8-ae48dee983fb
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/winnipeg.git
+[submodule "datasets/oshikoto2025-petrovic"]
+	path = datasets/oshikoto2025-petrovic
+	url = git@gin.g-node.org:/LAAC-LSCP/oshikoto2025-petrovic.git
+	datalad-id = af8b0636-89b9-49d6-bd38-96f65e925f34
+[submodule "datasets/phonSES"]
+	path = datasets/phonSES
+	url = git@gin.g-node.org:/LAAC-LSCP/phonSES.git
+	datalad-id = 8ac1ca34-959d-48dc-b950-182d77c6845b
+[submodule "datasets/ticuna2018"]
+	path = datasets/ticuna2018
+	url = git@gin.g-node.org:/LAAC-LSCP/ticuna2018.git
