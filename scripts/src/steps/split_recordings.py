@@ -128,16 +128,17 @@ class SplitRecordings(Step):
             onset_s = onset_ms / 1000
             offset_s = offset_ms / 1000
             duration = offset_s - onset_s
+            time_seek_s = time_seek_ms / 1000
 
             output_rec = SplitRecordings._get_final_rec_path(
-                rec, onset_ms, offset_ms, time_seek_ms
+                rec, onset_ms, offset_ms, time_seek_s
             )
 
             if output_rec.exists():
                 continue
 
             sox_commands.append(f"sox {rec!s} {output_rec!s} trim \
-{(onset_s + time_seek_ms)!s} {duration!s}")
+{(onset_s + time_seek_s)!s} {duration!s}")
 
         if not sox_commands:
             return
@@ -253,7 +254,7 @@ class SplitRecordings(Step):
     ) -> Path:
         return rec.parent / (
             rec.stem
-            + f"-{(onset_ms + time_seek_ms)!s}to{(offset_ms + time_seek_ms)!s}{rec.suffix}"
+            + f"-{int(onset_ms + time_seek_ms)!s}to{int(offset_ms + time_seek_ms)!s}{rec.suffix}"
         )
 
     @staticmethod

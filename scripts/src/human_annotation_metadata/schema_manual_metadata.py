@@ -1,6 +1,6 @@
 from contextvars import ContextVar
 from pathlib import Path
-from typing import Dict, List, Literal, Optional, Set, Tuple
+from typing import Callable, Dict, List, Literal, Optional, Set, Tuple
 
 import yaml
 from pydantic import BaseModel, model_validator
@@ -17,7 +17,7 @@ def get_metannots(dataset: str, set: str, datasets_dir: Path) -> Path:
     return (datasets_dir / dataset / "annotations" / set / "metannots.yml").resolve()
 
 
-def dataset_model_factory(generated_datasets: GeneratedDatasets, datasets_folder: Optional[Path] = DATASETS_FOLDER):
+def dataset_model_factory(generated_datasets: GeneratedDatasets, datasets_folder: Optional[Path] = DATASETS_FOLDER, skip_validation: bool = False):
     context_dataset_name = ContextVar("name")
 
     class ManualSet(BaseModel):
@@ -33,6 +33,9 @@ def dataset_model_factory(generated_datasets: GeneratedDatasets, datasets_folder
         def assure_cols_exact_match(self):
             """Check that the available columns are an exact match on the columns in
             the generated data."""
+            if skip_validation:
+                return self
+
             manual_cols = self._get_all_cols()
 
             dataset = self._get_dataset()
@@ -52,6 +55,9 @@ def dataset_model_factory(generated_datasets: GeneratedDatasets, datasets_folder
         @model_validator(mode="after")
         def check_metannots_exist(self):
             """Check if metannots exist. Implicitly checks the set exists"""
+            if skip_validation:
+                return self
+
             self._get_metannots(datasets_folder)
 
             return self
@@ -109,6 +115,9 @@ def dataset_model_factory(generated_datasets: GeneratedDatasets, datasets_folder
                 | Tuple[Literal["transcription_cols"], Literal["has_transcription"]]
             ),
         ) -> None:
+            if skip_validation:
+                return self
+
             metannots = self._get_metannots(datasets_folder)
             duration, cols = self._get_annotated_duration(keys[0])
 
@@ -127,6 +136,9 @@ Duration: {duration!s}\n")
                 | Tuple[Literal["transcription_cols"], Literal["has_transcription"]]
             ),
         ) -> None:
+            if skip_validation:
+                return self
+
             metannots = self._get_metannots(datasets_folder)
             duration, cols = self._get_annotated_duration(keys[0])
 
@@ -219,6 +231,9 @@ Associated columns: {cols!s}\n")
 
         @model_validator(mode="after")
         def check_sets_match(self):
+            if skip_validation:
+                return self
+
             this_dataset = self._get_dataset()
             generated_sets = {s.name for s in this_dataset.sets}
             manual_sets = {s.name for s in self.sets}
