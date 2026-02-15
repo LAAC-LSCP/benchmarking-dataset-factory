@@ -19,12 +19,12 @@ class AddAnnotations(Step):
     _fetch_files: bool
 
     def __init__(
-        self, env: EnvConfig, *, file_infos: pd.DataFrame, fetch_files: bool
+        self, env: EnvConfig, additive: bool, *, file_infos: pd.DataFrame, fetch_files: bool
     ) -> None:
         self._file_infos = file_infos
         self._fetch_files = fetch_files
 
-        super().__init__(env=env, name=StepName.ADD_ANNOTATIONS)
+        super().__init__(env=env, additive=additive, name=StepName.ADD_ANNOTATIONS)
 
     def _run(self, datasets_dir: Path, dest_dataset: Path) -> None:
         file_pairs: Set[Tuple[Path, Path]] = set()
@@ -41,7 +41,7 @@ class AddAnnotations(Step):
 
         for _, row in (
             self._file_infos[["dataset", "set"]].drop_duplicates().iterrows()
-        ):  # type: 
+        ):  # type: ignore
             src: Path = (
                 datasets_dir
                 / row["dataset"]
@@ -69,11 +69,11 @@ class AddAnnotations(Step):
 
         if len(file_pairs) != 0:
             if self._fetch_files:
-                fetch_files(self._env, dataset_file_map, datasets_dir)
-            copy_files(self._env, file_pairs, dest_dataset)
+                fetch_files(self.env, dataset_file_map, datasets_dir)
+            copy_files(self.env, file_pairs, dest_dataset)
 
         git_unannex_and_save(
-            self._env, dest_dataset, "annotations/**", "Unannexed annotations and saved"
+            self.env, dest_dataset, "annotations/**", "Unannexed annotations and saved"
         )
 
         return

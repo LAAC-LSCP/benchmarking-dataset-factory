@@ -1,4 +1,5 @@
 from pathlib import Path
+import traceback
 from typing import List, Optional
 
 from scripts.src.steps.step import Step
@@ -33,8 +34,8 @@ class DatasetPipeline:
             except StepFailedException as e:
                 logger.exception(f"Exception occured: {repr(e)} \
 Stopping and exciting...")
-
-                return
+                logger.error(traceback.format_exc())
+                traceback.print_exc()
         logger.info("Finished running dataset pipeline")
 
         return

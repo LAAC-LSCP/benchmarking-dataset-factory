@@ -25,6 +25,8 @@ class SplitRecordings(Step):
     def __init__(
         self,
         env: EnvConfig,
+        additive: bool,
+        *,
         annotations: pd.DataFrame,
         recordings: pd.DataFrame,
         remove_full_recordings: bool = True,
@@ -33,7 +35,7 @@ class SplitRecordings(Step):
         self._annotations = annotations
         self._recordings = recordings
 
-        super().__init__(env=env, name=StepName.SPLIT_RECORDINGS)
+        super().__init__(env=env, additive=additive, name=StepName.SPLIT_RECORDINGS)
 
     def _run(self, _: Path, dest_dataset: Path) -> None:
         annotations = self._annotations
@@ -159,24 +161,31 @@ class SplitRecordings(Step):
 
     def _update_annotations_csv(
         self, dest_dataset: Path, annotations: pd.DataFrame
-    ) -> pd.DataFrame:
-        logger.info("Updating annotations...")
+    ) -> None:
+        logger.info("Saving annotations...")
         annotations = annotations.copy()
         annotations = annotations.drop(
             ["original_recording_filename", "original_annotation_filename"], axis=1
         )
 
-        annotations.to_csv(dest_dataset / "metadata" / "annotations.csv", index=False)
-        datalad_save(self._env, dest_dataset, "Updated annotations.csv")
+        if self.additive:
+            existing_annotations = pd.read_csv(dest_dataset / "metadata" / "annotations.csv")
+            # At this point sets read like thomas/cha. We must be careful not to include
+            # the annotations for the sets (datasets) we're currently adding
+            sets_being_added = [s for s in annotations["set"].unique()]
 
-        return annotations
+            existing_annotations = existing_annotations[~existing_annotations["set"].isin(sets_being_added)]
+
+            annotations = pd.concat([annotations, existing_annotations]).drop_duplicates()
+
+        self._save_annotations_csv(dest_dataset, annotations)
 
     def _update_recordings_csv(
         self,
         dest_dataset: Path,
         recordings_index: pd.DataFrame,
-    ) -> pd.DataFrame:
-        logger.info("Updating recordings...")
+    ) -> None:
+        logger.info("Saving recordings...")
         recordings = self._recordings.copy()
 
         recordings = pd.merge(
@@ -188,10 +197,24 @@ class SplitRecordings(Step):
         recordings = recordings.drop_duplicates()
         recordings["experiment"] = "benchmarking"
 
-        recordings.to_csv(dest_dataset / "metadata" / "recordings.csv", index=False)
-        datalad_save(self._env, dest_dataset, "Updated recordings.csv")
+        if self.additive:
+            existing_recordings = pd.read_csv(dest_dataset / "metadata" / "recordings.csv")
+            # At this point child_ids read like thomas_thomas. We must be careful not to include
+            # the recordings for the sets (datasets) we're currently adding
+            children_being_added = [s for s in recordings["child_id"].unique()]
 
-        return recordings
+            existing_recordings = existing_recordings[~existing_recordings["child_id"].isin(children_being_added)]
+            recordings = pd.concat([recordings, existing_recordings]).drop_duplicates()
+
+        self._save_recordings_csv(dest_dataset, recordings)
+
+    def _save_annotations_csv(self, dest_dataset: Path, annotations: pd.DataFrame) -> None:
+        annotations.to_csv(dest_dataset / "metadata" / "annotations.csv", index=False)
+        datalad_save(self.env, dest_dataset, "Updated annotations.csv")
+
+    def _save_recordings_csv(self, dest_dataset: Path, recordings: pd.DataFrame) -> None:
+        recordings.to_csv(dest_dataset / "metadata" / "recordings.csv", index=False)
+        datalad_save(self.env, dest_dataset, "Updated recordings.csv")
 
     def _remove_recordings(
         self, dest_dataset: Path, recordings: Set[Tuple[Path, Path]]
@@ -207,8 +230,8 @@ class SplitRecordings(Step):
 
         commands = [
             self._env.conda_activation_str,
-            f"datalad drop {files_str} --reckless kill",
-            f"datalad remove {files_str} --reckless kill -m \
+            # f"datalad drop {files_str} --reckless kill",
+            f"datalad remove {files_str} --reckless kill --drop all -m \
 'removed {len(files)} recordings'",
         ]
         shell_command = " && ".join(commands)

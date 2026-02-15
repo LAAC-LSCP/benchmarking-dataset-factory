@@ -33,6 +33,7 @@ def get_dataset_info(
 
     for ds in datasets:
         project = ChildProject(ds)
+        logger.info(f"Loading annotation manager for dataset {ds.name}...")
         am = AnnotationManager(project)
 
         sets_metadata: pd.DataFrame = am.get_sets_metadata()

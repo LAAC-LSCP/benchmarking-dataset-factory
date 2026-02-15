@@ -12,12 +12,12 @@ class AddRecordings(Step):
     _fetch_files: bool
 
     def __init__(
-        self, env: EnvConfig, *, file_infos: pd.DataFrame, fetch_files: bool
+        self, env: EnvConfig, additive: bool, *, file_infos: pd.DataFrame, fetch_files: bool
     ) -> None:
         self._file_infos = file_infos
         self._fetch_files = fetch_files
 
-        super().__init__(env=env, name=StepName.ADD_RECORDINGS)
+        super().__init__(env=env, additive=additive, name=StepName.ADD_RECORDINGS)
 
     def _run(self, datasets_dir: Path, dest_dataset: Path) -> None:
         file_pairs: Set[Tuple[Path, Path]] = set()

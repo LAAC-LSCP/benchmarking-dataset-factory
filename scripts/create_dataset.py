@@ -52,6 +52,12 @@ logger = logging.getLogger(__name__)
     help="Whether to fetch datalad files",
 )
 @click.option(
+    "--additive",
+    is_flag=True,
+    default=False,
+    help="Set to true if you're adding datasets",
+)
+@click.option(
     "--type",
     type=click.Choice([t.value for t in DatasetType]),
     required=True,
@@ -89,6 +95,7 @@ subfolder in this repo to filter on potential dataset names)",
 def create_dataset(
     output_path: str,
     fetch_files: bool,
+    additive: bool,
     type: str,
     source: Tuple[str],
     step: Tuple[str],
@@ -116,6 +123,7 @@ def create_dataset(
         # Filters down further based on manual annotations as source of truth (more accurate than metannots)
         generated_data = get_generated_metadata()
         manual_data = dataset_model_factory(generated_data)(**get_manual_metadata())
+        # Skip validation with `model_construct`. Use the validation script if unsure
         file_infos, children_df, recordings_df, annotations_df = filter_on_manual_data(
             file_infos,
             children_df,
@@ -124,6 +132,12 @@ def create_dataset(
             manual_data,
             dataset_type,
         )
+
+        if len(annotations_df) == 0:
+            logger.info("Matched annotations empty. Exiting")
+
+            return
+
         children_df, recordings_df, annotations_df = fix_columns_for_combined_dfs(
             children_df, recordings_df, annotations_df
         )
@@ -133,17 +147,19 @@ def create_dataset(
         )
 
         pipeline_steps: List[Step] = [
-            AddBoilerplate(env),
+            AddBoilerplate(env, additive),
             AddMetadata(
                 env,
+                additive,
                 children=children_df,
                 recordings=recordings_df,
                 annotations=annotations_df,
             ),
-            AddAnnotations(env, file_infos=file_infos, fetch_files=fetch_files),
-            AddRecordings(env, file_infos=file_infos, fetch_files=fetch_files),
+            AddAnnotations(env, additive, file_infos=file_infos, fetch_files=fetch_files),
+            AddRecordings(env, additive, file_infos=file_infos, fetch_files=fetch_files),
             SplitRecordings(
                 env,
+                additive,
                 annotations=annotations_df,
                 recordings=recordings_df,
                 remove_full_recordings=True,

@@ -9,10 +9,15 @@ logger = get_logger(__name__)
 
 
 class AddBoilerplate(Step):
-    def __init__(self, env: EnvConfig) -> None:
-        super().__init__(env=env, name=StepName.ADD_BOILERPLATE)
+    def __init__(self, env: EnvConfig, additive: bool) -> None:
+        super().__init__(env=env, additive=additive, name=StepName.ADD_BOILERPLATE)
 
     def _run(self, _: Path, dest_dataset: Path) -> None:
+        if self.additive:
+            logger.info("Skipping boilerplate step as `additive==True`")
+
+            return
+
         logger.info(f"Preparing output directory: {dest_dataset}")
 
         if not dest_dataset.exists():
@@ -23,24 +28,24 @@ class AddBoilerplate(Step):
             self._initialise_childproject(dest_dataset)
             logger.info("Initialising datalad...")
             self._initialise_datalad(dest_dataset)
-            datalad_save(self._env, dest_dataset, "Added ChildProject boilerplate")
+            datalad_save(self.env, dest_dataset, "Added ChildProject boilerplate")
             logger.info("Handling .gitignore...")
             self._initialise_gitignore(dest_dataset)
             logger.info("Handling .gitattributes...")
             self._initialise_gitattributes(dest_dataset)
 
             git_unannex_and_save(
-                self._env, dest_dataset, "metadata/*", "Unannexed metadata and saved"
+                self.env, dest_dataset, "metadata/*", "Unannexed metadata and saved"
             )
             git_unannex_and_save(
-                self._env, dest_dataset, "README.md", "Unannexed README.md and saved"
+                self.env, dest_dataset, "README.md", "Unannexed README.md and saved"
             )
 
         return
 
     def _initialise_childproject(self, dest_dataset: Path) -> None:
         commands = [
-            self._env.conda_activation_str,
+            self.env.conda_activation_str,
             "child-project init .",
         ]
         shell_command = " && ".join(commands)
@@ -57,7 +62,7 @@ class AddBoilerplate(Step):
 
     def _initialise_datalad(self, dest_dataset: Path) -> None:
         commands = [
-            self._env.conda_activation_str,
+            self.env.conda_activation_str,
             "datalad create --force",
         ]
         shell_command = " && ".join(commands)
@@ -79,7 +84,7 @@ class AddBoilerplate(Step):
         if not gitignore_file.exists():
             gitignore_file.write_text(f"{ds_store_entry}\n")
             logger.info(f"Created .gitignore at {gitignore_file} (ignoring .DS_Store)")
-            datalad_save(self._env, dest_dataset, "added .gitignore")
+            datalad_save(self.env, dest_dataset, "added .gitignore")
             return
 
         with gitignore_file.open("r") as f:
@@ -89,7 +94,7 @@ class AddBoilerplate(Step):
             with gitignore_file.open("a") as f:
                 f.write(f"{ds_store_entry}\n")
             logger.info(f"Added .DS_Store to .gitignore at {gitignore_file}")
-            datalad_save(self._env, dest_dataset, "updated .gitignore")
+            datalad_save(self.env, dest_dataset, "updated .gitignore")
 
     def _initialise_gitattributes(self, dest_dataset: Path) -> None:
         gitattributes_file = dest_dataset / ".gitattributes"
@@ -106,4 +111,4 @@ class AddBoilerplate(Step):
 
         gitattributes_file.write_text(content)
         logger.info(f"Wrote .gitattributes at '{gitattributes_file!s}'")
-        datalad_save(self._env, dest_dataset, "updated .gitattributes")
+        datalad_save(self.env, dest_dataset, "updated .gitattributes")
