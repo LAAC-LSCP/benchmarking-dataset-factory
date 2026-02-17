@@ -56,6 +56,7 @@ class SplitRecordings(Step):
             ),
             axis=1,
         )
+        annotations = annotations[annotations["discard"] != True]
 
         unique_annots = annotations[
             [

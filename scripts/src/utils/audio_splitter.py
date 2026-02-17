@@ -4,6 +4,11 @@ from typing import Annotated, Dict
 import pandas as pd
 from pyannote.core import Annotation, Segment, Timeline
 
+from scripts.src.utils.logger import get_logger
+
+
+logger = get_logger(__name__)
+
 
 class AudioSplitter:
     """Helper class to split audio files
@@ -39,7 +44,12 @@ class AudioSplitter:
             None,
         )
 
-        assert recording is not None
+        if recording is None:
+            logger.warning(f"Annotation {annotation["annotation_filename"]} does not fit any recording")
+            
+            annotation["discard"] = True
+
+            return annotation 
 
         new_rec_filename = recording["new_recording_filename"]
 
