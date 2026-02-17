@@ -56,7 +56,8 @@ class SplitRecordings(Step):
             ),
             axis=1,
         )
-        annotations = annotations[annotations["discard"] != True]
+        if "discard" in annotations.columns:
+            annotations = annotations[annotations["discard"] != True]
 
         unique_annots = annotations[
             [
@@ -78,8 +79,12 @@ class SplitRecordings(Step):
                     dest_dataset, original_rec_name
                 )
 
-                commands.append((converted, int(onset), int(offset), int(time_seek)))
-                commands.append((raw, int(onset), int(offset), int(time_seek)))
+                if raw is not None:
+                    logger.warning(f"Couldn't find file {raw}")
+                    commands.append((raw, int(onset), int(offset), int(time_seek)))
+                if converted is not None:
+                    logger.warning(f"Couldn't find file {converted}")
+                    commands.append((converted, int(onset), int(offset), int(time_seek)))
 
             self._split_recordings(commands)
 
@@ -108,7 +113,7 @@ class SplitRecordings(Step):
         self._update_annotations_csv(dest_dataset, annotations)
         self._update_recordings_csv(dest_dataset, recordings)
 
-        pairs: Set[Tuple[Path, Path]] = set(
+        pairs: Set[Tuple[Path | None, Path | None]] = set(
             map(
                 partial(SplitRecordings._get_recording_paths, dest_dataset),
                 annotations["original_recording_filename"],
@@ -219,9 +224,9 @@ class SplitRecordings(Step):
         datalad_save(self.env, dest_dataset, "Updated recordings.csv")
 
     def _remove_recordings(
-        self, dest_dataset: Path, recordings: Set[Tuple[Path, Path]]
+        self, dest_dataset: Path, recordings: Set[Tuple[Path | None, Path | None]]
     ) -> None:
-        files = [str(f) for pair in recordings for f in pair]
+        files = [str(f) for pair in recordings for f in pair if f is not None]
 
         if not files:
             logger.info("No recordings to remove.")
@@ -259,16 +264,20 @@ class SplitRecordings(Step):
         )
 
     @staticmethod
-    def _get_recording_paths(dest_dataset: Path, rec_name: str) -> Tuple[Path, Path]:
+    def _get_recording_paths(dest_dataset: Path, rec_name: str) -> Tuple[Path | None, Path | None]:
         r_raw_path = dest_dataset / "recordings" / "raw" / rec_name
         r_converted_path = (
             dest_dataset / "recordings" / "converted" / "standard" / rec_name
         ).with_suffix(".wav")
 
         if not r_raw_path.exists():
-            raise FileNotFoundError(f"File not found at {r_raw_path!s}")
+            logger.warning(f"File not found at {r_raw_path!s}")
+
+            r_raw_path = None
 
         if not r_converted_path.exists():
-            raise FileNotFoundError(f"File not found at {r_converted_path!s}")
+            logger.warning(f"File not found at {r_converted_path!s}")
+
+            r_converted_path = None
 
         return r_raw_path, r_converted_path

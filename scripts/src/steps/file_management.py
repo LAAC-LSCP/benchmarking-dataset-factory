@@ -44,6 +44,8 @@ def fetch_files(
 def copy_files(
     env: EnvConfig, file_pairs: Set[Tuple[Path, Path]], dataset: Path
 ) -> None:
+    for (src, dst) in file_pairs:
+        logger.info(f"Copying file pair {src!s}: {dst!s}")
     logger.info(
         f"Copying {len(file_pairs)} files with datalad specfile in dataset {dataset}"
     )
