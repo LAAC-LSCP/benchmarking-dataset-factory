@@ -129,3 +129,8 @@
 [submodule "datasets/ticuna2018"]
 	path = datasets/ticuna2018
 	url = git@gin.g-node.org:/LAAC-LSCP/ticuna2018.git
+[submodule "datasets/babylogger-vs-lena-data"]
+	path = datasets/babylogger-vs-lena-data
+	url = git@gin.g-node.org:/LAAC-LSCP/babylogger-vs-lena-data.git
+	datalad-id = 9efbe6f2-885a-4b4e-8c99-23cf83b023af
+	datalad-url = git@gin.g-node.org:/LAAC-LSCP/babylogger-vs-lena-data.git
