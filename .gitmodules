@@ -38,11 +38,6 @@
 	url = git@gin.g-node.org:/LAAC-LSCP/lyon.git
 	datalad-id = 6c16a6b9-0cbe-4f52-93e8-8b67b71a9193
 	datalad-url = git@gin.g-node.org:/LAAC-LSCP/lyon.git
-[submodule "datasets/namibia"]
-	path = datasets/namibia
-	url = git@gin.g-node.org:/LAAC-LSCP/namibia.git
-	datalad-id = 5e5056b2-a2ad-4d87-b526-2adacf5348a3
-	datalad-url = git@gin.g-node.org:/LAAC-LSCP/namibia.git
 [submodule "datasets/png2016"]
 	path = datasets/png2016
 	url = git@gin.g-node.org:/LAAC-LSCP/png2016.git
