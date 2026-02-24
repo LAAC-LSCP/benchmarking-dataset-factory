@@ -1,0 +1,56 @@
+{
+  "name": "babylogger-vs-lena-data",
+  "sets": [
+    {
+      "name": "eaf_2025/PB",
+      "columns": [
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "FEM",
+            "CHI",
+            "<NA>",
+            "MAL",
+            "OCH"
+          ],
+          "annotated_duration_ms": 1245160,
+          "duration_from_samples_ms": 2880000,
+          "number_of_samples": 48,
+          "num_of_non_empty_segments": 860
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2880000,
+          "number_of_samples": 48,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "FA1",
+            "FA2",
+            "CHI",
+            "<NA>",
+            "MA1",
+            "UC2",
+            "UC1",
+            "MA2",
+            "FA3",
+            "Notes"
+          ],
+          "annotated_duration_ms": 1267710,
+          "duration_from_samples_ms": 2880000,
+          "number_of_samples": 48,
+          "num_of_non_empty_segments": 861
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ This dataframe can be used for later train/test/validation splitting of the data
 For more information on filter expressions, visit the Pandas documentation
 """
 
+import functools
 from pathlib import Path
 from typing import Annotated, Dict, List, Set, Tuple
 
@@ -14,6 +15,8 @@ import click
 import pandas as pd
 from ChildProject.annotations import AnnotationManager
 from ChildProject.projects import ChildProject
+
+from scripts.src.data.get_datasets import get_project_and_am
 
 from .src.data.get_metannots_df import get_metannots_df
 from .src.utils.constants import DATASETS, DATASETS_FOLDER
@@ -135,6 +138,7 @@ def get_children_df(datasets: Set[str], datasets_dir: Path) -> pd.DataFrame:
         project.read()
 
         children_df = project.children
+        children_df["age (months)"] = project.compute_ages()
 
         if "discard" in children_df.columns:
             children_df = children_df[children_df["discard"] != "1"]
@@ -217,8 +221,7 @@ def get_file_paths_for_set_dataset(
 ) -> pd.DataFrame:
     file_infos: List[Dict] = []
 
-    project = ChildProject(datasets_dir / dataset)
-    am: AnnotationManager = AnnotationManager(project)
+    project, am = get_project_and_am(datasets_dir / dataset)
 
     recordings = recordings_df[recordings_df["dataset"] == dataset]
     recordings = recordings.reindex(
@@ -271,6 +274,7 @@ def get_file_paths_for_set_dataset(
         )
 
     return pd.DataFrame(file_infos)
+
 
 
 def get_children_from_files(

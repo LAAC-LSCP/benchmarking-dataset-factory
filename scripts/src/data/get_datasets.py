@@ -2,16 +2,18 @@
 Pydantic boilerplate for the `datasets.json` file in the metadata folder
 """
 
+import functools
 from pathlib import Path
-from typing import List, Optional, Set
+from typing import List, Optional, Set, Tuple
 
 import pandas as pd
-from ChildProject.annotations import AnnotationManager
-from ChildProject.projects import ChildProject
 
 from scripts.src.custom_types import Dataset, Datasets
 from scripts.src.utils.constants import DATASETS
 from scripts.src.utils.logger import get_logger
+from ChildProject.projects import ChildProject
+from ChildProject.annotations import AnnotationManager
+
 
 logger = get_logger(__name__)
 
@@ -32,9 +34,7 @@ def get_dataset_info(
     }
 
     for ds in datasets:
-        project = ChildProject(ds)
-        logger.info(f"Loading annotation manager for dataset {ds.name}...")
-        am = AnnotationManager(project)
+        _, am = get_project_and_am(ds)
 
         sets_metadata: pd.DataFrame = am.get_sets_metadata()
 
@@ -54,3 +54,13 @@ dataset {ds.name}. Assuming all sets are manual")
         result["datasets"].append(dataset)
 
     return result
+
+
+@functools.cache
+def get_project_and_am(path: Path) -> Tuple[ChildProject, AnnotationManager]:
+    logger.info(f"Getting annotation manager for {path!s}......")
+
+    project = ChildProject(path)
+    am = AnnotationManager(project)
+
+    return project, am

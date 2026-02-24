@@ -108,7 +108,7 @@ def get_dataset_duration_table_data(dataset: Data) -> List[dict]:
                 s["columns"][0]["duration_from_samples_ms"]
             ),
             "duration_annotated_minutes": ms_to_min(
-                s["columns"][0]["annotation_duration_ms"]
+                s["columns"][0]["annotated_duration_ms"]
             ),
         }
         for s in dataset["sets"]

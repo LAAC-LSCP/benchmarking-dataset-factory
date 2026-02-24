@@ -8,25 +8,25 @@
                     "name": "eaf/an1",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["words", "lex_type", "mwu_type"]
+                    "other": ["words", "lex_type", "mwu_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_high_volubility",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["words", "lex_type", "mwu_type"]
+                    "other": ["words", "lex_type", "mwu_type", "speaker_id"]
                 },
                 {
                     "name": "eaf/reliability",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "mwu_type"]
+                    "other": ["lex_type", "mwu_type", "speaker_id"]
                 }
             ]
         },
@@ -37,57 +37,57 @@
                     "name": "cha/an1",
                     "addressee_cols": ["add", "addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type", "speaker_role"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["gra", "pho", "com", "words", "exp", "mor"]
+                    "other": ["gra", "pho", "com", "words", "exp", "mor", "speaker_id", "speaker_role"]
                 },
                 {
                     "name": "eaf_2023/AM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "mwu_type", "words"]
+                    "other": ["lex_type", "mwu_type", "words", "speaker_id"]
                 },
                 {
                     "name": "eaf_2023/JN",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "mwu_type", "words"]
+                    "other": ["lex_type", "mwu_type", "words", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/AD",
                     "addressee_cols": ["adr", "addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["cal", "fbk", "frm", "ref", "val"]
+                    "other": ["cal", "fbk", "frm", "ref", "val", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/CC",
                     "addressee_cols": ["adr", "addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["cal", "fbk", "frm", "ref", "val"]
+                    "other": ["cal", "fbk", "frm", "ref", "val", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/HA",
                     "addressee_cols": ["adr", "addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["cal", "fbk", "frm", "ref", "val"]
+                    "other": ["cal", "fbk", "frm", "ref", "val", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/LQ",
                     "addressee_cols": ["adr", "addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["cal", "fbk", "frm", "ref", "val"]
+                    "other": ["cal", "fbk", "frm", "ref", "val", "speaker_id"]
                 }
             ]
         },
@@ -98,18 +98,18 @@
                     "name": "eaf_2021/LM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "mwu_type", "words"],
+                    "other": ["lex_type", "mwu_type", "words", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2021/SP",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "mwu_type", "words"],
+                    "other": ["lex_type", "mwu_type", "words", "speaker_id"],
                     "ignore": ["transcription"]
                 }
             ]
@@ -121,9 +121,9 @@
                     "name": "cha",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type", "speaker_role"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["gpx", "words", "com"]
+                    "other": ["gpx", "words", "com", "speaker_id", "speaker_role"]
                 }
             ]
         },
@@ -134,49 +134,49 @@
                     "name": "eaf_2023",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type", "vcm_type_precise"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type", "gra_type", "xds_type"]
+                    "other": ["msc_type", "gra_type", "xds_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_och_2024/AC",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_och_2024/IK",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["words", "mwu_type", "lex_type"]
+                    "other": ["words", "mwu_type", "lex_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_och_2024/JH",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_och_2024/ML",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_och_2024/PB",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -187,9 +187,9 @@
                     "name": "eaf/2025",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -200,25 +200,25 @@
                     "name": "eaf/an1",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["mwu_type", "lex_type", "words"]
+                    "other": ["mwu_type", "lex_type", "words", "speaker_id"]
                 },
                 {
                     "name": "eaf/reliability",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "mwu_type"]   
+                    "other": ["lex_type", "mwu_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_hv",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["mwu_type", "lex_type"]
+                    "other": ["mwu_type", "lex_type", "speaker_id"]
                 }
             ]
         },
@@ -229,201 +229,164 @@
                     "name": "eaf_2021/CD",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["mwu_type", "lex_type", "words"],
+                    "other": ["mwu_type", "lex_type", "words", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2021/CM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["mwu_type", "lex_type", "words"],
+                    "other": ["mwu_type", "lex_type", "words", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2021_conv/EC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type"]
+                    "other": ["msc_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2021_conv/JC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type"]
+                    "other": ["msc_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2021_conv/MA",
                     "addressee_cols": [],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type"],
+                    "other": ["msc_type", "speaker_id"],
                     "ignore": ["addressee"]
                 },
                 {
                     "name": "eaf_2022/AM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type_precise", "vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type", "gra_type", "xds_type"]
+                    "other": ["msc_type", "gra_type", "xds_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2022/CA",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type_precise", "vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type", "gra_type", "xds_type"]
+                    "other": ["msc_type", "gra_type", "xds_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2022/ER",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type_precise", "vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type", "gra_type", "xds_type"]
+                    "other": ["msc_type", "gra_type", "xds_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2022/LL",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type_precise", "vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type", "gra_type", "xds_type"]
+                    "other": ["msc_type", "gra_type", "xds_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2022/PC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type_precise", "vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["msc_type", "gra_type", "xds_type"]
+                    "other": ["msc_type", "gra_type", "xds_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/AD",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/CK",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/CR",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/EC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/FB",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/LD",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/LQ",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/PT",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "eaf_2025_May/SC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["ref", "frm", "val", "fbk", "cal"]
+                    "other": ["ref", "frm", "val", "fbk", "cal", "speaker_id"]
                 },
                 {
                     "name": "textgrid/gl",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": []
-                }
-            ]
-        },
-        {
-            "name": "namibia",
-            "sets": [
-                {
-                    "name": "textgrid/ac",
-                    "addressee_cols": [],
-                    "vcm_cols": [],
-                    "vtc_cols": [],
-                    "transcription_cols": [],
-                    "other": ["lineno"]
-                },
-                {
-                    "name": "textgrid/ak",
-                    "addressee_cols": [],
-                    "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
-                    "transcription_cols": [],
-                    "other": ["ling_type", "lineno"]
-                },
-                {
-                    "name": "textgrid/m1",
-                    "addressee_cols": [],
-                    "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
-                    "transcription_cols": [],
-                    "other": ["ling_type", "lineno"]
-                },
-                {
-                    "name": "textgrid/mm",
-                    "addressee_cols": [],
-                    "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
-                    "transcription_cols": [],
-                    "other": ["ling_type", "lineno"]
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -434,9 +397,9 @@
                     "name": "eaf_2025/PB",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -447,9 +410,23 @@
                     "name": "eaf_2025/PB",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
+                }
+            ]
+        },
+        {
+            "name": "babylogger-vs-lena-data",
+            "sets": [
+                {
+                    "name": "eaf_2025/PB",
+                    "addressee_cols": [],
+                    "vcm_cols": [],
+                    "vtc_cols": ["speaker_type"],
+                    "transcription_cols": [],
+                    "other": ["speaker_id"],
+                    "ignore": ["addressee"]
                 }
             ]
         },
@@ -460,17 +437,19 @@
                     "name": "eaf_2016",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
+                    "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2016/reliability",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
+                    "ignore": ["transcription"]
                 }
             ]
         },
@@ -481,9 +460,10 @@
                     "name": "eaf/mc",
                     "addressee_cols": [],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["transcription"]
+                    "other": ["speaker_id"],
+                    "ignore": ["transcription"]
                 }
             ]
         },
@@ -494,9 +474,9 @@
                     "name": "cha",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_role", "speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["gra", "pho", "sit", "mod", "com", "mor", "words"]
+                    "other": ["gra", "pho", "sit", "mod", "com", "mor", "words", "speaker_id", "speaker_role"]
                 }
             ]
         },
@@ -507,27 +487,27 @@
                     "name": "eaf/IK",
                     "addressee_cols": [],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["addressee", "transcription"]
                 },
                 {
                     "name": "eaf/JH",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf/ML",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 }
             ]
@@ -539,9 +519,9 @@
                     "name": "cha",
                     "addressee_cols": ["addressee", "add"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_role", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["com", "mor", "sit", "act", "words", "gra"]
+                    "other": ["com", "mor", "sit", "act", "words", "gra", "speaker_id", "speaker_role"]
                 }
             ]
         },
@@ -552,103 +532,103 @@
                     "name": "eaf_2021/EC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "transcription", "speaker_id"]
                 },
                 {
                     "name": "eaf_2021/JC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "transcription", "speaker_id"]
                 },
                 {
                     "name": "eaf_2021/MA",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2023/AH",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2023/DD",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2023/LJB",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "transcription", "speaker_id"]
                 },
                 {
                     "name": "eaf_2023/RC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "transcription", "speaker_id"]
                 },
                 {
                     "name": "eaf_2023/SM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "transcription", "speaker_id"]
                 },
                 {
                     "name": "solis/BC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "solis/LD",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "solis/NK",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "solis/NM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 }
             ]
@@ -660,9 +640,9 @@
                     "name": "cha",
                     "addressee_cols": ["add"],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id", "speaker_role"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["exp", "err", "mor", "act", "words", "com", "gra"],
+                    "other": ["exp", "err", "mor", "act", "words", "com", "gra", "speaker_id", "speaker_role"],
                     "ignore": ["addressee"]
                 }
             ]
@@ -674,17 +654,17 @@
                     "name": "eaf_2025/AC",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_2025/PB",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -695,27 +675,27 @@
                     "name": "eaf_periodic/CC",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["mwu_type", "words", "lex_type"],
+                    "other": ["mwu_type", "words", "lex_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_periodic/DJ",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["mwu_type", "words", "lex_type"],
+                    "other": ["mwu_type", "words", "lex_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_periodic/LL",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["mwu_type", "words", "lex_type"],
+                    "other": ["mwu_type", "words", "lex_type", "speaker_id"],
                     "ignore": ["transcription"]
                 }
             ]
@@ -727,17 +707,17 @@
                     "name": "eaf_2025/AC",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_2025/PB",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -748,9 +728,9 @@
                     "name": "cha",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_role", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["pho", "xsyc", "com", "ort", "xton", "words", "act", "xcod", "exp", "xsyl"]
+                    "other": ["pho", "xsyc", "com", "ort", "xton", "words", "act", "xcod", "exp", "xsyl", "speaker_id", "speaker_role"]
                 }
             ]
         },
@@ -761,17 +741,17 @@
                     "name": "eaf_2015",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["mwu_type", "words", "lex_type"]
+                    "other": ["mwu_type", "words", "lex_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_2015/reliability",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["mwu_type", "words", "lex_type"]
+                    "other": ["mwu_type", "words", "lex_type", "speaker_id"]
                 }
             ]
         },
@@ -782,42 +762,44 @@
                     "name": "eaf/nk",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type"],
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
                     "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2021/CD",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
+                    "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2021/CM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["lex_type", "words", "mwu_type", "transcription"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"],
+                    "ignore": ["transcription"]
                 },
                 {
                     "name": "eaf_2024/DFGB",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
-                    "transcription_cols": ["tra_es", "transcription"],
-                    "other": ["notes"]
+                    "vtc_cols": ["speaker_type"],
+                    "transcription_cols": ["tra_es", "speaker_id"],
+                    "other": ["notes", "transcription"]
                 },
                 {
                     "name": "textgrid/mm",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["ling_type"]
+                    "other": ["ling_type", "speaker_id"]
                 }
             ]
         },
@@ -828,9 +810,9 @@
                     "name": "eaf/vocs",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": []
+                    "other": ["speaker_id"]
                 }
             ]
         },
@@ -841,49 +823,49 @@
                     "name": "eaf_2023/AD",
                     "addressee_cols": [],
                     "vcm_cols": ["extended_vcm_type", "vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_2023/AM",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["extended_vcm_type", "vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_2023/HM",
                     "addressee_cols": [],
                     "vcm_cols": ["extended_vcm_type", "vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_2023/MC",
                     "addressee_cols": [],
                     "vcm_cols": ["extended_vcm_type", "vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_2023/MR",
                     "addressee_cols": [],
                     "vcm_cols": ["extended_vcm_type", "vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "textgrid/m1",
                     "addressee_cols": [],
                     "vcm_cols": [],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": [],
-                    "other": ["ling_type"]
+                    "other": ["ling_type", "speaker_id"]
                 }
             ]
         },
@@ -894,25 +876,25 @@
                     "name": "eaf/an1",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "words", "mwu_type"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"]
                 },
                 {
                     "name": "eaf/reliability",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": []
+                    "other": ["speaker_id"]
                 },
                 {
                     "name": "eaf_hv",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_type", "speaker_id"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type"]
+                    "other": ["lex_type", "speaker_id"]
                 }
             ]
         },
@@ -923,25 +905,25 @@
                     "name": "eaf/an1",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "words", "mwu_type"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"]
                 },
                 {
                     "name": "eaf/reliability",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type"]
+                    "other": ["lex_type", "speaker_id"]
                 },
                 {
                     "name": "eaf_hv",
                     "addressee_cols": ["addressee"],
                     "vcm_cols": ["vcm_type"],
-                    "vtc_cols": ["speaker_id", "speaker_type"],
+                    "vtc_cols": ["speaker_type"],
                     "transcription_cols": ["transcription"],
-                    "other": ["lex_type", "words", "mwu_type"]
+                    "other": ["lex_type", "words", "mwu_type", "speaker_id"]
                 }
             ]
         }
