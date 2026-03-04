@@ -5,7 +5,55 @@
       "name": "eaf/IK",
       "columns": [
         {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000,
+          "number_of_samples": 38,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "L'enfant dort",
+            "L'enfant dort ",
+            "Conversations Inaudibles",
+            "Peu \u00ebtre pr\u00e9nom ?"
+          ],
+          "annotated_duration_ms": 8837,
+          "duration_from_samples_ms": 2280000,
+          "number_of_samples": 38,
+          "num_of_non_empty_segments": 8
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000,
+          "number_of_samples": 38,
+          "num_of_non_empty_segments": 0
+        },
+        {
           "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2280000,
+          "number_of_samples": 38,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "words",
           "categorical": true,
           "values": [
             "<NA>"
@@ -34,28 +82,6 @@
           "num_of_non_empty_segments": 633
         },
         {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2280000,
-          "number_of_samples": 38,
-          "num_of_non_empty_segments": 0
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2280000,
-          "number_of_samples": 38,
-          "num_of_non_empty_segments": 0
-        },
-        {
           "column": "addressee",
           "categorical": true,
           "values": [
@@ -79,6 +105,33 @@
           "duration_from_samples_ms": 2280000,
           "number_of_samples": 38,
           "num_of_non_empty_segments": 633
+        }
+      ]
+    },
+    {
+      "name": "eaf/JH",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 0
         },
         {
           "column": "vcm_type",
@@ -87,32 +140,23 @@
             "<NA>"
           ],
           "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2280000,
-          "number_of_samples": 38,
+          "duration_from_samples_ms": 1860000,
+          "number_of_samples": 31,
           "num_of_non_empty_segments": 0
         },
         {
-          "column": "transcription",
+          "column": "lex_type",
           "categorical": true,
           "values": [
-            "<NA>",
-            "L'enfant dort",
-            "L'enfant dort ",
-            "Conversations Inaudibles",
-            "Peu \u00ebtre pr\u00e9nom ?"
+            "<NA>"
           ],
-          "annotated_duration_ms": 8837,
-          "duration_from_samples_ms": 2280000,
-          "number_of_samples": 38,
-          "num_of_non_empty_segments": 8
-        }
-      ]
-    },
-    {
-      "name": "eaf/JH",
-      "columns": [
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 1860000,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 0
+        },
         {
-          "column": "lex_type",
+          "column": "words",
           "categorical": true,
           "values": [
             "<NA>"
@@ -144,28 +188,6 @@
           "num_of_non_empty_segments": 450
         },
         {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 1860000,
-          "number_of_samples": 31,
-          "num_of_non_empty_segments": 0
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 1860000,
-          "number_of_samples": 31,
-          "num_of_non_empty_segments": 0
-        },
-        {
           "column": "addressee",
           "categorical": true,
           "values": [
@@ -190,6 +212,36 @@
           "duration_from_samples_ms": 1860000,
           "number_of_samples": 31,
           "num_of_non_empty_segments": 437
+        }
+      ]
+    },
+    {
+      "name": "eaf/ML",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 2340000,
+          "number_of_samples": 39,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "watching a movie, no talking",
+            "Chi watch TVthe whole minute",
+            "nothing to annotate, CHI is playing in silence"
+          ],
+          "annotated_duration_ms": 12100,
+          "duration_from_samples_ms": 2340000,
+          "number_of_samples": 39,
+          "num_of_non_empty_segments": 3
         },
         {
           "column": "vcm_type",
@@ -198,28 +250,23 @@
             "<NA>"
           ],
           "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 1860000,
-          "number_of_samples": 31,
+          "duration_from_samples_ms": 2340000,
+          "number_of_samples": 39,
           "num_of_non_empty_segments": 0
         },
         {
-          "column": "transcription",
+          "column": "lex_type",
           "categorical": true,
           "values": [
             "<NA>"
           ],
           "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 1860000,
-          "number_of_samples": 31,
+          "duration_from_samples_ms": 2340000,
+          "number_of_samples": 39,
           "num_of_non_empty_segments": 0
-        }
-      ]
-    },
-    {
-      "name": "eaf/ML",
-      "columns": [
+        },
         {
-          "column": "lex_type",
+          "column": "words",
           "categorical": true,
           "values": [
             "<NA>"
@@ -249,28 +296,6 @@
           "num_of_non_empty_segments": 619
         },
         {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2340000,
-          "number_of_samples": 39,
-          "num_of_non_empty_segments": 0
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2340000,
-          "number_of_samples": 39,
-          "num_of_non_empty_segments": 0
-        },
-        {
           "column": "addressee",
           "categorical": true,
           "values": [
@@ -294,31 +319,6 @@
           "duration_from_samples_ms": 2340000,
           "number_of_samples": 39,
           "num_of_non_empty_segments": 619
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 2340000,
-          "number_of_samples": 39,
-          "num_of_non_empty_segments": 0
-        },
-        {
-          "column": "transcription",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "watching a movie, no talking",
-            "Chi watch TVthe whole minute",
-            "nothing to annotate, CHI is playing in silence"
-          ],
-          "annotated_duration_ms": 12100,
-          "duration_from_samples_ms": 2340000,
-          "number_of_samples": 39,
-          "num_of_non_empty_segments": 3
         }
       ]
     }

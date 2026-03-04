@@ -5,162 +5,6 @@
       "name": "cha",
       "columns": [
         {
-          "column": "err",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "Grandad [* 0's] = Grandad's . \u00151063331_1064701\u0015",
-            "missing auxiliary question form ."
-          ],
-          "annotated_duration_ms": 3342,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 2
-        },
-        {
-          "column": "exp",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "CHI says wodar when he wants to be given something",
-            "telephone rings .",
-            "talking on phone .",
-            "MOT says bye on the phone ."
-          ],
-          "annotated_duration_ms": 10217,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 4
-        },
-        {
-          "column": "act",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "CHI splashing water",
-            "CHI blowing",
-            "CHI scooping sugar onto weighing scales",
-            "MOT cracking egg .",
-            "MOT and CHI cracked egg",
-            "CHI banging spoon/weights",
-            "CHI drops spoon .",
-            "CHI yawns",
-            "object drops",
-            "CHI hammering with rolling pin",
-            "CHI hammering"
-          ],
-          "annotated_duration_ms": 26005,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 14
-        },
-        {
-          "column": "speaker_id",
-          "categorical": true,
-          "values": [
-            "INV",
-            "MOT",
-            "CHI",
-            "FAT",
-            "DAD",
-            "NAN",
-            "GRA",
-            "VI1",
-            "VI2",
-            "MAN",
-            "VIS",
-            "ADU",
-            "OBS",
-            "AUN"
-          ],
-          "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 590264
-        },
-        {
-          "column": "gra",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 945638554,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 563689
-        },
-        {
-          "column": "mor",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 945638554,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 563689
-        },
-        {
-          "column": "com",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 14997342,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 8672
-        },
-        {
-          "column": "words",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 590264
-        },
-        {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "FEM",
-            "CHI",
-            "MAL"
-          ],
-          "annotated_duration_ms": 931950138,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 552410
-        },
-        {
-          "column": "addressee",
-          "categorical": true,
-          "values": [
-            "A",
-            "<NA>",
-            "A,NA"
-          ],
-          "annotated_duration_ms": 825779,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 322
-        },
-        {
-          "column": "speaker_role",
-          "categorical": true,
-          "values": [
-            "Investigator",
-            "Mother",
-            "Target_Child",
-            "Father",
-            "Grandmother",
-            "Visitor",
-            "Grandfather",
-            "Adult",
-            "Relative"
-          ],
-          "annotated_duration_ms": 987629137,
-          "duration_from_samples_ms": 1470645426,
-          "number_of_samples": 377,
-          "num_of_non_empty_segments": 590264
-        },
-        {
           "column": "add",
           "categorical": true,
           "values": [
@@ -189,6 +33,58 @@
           "num_of_non_empty_segments": 354
         },
         {
+          "column": "mor",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 945638554,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 563689
+        },
+        {
+          "column": "gra",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 945638554,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 563689
+        },
+        {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Investigator",
+            "Mother",
+            "Target_Child",
+            "Father",
+            "Grandmother",
+            "Visitor",
+            "Grandfather",
+            "Adult",
+            "Relative"
+          ],
+          "annotated_duration_ms": 987629137,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 590264
+        },
+        {
+          "column": "exp",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "CHI says wodar when he wants to be given something",
+            "telephone rings .",
+            "talking on phone .",
+            "MOT says bye on the phone ."
+          ],
+          "annotated_duration_ms": 10217,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 4
+        },
+        {
           "column": "transcription",
           "categorical": false,
           "values": [],
@@ -196,6 +92,110 @@
           "duration_from_samples_ms": 1470645426,
           "number_of_samples": 377,
           "num_of_non_empty_segments": 590264
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "values": [
+            "INV",
+            "MOT",
+            "CHI",
+            "FAT",
+            "DAD",
+            "NAN",
+            "GRA",
+            "VI1",
+            "VI2",
+            "MAN",
+            "VIS",
+            "ADU",
+            "OBS",
+            "AUN"
+          ],
+          "annotated_duration_ms": 987629137,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 590264
+        },
+        {
+          "column": "words",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 987629137,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 590264
+        },
+        {
+          "column": "err",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "Grandad [* 0's] = Grandad's . \u00151063331_1064701\u0015",
+            "missing auxiliary question form ."
+          ],
+          "annotated_duration_ms": 3342,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 2
+        },
+        {
+          "column": "act",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "CHI splashing water",
+            "CHI blowing",
+            "CHI scooping sugar onto weighing scales",
+            "MOT cracking egg .",
+            "MOT and CHI cracked egg",
+            "CHI banging spoon/weights",
+            "CHI drops spoon .",
+            "CHI yawns",
+            "object drops",
+            "CHI hammering with rolling pin",
+            "CHI hammering"
+          ],
+          "annotated_duration_ms": 26005,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 14
+        },
+        {
+          "column": "addressee",
+          "categorical": true,
+          "values": [
+            "A",
+            "<NA>",
+            "A,NA"
+          ],
+          "annotated_duration_ms": 825779,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 322
+        },
+        {
+          "column": "com",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 14997342,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 8672
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "FEM",
+            "CHI",
+            "MAL"
+          ],
+          "annotated_duration_ms": 931950138,
+          "duration_from_samples_ms": 1470645426,
+          "number_of_samples": 377,
+          "num_of_non_empty_segments": 552410
         }
       ]
     }

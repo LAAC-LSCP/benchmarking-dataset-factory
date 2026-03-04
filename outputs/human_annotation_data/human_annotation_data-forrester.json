@@ -5,6 +5,49 @@
       "name": "cha",
       "columns": [
         {
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Father",
+            "Target_Child",
+            "Sister",
+            "Mother",
+            "Adult",
+            "Child"
+          ],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 13197
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 13197
+        },
+        {
+          "column": "words",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 39018872,
+          "duration_from_samples_ms": 42471678,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 13197
+        },
+        {
+          "column": "gpx",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 2125668,
+          "duration_from_samples_ms": 42471678,
+          "number_of_samples": 31,
+          "num_of_non_empty_segments": 669
+        },
+        {
           "column": "speaker_id",
           "categorical": true,
           "values": [
@@ -19,15 +62,6 @@
           "duration_from_samples_ms": 42471678,
           "number_of_samples": 31,
           "num_of_non_empty_segments": 13197
-        },
-        {
-          "column": "gpx",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 2125668,
-          "duration_from_samples_ms": 42471678,
-          "number_of_samples": 31,
-          "num_of_non_empty_segments": 669
         },
         {
           "column": "com",
@@ -54,15 +88,6 @@
           "num_of_non_empty_segments": 13
         },
         {
-          "column": "words",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": 42471678,
-          "number_of_samples": 31,
-          "num_of_non_empty_segments": 13197
-        },
-        {
           "column": "speaker_type",
           "categorical": true,
           "values": [
@@ -76,31 +101,6 @@
           "duration_from_samples_ms": 42471678,
           "number_of_samples": 31,
           "num_of_non_empty_segments": 12992
-        },
-        {
-          "column": "speaker_role",
-          "categorical": true,
-          "values": [
-            "Father",
-            "Target_Child",
-            "Sister",
-            "Mother",
-            "Adult",
-            "Child"
-          ],
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": 42471678,
-          "number_of_samples": 31,
-          "num_of_non_empty_segments": 13197
-        },
-        {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 39018872,
-          "duration_from_samples_ms": 42471678,
-          "number_of_samples": 31,
-          "num_of_non_empty_segments": 13197
         }
       ]
     }

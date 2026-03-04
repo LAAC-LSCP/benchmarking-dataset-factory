@@ -5,30 +5,6 @@
       "name": "eaf_2015",
       "columns": [
         {
-          "column": "lex_type",
-          "categorical": true,
-          "values": [
-            "nan",
-            "0",
-            "<NA>",
-            "W",
-            "0"
-          ],
-          "annotated_duration_ms": 1428619,
-          "duration_from_samples_ms": 23751000,
-          "number_of_samples": 203,
-          "num_of_non_empty_segments": 1644
-        },
-        {
-          "column": "speaker_id",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 60673720,
-          "duration_from_samples_ms": 23751000,
-          "number_of_samples": 203,
-          "num_of_non_empty_segments": 11142
-        },
-        {
           "column": "mwu_type",
           "categorical": true,
           "values": [
@@ -44,6 +20,46 @@
           "num_of_non_empty_segments": 1368
         },
         {
+          "column": "transcription",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 60672830,
+          "duration_from_samples_ms": 23751000,
+          "number_of_samples": 203,
+          "num_of_non_empty_segments": 11141
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "C",
+            "N",
+            "Y",
+            "L",
+            "U"
+          ],
+          "annotated_duration_ms": 2841234,
+          "duration_from_samples_ms": 23751000,
+          "number_of_samples": 203,
+          "num_of_non_empty_segments": 3402
+        },
+        {
+          "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "nan",
+            "0",
+            "<NA>",
+            "W",
+            "0"
+          ],
+          "annotated_duration_ms": 1428619,
+          "duration_from_samples_ms": 23751000,
+          "number_of_samples": 203,
+          "num_of_non_empty_segments": 1644
+        },
+        {
           "column": "words",
           "categorical": true,
           "values": [
@@ -53,6 +69,15 @@
           "duration_from_samples_ms": 23751000,
           "number_of_samples": 203,
           "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "speaker_id",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 60673720,
+          "duration_from_samples_ms": 23751000,
+          "number_of_samples": 203,
+          "num_of_non_empty_segments": 11142
         },
         {
           "column": "addressee",
@@ -88,31 +113,6 @@
           "duration_from_samples_ms": 23751000,
           "number_of_samples": 203,
           "num_of_non_empty_segments": 11142
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "C",
-            "N",
-            "Y",
-            "L",
-            "U"
-          ],
-          "annotated_duration_ms": 2841234,
-          "duration_from_samples_ms": 23751000,
-          "number_of_samples": 203,
-          "num_of_non_empty_segments": 3402
-        },
-        {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 60672830,
-          "duration_from_samples_ms": 23751000,
-          "number_of_samples": 203,
-          "num_of_non_empty_segments": 11141
         }
       ]
     },
@@ -120,7 +120,60 @@
       "name": "eaf_2015/reliability",
       "columns": [
         {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 600000,
+          "number_of_samples": 10,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "transcription",
+          "categorical": true,
+          "values": [
+            "xxx.",
+            "<NA>",
+            "1",
+            "0.",
+            "xxx. ",
+            "Vanesa."
+          ],
+          "annotated_duration_ms": 1021655,
+          "duration_from_samples_ms": 600000,
+          "number_of_samples": 10,
+          "num_of_non_empty_segments": 328
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "N",
+            "U",
+            "C",
+            "L"
+          ],
+          "annotated_duration_ms": 47399,
+          "duration_from_samples_ms": 600000,
+          "number_of_samples": 10,
+          "num_of_non_empty_segments": 76
+        },
+        {
           "column": "lex_type",
+          "categorical": true,
+          "values": [
+            "<NA>"
+          ],
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 600000,
+          "number_of_samples": 10,
+          "num_of_non_empty_segments": 0
+        },
+        {
+          "column": "words",
           "categorical": true,
           "values": [
             "<NA>"
@@ -157,28 +210,6 @@
           "num_of_non_empty_segments": 336
         },
         {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 600000,
-          "number_of_samples": 10,
-          "num_of_non_empty_segments": 0
-        },
-        {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 600000,
-          "number_of_samples": 10,
-          "num_of_non_empty_segments": 0
-        },
-        {
           "column": "addressee",
           "categorical": true,
           "values": [
@@ -210,37 +241,6 @@
           "duration_from_samples_ms": 600000,
           "number_of_samples": 10,
           "num_of_non_empty_segments": 329
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "N",
-            "U",
-            "C",
-            "L"
-          ],
-          "annotated_duration_ms": 47399,
-          "duration_from_samples_ms": 600000,
-          "number_of_samples": 10,
-          "num_of_non_empty_segments": 76
-        },
-        {
-          "column": "transcription",
-          "categorical": true,
-          "values": [
-            "xxx.",
-            "<NA>",
-            "1",
-            "0.",
-            "xxx. ",
-            "Vanesa."
-          ],
-          "annotated_duration_ms": 1021655,
-          "duration_from_samples_ms": 600000,
-          "number_of_samples": 10,
-          "num_of_non_empty_segments": 328
         }
       ]
     }

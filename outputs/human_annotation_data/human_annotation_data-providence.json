@@ -5,28 +5,13 @@
       "name": "cha",
       "columns": [
         {
-          "column": "com",
+          "column": "mor",
           "categorical": false,
           "values": [],
-          "annotated_duration_ms": 25342861,
+          "annotated_duration_ms": 1009284204,
           "duration_from_samples_ms": 1255787707,
           "number_of_samples": 364,
-          "num_of_non_empty_segments": 6203
-        },
-        {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "FEM",
-            "CHI",
-            "MAL",
-            "OCH"
-          ],
-          "annotated_duration_ms": 1189955868,
-          "duration_from_samples_ms": 1255787707,
-          "number_of_samples": 364,
-          "num_of_non_empty_segments": 364101
+          "num_of_non_empty_segments": 311969
         },
         {
           "column": "gra",
@@ -38,13 +23,29 @@
           "num_of_non_empty_segments": 311969
         },
         {
-          "column": "pho",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 536600538,
+          "column": "speaker_role",
+          "categorical": true,
+          "values": [
+            "Investigator",
+            "Mother",
+            "Environment",
+            "Target_Child",
+            "Media",
+            "Adult",
+            "Father",
+            "Grandmother",
+            "Relative",
+            "Unidentified",
+            "Grandfather",
+            "Visitor",
+            "Brother",
+            "Friend",
+            "Sister"
+          ],
+          "annotated_duration_ms": 1201597714,
           "duration_from_samples_ms": 1255787707,
           "number_of_samples": 364,
-          "num_of_non_empty_segments": 162160
+          "num_of_non_empty_segments": 368009
         },
         {
           "column": "sit",
@@ -54,24 +55,6 @@
           "duration_from_samples_ms": 1255787707,
           "number_of_samples": 364,
           "num_of_non_empty_segments": 13368
-        },
-        {
-          "column": "mor",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 1009284204,
-          "duration_from_samples_ms": 1255787707,
-          "number_of_samples": 364,
-          "num_of_non_empty_segments": 311969
-        },
-        {
-          "column": "speaker_id",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 1201597714,
-          "duration_from_samples_ms": 1255787707,
-          "number_of_samples": 364,
-          "num_of_non_empty_segments": 368009
         },
         {
           "column": "transcription",
@@ -101,29 +84,46 @@
           "num_of_non_empty_segments": 160683
         },
         {
-          "column": "speaker_role",
-          "categorical": true,
-          "values": [
-            "Investigator",
-            "Mother",
-            "Environment",
-            "Target_Child",
-            "Media",
-            "Adult",
-            "Father",
-            "Grandmother",
-            "Relative",
-            "Unidentified",
-            "Grandfather",
-            "Visitor",
-            "Brother",
-            "Friend",
-            "Sister"
-          ],
+          "column": "pho",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 536600538,
+          "duration_from_samples_ms": 1255787707,
+          "number_of_samples": 364,
+          "num_of_non_empty_segments": 162160
+        },
+        {
+          "column": "speaker_id",
+          "categorical": false,
+          "values": [],
           "annotated_duration_ms": 1201597714,
           "duration_from_samples_ms": 1255787707,
           "number_of_samples": 364,
           "num_of_non_empty_segments": 368009
+        },
+        {
+          "column": "com",
+          "categorical": false,
+          "values": [],
+          "annotated_duration_ms": 25342861,
+          "duration_from_samples_ms": 1255787707,
+          "number_of_samples": 364,
+          "num_of_non_empty_segments": 6203
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "values": [
+            "<NA>",
+            "FEM",
+            "CHI",
+            "MAL",
+            "OCH"
+          ],
+          "annotated_duration_ms": 1189955868,
+          "duration_from_samples_ms": 1255787707,
+          "number_of_samples": 364,
+          "num_of_non_empty_segments": 364101
         }
       ]
     }
