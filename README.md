@@ -1,11 +1,160 @@
-# Benchmarking Dataset 2025
+# Benchmarking Dataset Factory 2025
 
-This benchmarking dataset contains human "gold-standard" annotation data available to LAAC around the time of writing (Dec 2, 2025). Our main focus has been on getting (1) addressee, (2) vocal maturity and (3) transcription data.
+This benchmarking dataset factory contains scripts to create datasets for use in benchmarking supervised ML models.
+
+This dataset contains human "gold-standard" annotation data available to LAAC around the time of writing (Dec 2, 2025). Our main focus has been on getting (1) addressee, (2) vocal maturity, (3) transcription data and (4) vocalization type data in one place.
+
+The 4 categories of gold standard annotation data are roughly defined as:
+1. Addressee data which identifies who is being addressed during a session, typically at the level of target/other child, adult, pet etc.
+2. Vocalization/speech maturity data, which tells you the vocalization maturity of the young child speaker e.g., canonical, non-canonical vocalizations, syllable types, laughing, crying etc.
+3. Transcription data which shows what is said in the language of origin, sometimes with available translations
+4. Vocalization type, in the case of these corpora almost always the categories key child, other child, adult male, adult female in the `speaker_type` column
 
 As well as containing human annotation data, this repository contains scripts that allows you to find certain annotation data, satisfying certain conditions.
 
+## General Workflow
+The benchmarking dataset has been designed implicitly as a tiny data pipeline. It works as follows:
+1. Add datasets you want to use
+2. Generate human annotation metadata for your datasets
+3. Hand-write human annotated metadata index based on the output of (2)
+4. Validate your metadata written in (3)
+5. Once valid, generate your dataset
+
+### Adding Datasets
+Datasets added in the /datasets folder must satisfy the ChildProject dataset structure in order to be correctly parsed by the generation scripts.
+
+Our workflow includes datalad for version control and handling remote file storage/retrieval. Therefore, to add a dataset, `cd` into the /datasets folder and run
+
+```bash
+datalad clone -d .. [remote storage URL]
+```
+
+For example `datalad clone -d .. git@gin.g-node.org:/my_organization/my_dataset.git` if your storage solution is GIN, although DataLad supports many clouds out of the box. Note that cloning always requires SSH certification and user access.
+
+Remember also to fetch the non-large files data, e.g.,
+```bash
+datalad get --no-data [repository name]
+```
+
+If your annotation data is classified as "large" and not immediately fetched, use
+```bash
+datalad get [glob pattern] -J [num of concurrent connections]
+```
+e.g., `datalad get my_dataset/annotations/eaf_2016/converted/** -J 10`
+
+Note that, not only does your dataset need to follow the ChildProject structure, but every human annotation ChildProject "set" needs to have an associated `metannots.yml` file, as per the ChildProject documentation. These meta annotations are used in the next step.
+
+Optionally, to validate your dataset's meta annotations use
+```bash
+uv run -m scripts.validate_metannots.py --dataset-name [dataset name]
+```
+
+### Generate Human Annotation Data Metadata
+Once you have added your datasets and fetched your annotation data, you can generate human annotation metadata using the `get_human_annotation_metadata` script. This creates json-formatted metadata over the human annotation data for your dataset, e.g.,
+
+```bash
+uv run -m scripts.get_human_annotation_metadata --dataset-name "my_dataset"
+```
+
+Running the above script generates `outputs/human_annotation_data/human_annotation_data-my_dataset.json` outlining the amount of annotations available. Here is an example for `png2016`:
+```json
+{
+  "name": "png2016",
+  "sets": [
+    {
+      "name": "eaf_2016",
+      "columns": [
+        {
+          "column": "mwu_type",
+          "categorical": true,
+          "values": [
+            "nan",
+            "<NA>",
+            "1",
+            "M",
+            "1"
+          ],
+          "annotated_duration_ms": 1337411,
+          "duration_from_samples_ms": 22454000,
+          "number_of_samples": 206,
+          "num_of_non_empty_segments": 1519
+        },
+...
+```
+This metadata is useful as (1) a filter, (2) a summary and (3) a view to inspect what kind of data is available.
+
+### Hand-write an Index for your Data
+Here we need a human in the loop. We need to write an index to aid in the discovery of data related to the four categories of human annotated data. The correct identification of ChildProject sets–sets are collections of related data in ChildProject–containing such data can only be achieved through human judgement.
+
+Inspecting the output from the previous step, it can be readily seen which data is available. Using this output as a source of truth, and potentially inspecting the human annotations themselves, an index is written at outputs/manually_annotated_metadata.json. This shows only the top of the file:
+
+```json
+{
+    "datasets":
+    [
+        {
+            "name": "bergelson",
+            "sets": [
+                {
+                    "name": "eaf/an1",
+                    "addressee_cols": ["addressee"],
+                    "vcm_cols": ["vcm_type"],
+                    "vtc_cols": ["speaker_type"],
+                    "transcription_cols": ["transcription"],
+                    "other": ["words", "lex_type", "mwu_type", "speaker_id"]
+                },
+                {
+                    "name": "eaf_high_volubility",
+                    "addressee_cols": ["addressee"],
+                    "vcm_cols": ["vcm_type"],
+                    "vtc_cols": ["speaker_type"],
+                    "transcription_cols": ["transcription"],
+                    "other": ["words", "lex_type", "mwu_type", "speaker_id"]
+                },
+                {
+                    "name": "eaf/reliability",
+                    "addressee_cols": ["addressee"],
+                    "vcm_cols": ["vcm_type"],
+                    "vtc_cols": ["speaker_type"],
+                    "transcription_cols": ["transcription"],
+                    "other": ["lex_type", "mwu_type", "speaker_id"]
+                }
+            ]
+        },
+...
+```
+
+### Validate your Manual Index
+Because the index is hand-written, it needs to be validated and rewritten until it passes all checks. Validate your manual metadata with
+```bash
+uv run -m scripts.validate_manual_metadata.py
+```
+This script compares, for instance, your manual metadata with the human annotation data json files to see that column names aren't mispelled, or that columns aren't missing.
+
+### Generate a Benchmarking Dataset
+The meat of this repository is in the dataset generation script. It can be run like
+
+```bash
+uv run -m scripts.create_dataset --output-path [location of generated dataset] \
+  --fetch-files // Fetch large files with DataLad if not present  \
+  --type vtc  \
+  -d my_dataset \
+  -d my_other_dataset
+```
+To generate a vocalization type dataset.
+There are many more options available, and its usage is complex. It can be used to generate the dataset in one fell swoop, or to generate one step at a time, or one dataset at a time, or both one step and one dataset a time. This is very useful if you need short feedback loops for testing/exploring/validating your generated dataset.
+
+Below is an example of adding a subdataset to a generated benchmarking dataset using the `--additive` flag, rather than generating it from scratch
+```bash
+uv run -m scripts.create_dataset --output-path [location of generated dataset] \
+  --fetch-files // Fetch large files with DataLad if not present  \
+  --type vtc  \
+  -d my_added_subdataset \
+  --additive
+```
+
 ## Dependency management
-I decided to use `uv`. Things will probably work with the `ChildProject` conda environment we have been using for so long, maybe installing one or two missing dependencies.
+I decided to use `uv`. Things will probably work fine with the `ChildProject` conda environment we have been using for so long internally, maybe installing one or two missing dependencies.
 
 But if you want to use `uv` instead, simply use `uv run`, e.g.,
 
