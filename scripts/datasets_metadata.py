@@ -103,8 +103,8 @@ def get_datasets_metadata_table(output_path: str, dataset_type: str):
             annotated_duration_ms += sum(
                 [c.annotated_duration_ms for c in generated_cols]
             )
-            duration_from_samples_ms += sum(
-                [c.duration_from_samples_ms for c in generated_cols]
+            duration_from_samples_ms = max(
+                [c.duration_from_samples_ms for c in generated_cols], default=0
             )
             num_non_empty_segments += sum(
                 [c.num_of_non_empty_segments for c in generated_cols]
