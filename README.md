@@ -168,6 +168,78 @@ The use of `uv` is encouraged over `conda` as it allows locking of dependencies,
 I use `tox` to keep code clean and standard. `pipx install tox`, and run `tox` to run some automated checks on the scripts folder.
 
 ## Scripts
+### create_table_corpora_info.py
+```
+Usage: python -m scripts.create_table_corpora_info [OPTIONS]
+
+  Creates a table with info about the various human annotation corpora
+
+Options:
+  --output-path PATH              Output path of dataframe
+  --type [vtc|addressee|transcription|vcm]
+                                  Type of dataset to create  [required]
+  --help                          Show this message and exit.
+```
+This script gets information . Used for table 1. in the associated paper. It outputs a csv file with dataset, set, sampled duration and annotated duration as columns. Sampled duration represents the amount of audio that was sampled, i.e., that was made available to annotators. Annotated duration, on the other hand, represents how much data was annotated pertaining to the category at hand (allowing overlap/double counting). Annotated duration is basically the sum of the lengths of segments pertaining to the category that were labelled with a non-NA value.
+
+### validate_manual_metadata.py
+```
+Usage: python -m scripts.validate_manual_metadata [OPTIONS]
+
+  Validate manual metadata
+
+Options:
+  --help  Show this message and exit.
+```
+Validates the file at outputs/manually_annotated_metadata.json (see pipeline above)
+
+### datasets_metadata.py
+```
+Usage: python -m scripts.datasets_metadata [OPTIONS]
+
+  Get datasets metadata
+Options:
+  --output-path PATH              Output path of dataframe
+  --dataset-type [vtc|addressee|transcription|vcm]
+                                  Type of dataset
+  --help                          Show this message and exit.
+```
+Get metadata over datasets. Used for table 2. in the associated paper. Requires the manual metadata index to be in a valid state, because it uses this index. Use validate_manual_metadata.py to help you get it into a correct state.
+
+### create_dataset.py
+```
+Usage: python -m scripts.create_dataset [OPTIONS]
+
+  Create a benchmarking dataset
+
+Options:
+  --output-path PATH              Output path for this new dataset
+  --fetch-files                   Whether to fetch datalad files
+  --additive                      Set to true if you're adding datasets
+  --type [vtc|addressee|transcription|vcm]
+                                  Type of dataset to create  [required]
+  -d, --source TEXT               datasets to source from. If not specified,
+                                  will use all datasets
+  -s, --step [add_boilerplate|add_metadata|add_annotations|add_recordings|split_recordings]
+                                  steps to run. If not specified, run all
+                                  steps in the pipeline
+  --children-filter-expr TEXT     Filter expression on children metadata like
+                                  'child_sex == 'F'' (see Pandas +
+                                  ChildProject docs)
+  --datasets-folder PATH          Folder with available datasets (note:
+                                  compares against the subfolder in this repo
+                                  to filter on potential dataset names)
+  --help                          Show this message and exit.
+```
+Create a benchmarking dataset.
+
+This script is quite heavily parametrised. It is possible to generate a benchmarking dataset in one fell swoop. The resulting dataset is in "ChildProject format", meaning that we can use ChildProject's dataset utilities to inspect or manipulate it—one useful consequence is that we can run `ChildProject validate .` in the output folder to check for inconsistencies.
+
+With that said, it is often better to create your dataset step-wise. I personally recommend adding one dataset at a time. The first dataset is added as, let's say, `uv run -m scripts.create_dataset --output-path [path] --type vtc -d my_first_dataset --datasets-folder [a folder containing all the datasets]`. Subsequent datasets would be added like `uv run -m scripts.create_dataset --output-path [path] --type vtc -d my_second_dataset --datasets-folder [a folder containing all the datasets] --additive` (note the usage of the --additive flag). You can also run step-wise, but this is verbose and not recommended unless you keep track of the current step for each dataset and know exactly what you're doing.
+
+## Legacy Scripts (scripts you probably won't need)
+The below scripts were written when the requirements were still unclear. They are largely exploratory and not really important for the purpose of generating datasets.
+
 ### find_files_on_filter_expression.py
 ```
 Usage: find_files_on_filter_expression.py [OPTIONS]

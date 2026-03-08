@@ -102,6 +102,7 @@ def create_dataset(
     children_filter_expr: str | None,
     datasets_folder: str | None,
 ) -> None:
+    """Create a benchmarking dataset"""
     output_dir, dataset_type, steps, datasets_dir = validate(
         output_path, type, step, datasets_folder
     )

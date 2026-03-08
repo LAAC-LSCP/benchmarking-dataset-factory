@@ -63,6 +63,7 @@ logger = get_logger(__name__)
     help="Type of dataset",
 )
 def get_datasets_metadata_table(output_path: str, dataset_type: str):
+    """Get datasets metadata"""
     generated_data = get_generated_metadata()
     manual_data = dataset_model_factory(generated_data)(**get_manual_metadata())
 
