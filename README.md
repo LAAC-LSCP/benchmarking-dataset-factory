@@ -1,55 +1,238 @@
 # Benchmarking Dataset Factory 2025
+This repository provides a unified pipeline for generating benchmarking datasets for supervised machine learning models for language tasks, with a focus on human "gold-standard" annotation data. The existing corpora currently used as input are those containing long form audio recordings. It was originally designed for the ExELang lab ecosystem and follows the [ChildProject](https://childproject.readthedocs.io/en/latest/format.html) dataset structure. The repository includes:
 
-This benchmarking dataset factory contains scripts to create datasets for use in benchmarking supervised ML models.
+- Scripts for dataset creation, validation, and metadata generation
+- Human annotation data (addressee, vocal maturity, transcription, vocalization type)
+- Utilities for inspecting, filtering, and splitting data
 
-This dataset contains human "gold-standard" annotation data available to LAAC around the time of writing (Dec 2, 2025). Our main focus has been on getting (1) addressee, (2) vocal maturity, (3) transcription data and (4) vocalization type data in one place.
+---
 
-The 4 categories of gold standard annotation data are roughly defined as:
-1. Addressee data which identifies who is being addressed during a session, typically at the level of target/other child, adult, pet etc.
-2. Vocalization/speech maturity data, which tells you the vocalization maturity of the young child speaker e.g., canonical, non-canonical vocalizations, syllable types, laughing, crying etc.
-3. Transcription data which shows what is said in the language of origin, sometimes with available translations
-4. Vocalization type, in the case of these corpora almost always the categories key child, other child, adult male, adult female in the `speaker_type` column
+## Quickstart
+If you want to get started immediately, follow these steps:
 
-As well as containing human annotation data, this repository contains scripts that allows you to find certain annotation data, satisfying certain conditions.
+### 1. Download and Install Miniconda or Micromamba
+- **Miniconda:** [Download here](https://docs.conda.io/en/latest/miniconda.html)
+- **Micromamba:** [Download here](https://mamba.readthedocs.io/en/latest/installation.html)
+Follow the instructions on the website for your operating system. After installation, open a new terminal window.
 
-## General Workflow
-The benchmarking dataset has been designed implicitly as a tiny data pipeline. It works as follows:
-1. Add datasets you want to use
-2. Generate human annotation metadata for your datasets
-3. Hand-write human annotated metadata index based on the output of (2)
-4. Validate your metadata written in (3)
-5. Once valid, generate your dataset
-
-### Adding Datasets
-Datasets added in the /datasets folder must satisfy the ChildProject dataset structure in order to be correctly parsed by the generation scripts.
-
-Our workflow includes datalad for version control and handling remote file storage/retrieval. Therefore, to add a dataset, `cd` into the /datasets folder and run
-
+### 2. Clone This Repository
 ```bash
-datalad clone -d .. [remote storage URL]
+git clone [repository URL]
+cd benchmarking-data-2025
 ```
 
-For example `datalad clone -d .. git@gin.g-node.org:/my_organization/my_dataset.git` if your storage solution is GIN, although DataLad supports many clouds out of the box. Note that cloning always requires SSH certification and user access.
-
-Remember also to fetch the non-large files data, e.g.,
+### 3. Download the Environment File
+For MacOS:
 ```bash
-datalad get --no-data [repository name]
+curl https://raw.githubusercontent.com/LAAC-LSCP/ChildProject/master/env_macos.yml -o env.yml
+```
+For Linux or Windows, use the appropriate `.yml` file from the [ChildProject repository](https://github.com/LAAC-LSCP/ChildProject/).
+
+### 4. Create the Environment
+**With Miniconda:**
+```bash
+conda env create -f env.yml
+```
+**With Micromamba:**
+```bash
+micromamba env create -f env.yml
 ```
 
-If your annotation data is classified as "large" and not immediately fetched, use
+### 5. Activate the Environment
+**With Miniconda:**
 ```bash
-datalad get [glob pattern] -J [num of concurrent connections]
+conda activate childproject
 ```
-e.g., `datalad get my_dataset/annotations/eaf_2016/converted/** -J 10`
-
-Note that, not only does your dataset need to follow the ChildProject structure, but every human annotation ChildProject "set" needs to have an associated `metannots.yml` file, as per the ChildProject documentation. These meta annotations are used in the next step.
-
-Optionally, to validate your dataset's meta annotations use
+**With Micromamba:**
 ```bash
-uv run -m scripts.validate_metannots.py --dataset-name [dataset name]
+micromamba activate childproject
 ```
 
-### Generate Human Annotation Data Metadata
+You should see `(childproject)` at the start of your terminal prompt. To check, run:
+```bash
+conda env list  # or micromamba env list
+```
+An asterisk (*) should appear next to `childproject`.
+
+### 6. Check That DataLad is Installed
+```bash
+datalad --version
+```
+If you see a version number, you're good. If not, install it with:
+```bash
+conda install -c conda-forge datalad
+```
+
+### 7. Install Any Missing Python Packages
+If you get errors about missing packages when running scripts, install them with:
+```bash
+pip install [package_name]
+```
+while your environment is active.
+
+### 8. Add a Dataset (Optional)
+If you want to add a new dataset, follow the instructions in the "Adding Datasets" section below. Otherwise, skip to the next step.
+
+### 9. Generate Human Annotation Metadata (Optional)
+From the root of the repository, run:
+```bash
+python -m scripts.get_human_annotation_metadata --dataset-name "my_dataset"
+```
+or, if you have `uv` installed and prefer to use it:
+```bash
+uv run -m scripts.get_human_annotation_metadata --dataset-name "my_dataset"
+```
+This will create a file in `outputs/human_annotation_data/`.
+
+### 10. (If Needed) Update the Manual Metadata Index
+Edit `outputs/manually_annotated_metadata.json` as described in the main instructions below.
+
+### 11. Validate the Manual Metadata Index
+```bash
+python -m scripts.validate_manual_metadata
+```
+or
+```bash
+uv run -m scripts.validate_manual_metadata
+```
+Fix any errors before proceeding.
+
+### 12. Generate a Benchmarking Dataset
+Example command:
+```bash
+python -m scripts.create_dataset --output-path [location of generated dataset] \
+  --fetch-files \
+  --type vtc \
+  -d my_dataset \
+  -d my_other_dataset
+```
+or
+```bash
+uv run -m scripts.create_dataset --output-path [location of generated dataset] \
+  --fetch-files \
+  --type vtc \
+  -d my_dataset \
+  -d my_other_dataset
+```
+Replace `[location of generated dataset]` and dataset names as needed.
+
+### 13. (Optional) Add More Datasets Incrementally
+To add a subdataset to an existing benchmarking dataset:
+```bash
+python -m scripts.create_dataset --output-path [location of generated dataset] \
+  --fetch-files \
+  --type vtc \
+  -d my_added_subdataset \
+  --additive
+```
+It is recommend to build your composite dataset one dataset at a time—changes are more manageable.
+
+The resulting dataset will contain further instructions.
+
+### 14. Troubleshooting
+- **Command not found:** Make sure you are in the correct directory and your environment is activated.
+- **Missing package:** Install with `pip install [package_name]` or `conda install [package_name]`.
+- **Permission denied:** Try running the command with `sudo` (Linux/Mac) or as administrator (Windows), or check file permissions.
+- **Script errors:** Read the error message carefully. Most issues are due to missing dependencies or not activating the environment.
+
+---
+
+## In-Depth: The 5-Step Pipeline
+This repository is structured as a data pipeline. The main steps are:
+
+1. **Add datasets**: Place datasets in `/datasets` following the ChildProject structure. To add a new dataset, use DataLad:
+  ```bash
+  cd datasets
+  datalad clone -d .. [remote storage URL]
+  datalad get --no-data [repository name]
+  # For large files:
+  datalad get [glob pattern] -J [num connections]
+  ```
+  Each human annotation set must have a `metannots.yml` file.
+
+2. **Generate human annotation metadata**: Summarize available annotation data for a dataset:
+  ```bash
+  python -m scripts.get_human_annotation_metadata --dataset-name "my_dataset"
+  # or
+  uv run -m scripts.get_human_annotation_metadata --dataset-name "my_dataset"
+  ```
+  This creates a JSON file in `outputs/human_annotation_data/`.
+
+3. **Hand-write the manual metadata index**: Edit `outputs/manually_annotated_metadata.json` to index which sets contain which annotation types. Use the output from step 2 as a guide.
+
+4. **Validate the manual metadata index**: Ensure your manual index matches the actual data:
+  ```bash
+  python -m scripts.validate_manual_metadata
+  # or
+  uv run -m scripts.validate_manual_metadata
+  ```
+  Fix any errors before proceeding.
+
+5. **Generate a benchmarking dataset**: Create a dataset for ML benchmarking:
+  ```bash
+  python -m scripts.create_dataset --output-path [output path] --fetch-files --type vtc -d my_dataset -d my_other_dataset
+  # or
+  uv run -m scripts.create_dataset --output-path [output path] --fetch-files --type vtc -d my_dataset -d my_other_dataset
+  ```
+  Use `--additive` to add more datasets incrementally.
+
+---
+
+
+## Scripts Overview
+
+The main scripts in the `scripts/` folder are:
+
+- **create_dataset.py**: Main entry point for dataset generation. Highly parameterized; see `--help` for options.
+- **get_human_annotation_metadata.py**: Aggregates and summarizes annotation metadata for a dataset.
+- **validate_manual_metadata.py**: Validates the manual metadata index against available data.
+- **create_table_corpora_info.py**: Creates a table with information about human annotation corpora.
+- **datasets_metadata.py**: Summarizes metadata over datasets (used for paper tables).
+- **graph_dataset_distribution.py**: Graphs distributional information of metadata.
+- **split_data.py**: Splits data into train, test, and validation sets with stratification.
+
+For usage details and available options, run each script with the `--help` flag.
+
+---
+
+## Data Categories
+
+The main annotation categories in this repository are:
+
+1. **Addressee**: Who is being addressed (target/other child, adult, pet, etc.)
+2. **Vocalization/speech maturity**: Canonical/non-canonical vocalizations, syllable types, etc.
+3. **Transcription**: What is said, sometimes with translations.
+4. **Vocalization type**: Key child, other child, adult male, adult female (see `speaker_type`).
+
+---
+
+## Development
+
+### Dependency Management
+The recommended way to manage dependencies is to use the provided environment file and `uv` for reproducibility. If you encounter missing dependencies, install them with `pip` or `conda` as described in the Quickstart.
+
+### Linting & Formatting
+To keep the code clean and standardized, run `tox` (install with `pipx install tox`) to check code quality in the `scripts/` folder.
+
+---
+
+## Legacy Scripts
+
+These scripts are for exploratory or legacy purposes. Most users can ignore them:
+
+- **find_files_on_filter_expression.py**: Find files matching filter expressions on metadata.
+- **find_on_filter_expression.py**: Find datasets/sets matching a filter expression.
+- **validate_metannots.py**: Validate metannots files for schema compliance.
+- **get_human_annotation_metadata.py**: Aggregate and summarize annotation metadata.
+- **graph_dataset_distribution.py**: Graph distributional information of metadata.
+- **split_data.py**: Split data into train, test, and validation sets with stratification.
+
+See script docstrings or run with `--help` for details.
+```bash
+uv run -m scripts.validate_metannots --dataset-name [dataset name]
+```
+
+### 2. Generate Human Annotation Data Metadata
 Once you have added your datasets and fetched your annotation data, you can generate human annotation metadata using the `get_human_annotation_metadata` script. This creates json-formatted metadata over the human annotation data for your dataset, e.g.,
 
 ```bash
@@ -81,10 +264,10 @@ Running the above script generates `outputs/human_annotation_data/human_annotati
         },
 ...
 ```
-This metadata is useful as (1) a filter, (2) a summary and (3) a view to inspect what kind of data is available.
+This metadata is useful as (1) a filter, (2) a summary, and (3) a way to inspect what kind of data is available.
 
-### Hand-write an Index for your Data
-Here we need a human in the loop. We need to write an index to aid in the discovery of data related to the four categories of human annotated data. The correct identification of ChildProject sets–sets are collections of related data in ChildProject–containing such data can only be achieved through human judgement.
+### 3. Hand-write an Index for your Data
+Here we need a human in the loop. We need to write an index to aid in the discovery of data related to the four categories of human-annotated data. The correct identification of ChildProject sets—sets are collections of related data in ChildProject—containing such data can only be achieved through human judgment.
 
 Inspecting the output from the previous step, it can be readily seen which data is available. Using this output as a source of truth, and potentially inspecting the human annotations themselves, an index is written at outputs/manually_annotated_metadata.json. This shows only the top of the file:
 
@@ -124,14 +307,14 @@ Inspecting the output from the previous step, it can be readily seen which data 
 ...
 ```
 
-### Validate your Manual Index
+### 4. Validate your Manual Index
 Because the index is hand-written, it needs to be validated and rewritten until it passes all checks. Validate your manual metadata with
 ```bash
-uv run -m scripts.validate_manual_metadata.py
+uv run -m scripts.validate_manual_metadata
 ```
-This script compares, for instance, your manual metadata with the human annotation data json files to see that column names aren't mispelled, or that columns aren't missing.
+This script compares, for instance, your manual metadata with the human annotation data JSON files to check that column names aren't misspelled or missing.
 
-### Generate a Benchmarking Dataset
+### 5. Generate a Benchmarking Dataset
 The meat of this repository is in the dataset generation script. It can be run like
 
 ```bash
@@ -142,7 +325,7 @@ uv run -m scripts.create_dataset --output-path [location of generated dataset] \
   -d my_other_dataset
 ```
 To generate a vocalization type dataset.
-There are many more options available, and its usage is complex. It can be used to generate the dataset in one fell swoop, or to generate one step at a time, or one dataset at a time, or both one step and one dataset a time. This is very useful if you need short feedback loops for testing/exploring/validating your generated dataset.
+There are many more options available, and its usage is complex. It can be used to generate the dataset in one fell swoop, or to generate one step at a time, or one dataset at a time, or both one step and one dataset at a time. This is very useful if you need short feedback loops for testing, exploring, or validating your generated dataset.
 
 Below is an example of adding a subdataset to a generated benchmarking dataset using the `--additive` flag, rather than generating it from scratch
 ```bash
@@ -167,315 +350,3 @@ The use of `uv` is encouraged over `conda` as it allows locking of dependencies,
 ## Linting, Formatting and More
 I use `tox` to keep code clean and standard. `pipx install tox`, and run `tox` to run some automated checks on the scripts folder.
 
-## Scripts
-### create_table_corpora_info.py
-```
-Usage: python -m scripts.create_table_corpora_info [OPTIONS]
-
-  Creates a table with info about the various human annotation corpora
-
-Options:
-  --output-path PATH              Output path of dataframe
-  --type [vtc|addressee|transcription|vcm]
-                                  Type of dataset to create  [required]
-  --help                          Show this message and exit.
-```
-This script gets information . Used for table 1. in the associated paper. It outputs a csv file with dataset, set, sampled duration and annotated duration as columns. Sampled duration represents the amount of audio that was sampled, i.e., that was made available to annotators. Annotated duration, on the other hand, represents how much data was annotated pertaining to the category at hand (allowing overlap/double counting). Annotated duration is basically the sum of the lengths of segments pertaining to the category that were labelled with a non-NA value.
-
-### validate_manual_metadata.py
-```
-Usage: python -m scripts.validate_manual_metadata [OPTIONS]
-
-  Validate manual metadata
-
-Options:
-  --help  Show this message and exit.
-```
-Validates the file at outputs/manually_annotated_metadata.json (see pipeline above)
-
-### datasets_metadata.py
-```
-Usage: python -m scripts.datasets_metadata [OPTIONS]
-
-  Get datasets metadata
-Options:
-  --output-path PATH              Output path of dataframe
-  --dataset-type [vtc|addressee|transcription|vcm]
-                                  Type of dataset
-  --help                          Show this message and exit.
-```
-Get metadata over datasets. Used for table 2. in the associated paper. Requires the manual metadata index to be in a valid state, because it uses this index. Use validate_manual_metadata.py to help you get it into a correct state.
-
-### create_dataset.py
-```
-Usage: python -m scripts.create_dataset [OPTIONS]
-
-  Create a benchmarking dataset
-
-Options:
-  --output-path PATH              Output path for this new dataset
-  --fetch-files                   Whether to fetch datalad files
-  --additive                      Set to true if you're adding datasets
-  --type [vtc|addressee|transcription|vcm]
-                                  Type of dataset to create  [required]
-  -d, --source TEXT               datasets to source from. If not specified,
-                                  will use all datasets
-  -s, --step [add_boilerplate|add_metadata|add_annotations|add_recordings|split_recordings]
-                                  steps to run. If not specified, run all
-                                  steps in the pipeline
-  --children-filter-expr TEXT     Filter expression on children metadata like
-                                  'child_sex == 'F'' (see Pandas +
-                                  ChildProject docs)
-  --datasets-folder PATH          Folder with available datasets (note:
-                                  compares against the subfolder in this repo
-                                  to filter on potential dataset names)
-  --help                          Show this message and exit.
-```
-Create a benchmarking dataset.
-
-This script is quite heavily parametrised. It is possible to generate a benchmarking dataset in one fell swoop. The resulting dataset is in "ChildProject format", meaning that we can use ChildProject's dataset utilities to inspect or manipulate it—one useful consequence is that we can run `ChildProject validate .` in the output folder to check for inconsistencies.
-
-With that said, it is often better to create your dataset step-wise. I personally recommend adding one dataset at a time. The first dataset is added as, let's say, `uv run -m scripts.create_dataset --output-path [path] --type vtc -d my_first_dataset --datasets-folder [a folder containing all the datasets]`. Subsequent datasets would be added like `uv run -m scripts.create_dataset --output-path [path] --type vtc -d my_second_dataset --datasets-folder [a folder containing all the datasets] --additive` (note the usage of the --additive flag). You can also run step-wise, but this is verbose and not recommended unless you keep track of the current step for each dataset and know exactly what you're doing.
-
-## Legacy Scripts (scripts you probably won't need)
-The below scripts were written when the requirements were still unclear. They are largely exploratory and not really important for the purpose of generating datasets.
-
-### find_files_on_filter_expression.py
-```
-Usage: find_files_on_filter_expression.py [OPTIONS]
-
-  Save file paths matching filter expressions on metannots and
-  children metadata (specified separately)
-
-Options:
-  -d, --dataset TEXT            datasets to graph. If not specified,
-                                will use all datasets
-
-  --metannots-filter-expr TEXT  Filter expression on metannots like
-                                'has_addressee == 'Y'' (see Pandas +
-                                ChildProject docs)
-
-  --children-filter-expr TEXT   Filter expression on children metadata
-                                like 'child_sex == 'f'' (see Pandas +
-                                ChildProject docs)
-
-  --output-csv PATH             Output .csv path  [required]
-  --help                        Show this message and exit.
-```
-This script lets you find files matching certain conditions. See the Pandas documentation for filter expressions. See the ChildProject documentation to see what columns can be looked for.
-
-Note that ChildProject does not parse dates or anything like that, so all columns, like `child_dob` for example, are interpreted as strings. Luckily this turns out to be okay for comparisons of the sort below.
-
-```bash
-uv run -m scripts.find_files_on_filter_expression --metannots-filter-expr "has_addressee == 'Y'" --children-filter-expr "child_dob < '2006-06-06'"
-```
-
-Note that if values are missing in the metadata–which is very often the case except on required columns–the filter expression will typically jump over them (these values are `<NA>`) and ignored.
-
-The output is a .csv file with the human annotation file path, recording file path, annotation start, end, duration and recording duration. Typically, you'll want to do some weighted train, test, validation split based on these durations, which is standard stuff in any ML toolkit. Note that the human annotation file typically signifies only a given part of the recording file that was listened to by an annotator, hence the choice of columns.
-
-### find_on_filter_expression.py
-```
-Usage: find_on_filter_expression.py [OPTIONS]
-
-  Find datasets and sets matching a filter expression on the metannots
-  metadata
-
-Options:
-  --filter-expr TEXT  Filter expression like 'has_addressee == 'Y'' (see
-                      Pandas + ChildProject docs)
-  --no-info-output    Don't print info, such as error info. Only print
-                      datasets and sets
-  --help              Show this message and exit.
-```
-
-Pandas has a feature called "filter expressions", which are just the kinds of expressions you pass into dataframes to filter them down, e.g., `annotations[annotations["has_vcm_type"] == "Y"]`, or equivalently, `annotations.query('has_vcm_type == "Y"')`.
-
-This script lets you pass in a filter expression and prints out the dataset and set (as it's called in ChildProject) that matches them.
-
-Example:
-```bash
-uv run -m scripts.find_on_filter_expression --filter-expr "has_vcm_type == 'Y'" --no-info-output
-```
-
-Output (stdout):
-```bash
-Dataset: 'vanuatu'       Set: 'eaf_2023/AD'
-Dataset: 'vanuatu'       Set: 'eaf_2023/AM'
-Dataset: 'vanuatu'       Set: 'eaf_2023/HM'
-Dataset: 'vanuatu'       Set: 'eaf_2023/MC'
-Dataset: 'vanuatu'       Set: 'eaf_2023/MR'
-```
-
-### validate_metannots.py
-```
-Usage: validate_metannots.py [OPTIONS]
-
-  Validate metannots. Prints out validation errors across datasets and
-  sets
-
-Options:
-  --help  Show this message and exit.
-```
-
-This script uses the schema laid out in the ChildProject documentation for metannots and checks that there are no errors. It prints any validation errors to standard output. Under the hood uses pydantic.
-
-Can be run simply with
-
-Prints out validation errors. Usage:
-
-```bash
-uv run -m scripts.validate_metannots
-```
-
-Or more practically, with output redirection:
-
-```bash
-uv run -m scripts.validate_metannots > validation_errors.txt
-```
-
-### get_human_annotation_metadata.py
-```
-Usage: get_human_annotation_metadata.py [OPTIONS]
-
-  Aggregates human annotation metadata for a given dataset (mostly
-  duration-related) and saves it
-
-Options:
-  --dataset-name TEXT  Dataset name to process
-  --help               Show this message and exit.
-```
-
-This script summarizes available human annotation metadata by going through the converted .csv files
-
-It also tries to summarise what kinds of values are available in this data, by making a guess at whether the data is categorical in nature or not.
-
-It gathers the total length of annotated segments, as well as the total length of the associated sampled recordings.
-
-Since models, for training, testing and validation, have to compare against annotated segments, the former statistic is probably more useful. But the other is also useful, which is that you may want to train on the absence of annotated segments as well instead of cherry-picking on slices of audio that have an explicit speech label laid down by a human. That is to say, in a training batch of say 12 seconds of annotated audio, there are unannotated pauses between the labelled speech segments, which the model should learn not to try to label as any sort of speech. For this the true available data–meaning whatever audio the annotator had at their disposal, including audio he/she didn't label–can often be calculated separately, not using this script, but using the `metannots.yml` file, based on the `sampling_count` and `sampling_unit_duration`.
-
-Example:
-```bash
-uv run -m scripts.get_human_annotation_metadata --dataset-name "vanuatu"
-```
-
-Output (to `outputs/human_annotation_data/human_annotation_data-vanuatu.json` file):
-```json
-{
-  "name": "vanuatu",
-  "sets": [
-    {
-      "name": "eaf_2023/AD",
-      "columns": [
-        {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "CHI",
-            "OCH",
-            "FEM",
-            "MAL"
-          ],
-          "annotated_duration_ms": 760555,
-          "duration_from_samples_ms": 864000
-        },
-        ...
-      ]
-    },
-    {
-      "name": "eaf_2023/HM",
-      "columns": [
-        {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "OCH",
-            "MAL",
-            "FEM",
-            "CHI"
-          ],
-          "annotated_duration_ms": 908559,
-          "duration_from_samples_ms": 864000
-        },
-        ...
-      ]
-    },
-    ...
-  ]
-}
-```
-
-### graph_dataset_distribution.py
-```
-Usage: graph_dataset_distribution.py [OPTIONS]
-
-  Lets you graph distributional info of metadata over a dataset
-
-  If looking at segments, will choose information only from human-
-  annotated sets If looking at recordings in general, will choose all
-  recording information regardless of which sets
-
-Options:
-  -d, --dataset TEXT              datasets to graph. If not specified, will
-                                  use all datasets
-  -x, --x-axis [child_id|child_age|child_sex|speaker_type|speaker_id]
-                                  x-axis  [required]
-  -y, --y-axis [segment|recording]
-                                  y-axis  [required]
-  --metric [duration_mean|count|duration_std|duration_total]
-                                  function to run over aggregated data
-                                  [required]
-  --sort-by-y                     Sort data by y (instead of x) axis
-  --aggregate                     Aggregate over datasets to obtain a
-                                  single plot
-  --output-folder PATH            path of output folder
-  --help                          Show this message and exit.
-```
-
-This is a generic graphing script that gives you a basic outline of how much data is available over some categorical index.
-
-The following is some example output for the following command:
-```bash
-uv run -m scripts.graph_dataset_distribution -d vanuatu -d fausey-trio -x speaker_type -y segment --metric duration_total
-```
-
-![Example age distribution](static/images/segment-duration-over-speaker-type.png)
-
-### split_data.py
-```
-Usage: split_data.py [OPTIONS]
-
-  Splits the output of `find_files_on_filter_expression.py` based on a
-  specified train, test, validation split
-
-Options:
-  --input PATH       Input file (output from
-                     `find_files_on_filter_expression.py`)  [required]
-
-  --train FLOAT      Train percentage in [0, 1]  [required]
-  --test FLOAT       Test percentage in [0, 1]  [required]
-  --validate FLOAT   Validation percentage in [0, 1]  [required]
-  --output-csv PATH  Output .csv path  [required]
-  --same-child       Stratify by child
-  --same-set         Stratify by set
-  --seed INTEGER     Random seed for split
-  --help             Show this message and exit.
-```
-
-This script takes the output from `find_files_on_filter_expression.py` and adds a column "split" to it.
-
-To split data among train, test, validation sets, you can use this script. Unlike the standard routines in sklearn or TensorFlow this routine can actually take into account the length of the recordings themselves. It also stratifies according to the set and child id inside a dataset.
-
-You can call it as follows:
-```bash
-python3 scripts/split_data.py --input /Users/me/Desktop/benchmarking-data-2025/files.csv --train 0.8 --test 0.1 --validate 0.1 --output-csv files_with_split.csv --same-child --same-set --seed 0
-```
-
-With output
-```bash
-Found split!
-Desired train, test, validation split (ms): 1188633405, 148579175, 148579175
-Found train, test, validation split (ms): 1187692678, 148317595, 149781484
-```
-
-By changing the seed you'll get slightly different splits, as it shuffles the file paths.
