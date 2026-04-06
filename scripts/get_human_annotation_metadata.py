@@ -217,7 +217,6 @@ def get_column_info(
             {
                 "column": col,
                 "categorical": categorical,
-                "values": values or [],
                 "annotated_duration_ms": get_annotated_ms(segments, col),
                 "duration_from_samples_ms": (
                     get_sampled_duration(metannots_dict, gold_std_annotations)
