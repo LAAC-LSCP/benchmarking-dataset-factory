@@ -15,20 +15,14 @@ If you want to get started immediately, follow these steps:
 - **Micromamba:** [Download here](https://mamba.readthedocs.io/en/latest/installation.html)
 Follow the instructions on the website for your operating system. After installation, open a new terminal window.
 
-### 2. Clone This Repository
-```bash
-git clone [repository URL]
-cd benchmarking-data-2025
-```
-
-### 3. Download the Environment File
+### 2. Download the Environment File
 For MacOS:
 ```bash
 curl https://raw.githubusercontent.com/LAAC-LSCP/ChildProject/master/env_macos.yml -o env.yml
 ```
 For Linux or Windows, use the appropriate `.yml` file from the [ChildProject repository](https://github.com/LAAC-LSCP/ChildProject/).
 
-### 4. Create the Environment
+### 3. Create the Environment
 **With Miniconda:**
 ```bash
 conda env create -f env.yml
@@ -38,7 +32,7 @@ conda env create -f env.yml
 micromamba env create -f env.yml
 ```
 
-### 5. Activate the Environment
+### 4. Activate the Environment
 **With Miniconda:**
 ```bash
 conda activate childproject
@@ -54,13 +48,21 @@ conda env list  # or micromamba env list
 ```
 An asterisk (*) should appear next to `childproject`.
 
-### 6. Check That DataLad is Installed
+### 5. Check That DataLad is Installed
 ```bash
 datalad --version
 ```
 If you see a version number, you're good. If not, install it with:
 ```bash
 conda install -c conda-forge datalad
+```
+
+### 6. Clone This Repository
+```bash
+# prefer using DataLad over git. git will not give you the subdatasets
+datalad clone git@gin.g-node.org:/LAAC-LSCP/benchmarking-data-2025.git
+datalad get -n benchmarking-data-2025
+cd benchmarking-data-2025
 ```
 
 ### 7. Install Any Missing Python Packages

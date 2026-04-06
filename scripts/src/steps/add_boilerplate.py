@@ -1,11 +1,19 @@
 import subprocess
 from pathlib import Path
+import shutil
 
 from scripts.src.steps.file_management import datalad_save, git_unannex_and_save
 from scripts.src.steps.step import EnvConfig, Step, StepName
 from scripts.src.utils.logger import get_logger
 
 logger = get_logger(__name__)
+
+
+current_file = Path(__file__)
+static_folder = current_file.parent.parent.parent.parent / "static"
+
+# in case things get moved
+assert static_folder.exists()
 
 
 class AddBoilerplate(Step):
@@ -28,11 +36,14 @@ class AddBoilerplate(Step):
             self._initialise_childproject(dest_dataset)
             logger.info("Initialising datalad...")
             self._initialise_datalad(dest_dataset)
-            datalad_save(self.env, dest_dataset, "Added ChildProject boilerplate")
             logger.info("Handling .gitignore...")
             self._initialise_gitignore(dest_dataset)
             logger.info("Handling .gitattributes...")
             self._initialise_gitattributes(dest_dataset)
+            logger.info("Adding README.md...")
+            self._add_readme(dest_dataset)
+            logger.info("Adding scripts...")
+            self._add_scripts(dest_dataset)
 
             git_unannex_and_save(
                 self.env, dest_dataset, "metadata/*", "Unannexed metadata and saved"
@@ -76,6 +87,9 @@ class AddBoilerplate(Step):
             logger.error(f"Subprocess stdout: {e.stdout}")
             logger.error(f"Subprocess stderr: {e.stderr}")
             raise e
+        
+        datalad_save(self.env, dest_dataset, "Added ChildProject boilerplate")
+
 
     def _initialise_gitignore(self, dest_dataset: Path) -> None:
         gitignore_file = dest_dataset / ".gitignore"
@@ -112,3 +126,27 @@ class AddBoilerplate(Step):
         gitattributes_file.write_text(content)
         logger.info(f"Wrote .gitattributes at '{gitattributes_file!s}'")
         datalad_save(self.env, dest_dataset, "updated .gitattributes")
+
+    def _add_readme(self, dest_dataset: Path) -> None:
+        static_readme = static_folder / "dataset_readme.md"
+        dest_readme = dest_dataset / "README.md"
+
+        try:
+            shutil.copyfile(static_readme, dest_readme)
+            logger.info(f"Copied {static_readme} to {dest_readme}")
+            datalad_save(self.env, dest_dataset, "added README.md")
+        except Exception as e:
+            logger.error(f"Failed to copy README.md: {e}")
+
+    def _add_scripts(self, dest_dataset: Path) -> None:
+        static_script = static_folder / "get_splits.py"
+        scripts_dir = dest_dataset / "scripts"
+        dest_script = scripts_dir / "get_splits.py"
+
+        try:
+            scripts_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(static_script, dest_script)
+            logger.info(f"Copied {static_script} to {dest_script}")
+            datalad_save(self.env, dest_dataset, "added scripts/get_splits.py")
+        except Exception as e:
+            logger.error(f"Failed to copy get_splits.py: {e}")
