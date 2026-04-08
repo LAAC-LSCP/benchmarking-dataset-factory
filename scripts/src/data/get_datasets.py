@@ -7,13 +7,12 @@ from pathlib import Path
 from typing import List, Optional, Set, Tuple
 
 import pandas as pd
+from ChildProject.annotations import AnnotationManager
+from ChildProject.projects import ChildProject
 
 from scripts.src.custom_types import Dataset, Datasets
 from scripts.src.utils.constants import DATASETS
 from scripts.src.utils.logger import get_logger
-from ChildProject.projects import ChildProject
-from ChildProject.annotations import AnnotationManager
-
 
 logger = get_logger(__name__)
 

@@ -24,10 +24,15 @@ from typing import List, Tuple
 import click
 import pandas as pd
 
-
-from scripts.create_dataset import filter_on_manual_data, fix_columns_for_combined_dfs, get_file_paths
+from scripts.create_dataset import (
+    filter_on_manual_data,
+    fix_columns_for_combined_dfs,
+    get_file_paths,
+)
 from scripts.src.custom_types import DatasetType
-from scripts.src.human_annotation_metadata.schema_manual_metadata import dataset_model_factory
+from scripts.src.human_annotation_metadata.schema_manual_metadata import (
+    dataset_model_factory,
+)
 from scripts.src.metadata import get_generated_metadata, get_manual_metadata
 from scripts.src.utils.logger import get_logger
 
@@ -117,7 +122,9 @@ def split_data(
     )
 
     generated_data = get_generated_metadata()
-    manual_data = dataset_model_factory(generated_data, skip_validation=True)(**get_manual_metadata())
+    manual_data = dataset_model_factory(generated_data, skip_validation=True)(
+        **get_manual_metadata()
+    )
     file_infos, children_df, recordings_df, annotations_df = filter_on_manual_data(
         file_infos,
         children_df,
@@ -183,7 +190,9 @@ def split_data(
 
     file_infos_with_split = file_infos_with_split.drop("age (months)", axis=1)
     file_infos_with_split = file_infos_with_split.drop_duplicates()
-    file_infos_with_split["full recording path"] = file_infos_with_split["full recording path"].apply(lambda x: str(Path(x).with_suffix(".wav")))
+    file_infos_with_split["full recording path"] = file_infos_with_split[
+        "full recording path"
+    ].apply(lambda x: str(Path(x).with_suffix(".wav")))
 
     print_info(file_infos_with_split, tot_duration, train, test, validate)
     save_file(file_infos_with_split, output_csv)
@@ -191,7 +200,9 @@ def split_data(
     return
 
 
-def get_file_infos(children: pd.DataFrame, recordings: pd.DataFrame, annotations: pd.DataFrame) -> pd.DataFrame:
+def get_file_infos(
+    children: pd.DataFrame, recordings: pd.DataFrame, annotations: pd.DataFrame
+) -> pd.DataFrame:
     result = annotations.merge(
         recordings[["recording_filename", "child_id"]],
         on="recording_filename",

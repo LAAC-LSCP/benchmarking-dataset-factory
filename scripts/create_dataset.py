@@ -123,7 +123,9 @@ def create_dataset(
         logger.info("Filtering on relevant data according to manual metadata...")
         # Filters down further based on manual annotations as source of truth (more accurate than metannots)
         generated_data = get_generated_metadata()
-        manual_data = dataset_model_factory(generated_data, skip_validation=True)(**get_manual_metadata())
+        manual_data = dataset_model_factory(generated_data, skip_validation=True)(
+            **get_manual_metadata()
+        )
         logger.info(f"Manual data: {repr(manual_data)}")
         file_infos, children_df, recordings_df, annotations_df = filter_on_manual_data(
             file_infos,
@@ -156,8 +158,12 @@ def create_dataset(
                 recordings=recordings_df,
                 annotations=annotations_df,
             ),
-            AddAnnotations(env, additive, file_infos=file_infos, fetch_files=fetch_files),
-            AddRecordings(env, additive, file_infos=file_infos, fetch_files=fetch_files),
+            AddAnnotations(
+                env, additive, file_infos=file_infos, fetch_files=fetch_files
+            ),
+            AddRecordings(
+                env, additive, file_infos=file_infos, fetch_files=fetch_files
+            ),
             SplitRecordings(
                 env,
                 additive,

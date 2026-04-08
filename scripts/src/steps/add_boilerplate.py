@@ -1,6 +1,6 @@
+import shutil
 import subprocess
 from pathlib import Path
-import shutil
 
 from scripts.src.steps.file_management import datalad_save, git_unannex_and_save
 from scripts.src.steps.step import EnvConfig, Step, StepName
@@ -87,9 +87,8 @@ class AddBoilerplate(Step):
             logger.error(f"Subprocess stdout: {e.stdout}")
             logger.error(f"Subprocess stderr: {e.stderr}")
             raise e
-        
-        datalad_save(self.env, dest_dataset, "Added ChildProject boilerplate")
 
+        datalad_save(self.env, dest_dataset, "Added ChildProject boilerplate")
 
     def _initialise_gitignore(self, dest_dataset: Path) -> None:
         gitignore_file = dest_dataset / ".gitignore"

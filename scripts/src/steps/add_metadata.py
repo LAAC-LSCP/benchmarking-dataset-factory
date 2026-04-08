@@ -52,14 +52,18 @@ class AddMetadata(Step):
     def _add_metadata(self, dest_dataset: Path) -> None:
         logger.info(f"Adding new metadata to {dest_dataset!s}")
         metadata = dest_dataset / "metadata"
-        
+
         existing_children = pd.read_csv(metadata / "children.csv")
         existing_recordings = pd.read_csv(metadata / "recordings.csv")
         existing_annotations = pd.read_csv(metadata / "annotations.csv")
 
         children = pd.concat([existing_children, self._children]).drop_duplicates()
-        recordings = pd.concat([existing_recordings, self._recordings]).drop_duplicates()
-        annotations = pd.concat([existing_annotations, self._annotations]).drop_duplicates()
+        recordings = pd.concat(
+            [existing_recordings, self._recordings]
+        ).drop_duplicates()
+        annotations = pd.concat(
+            [existing_annotations, self._annotations]
+        ).drop_duplicates()
 
         children["experiment"] = "benchmarking"
         recordings["experiment"] = "benchmarking"
@@ -68,7 +72,13 @@ class AddMetadata(Step):
 
         return
 
-    def _save(self, dest_dataset: Path, children: pd.DataFrame, recordings: pd.DataFrame, annotations: pd.DataFrame) -> None:
+    def _save(
+        self,
+        dest_dataset: Path,
+        children: pd.DataFrame,
+        recordings: pd.DataFrame,
+        annotations: pd.DataFrame,
+    ) -> None:
         metadata = dest_dataset / "metadata"
         logger.info("Saving metadata...")
         AddMetadata._save_to_csv(metadata / "children.csv", children)

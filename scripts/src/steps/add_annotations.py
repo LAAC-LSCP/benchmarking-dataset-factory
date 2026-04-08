@@ -19,7 +19,12 @@ class AddAnnotations(Step):
     _fetch_files: bool
 
     def __init__(
-        self, env: EnvConfig, additive: bool, *, file_infos: pd.DataFrame, fetch_files: bool
+        self,
+        env: EnvConfig,
+        additive: bool,
+        *,
+        file_infos: pd.DataFrame,
+        fetch_files: bool,
     ) -> None:
         self._file_infos = file_infos
         self._fetch_files = fetch_files

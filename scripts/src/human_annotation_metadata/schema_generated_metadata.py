@@ -9,7 +9,6 @@ from pydantic import BaseModel
 
 class GeneratedColumn(BaseModel):
     column: str
-    values: List[str] | None
     annotated_duration_ms: int
     duration_from_samples_ms: int
     number_of_samples: Optional[int] = None

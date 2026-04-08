@@ -6,7 +6,6 @@ from pyannote.core import Annotation, Segment, Timeline
 
 from scripts.src.utils.logger import get_logger
 
-
 logger = get_logger(__name__)
 
 
@@ -45,11 +44,13 @@ class AudioSplitter:
         )
 
         if recording is None:
-            logger.warning(f"Annotation {annotation["annotation_filename"]} does not fit any recording")
-            
+            logger.warning(
+                f"Annotation {annotation["annotation_filename"]} does not fit any recording"
+            )
+
             annotation["discard"] = True
 
-            return annotation 
+            return annotation
 
         new_rec_filename = recording["new_recording_filename"]
 
@@ -125,12 +126,3 @@ class AudioSplitter:
                 "duration"
             ].iloc[0]
         )
-
-    @staticmethod
-    def crop_annotation(annotation: Annotation, start: int, end: int) -> Annotation:
-        return annotation.crop(Timeline(segments={Segment(start=start, end=end)}))
-
-    @staticmethod
-    def calculate(onset: int, offset: int, time_seek: int) -> None:
-        onset = onset + time_seek
-        offset = offset + time_seek

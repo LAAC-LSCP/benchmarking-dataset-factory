@@ -5,44 +5,28 @@
       "name": "eaf/vocs",
       "columns": [
         {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 4709479,
+          "column": "speaker_id",
+          "categorical": true,
+          "annotated_duration_ms": 4712366,
           "duration_from_samples_ms": 3315793,
           "number_of_samples": 1782,
-          "num_of_non_empty_segments": 2230
+          "num_of_non_empty_segments": 2231
         },
         {
           "column": "speaker_type",
           "categorical": true,
-          "values": [
-            "OCH",
-            "CHI",
-            "MAL",
-            "FEM"
-          ],
           "annotated_duration_ms": 4712366,
           "duration_from_samples_ms": 3315793,
           "number_of_samples": 1782,
           "num_of_non_empty_segments": 2231
         },
         {
-          "column": "speaker_id",
-          "categorical": true,
-          "values": [
-            "UC1",
-            "CHI",
-            "MA1",
-            "FA1",
-            "UC2",
-            "UC3",
-            "FA2"
-          ],
-          "annotated_duration_ms": 4712366,
+          "column": "transcription",
+          "categorical": false,
+          "annotated_duration_ms": 4709479,
           "duration_from_samples_ms": 3315793,
           "number_of_samples": 1782,
-          "num_of_non_empty_segments": 2231
+          "num_of_non_empty_segments": 2230
         }
       ]
     }

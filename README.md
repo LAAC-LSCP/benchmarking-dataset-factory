@@ -86,6 +86,8 @@ uv run -m scripts.get_human_annotation_metadata --dataset-name "my_dataset"
 ```
 This will create a file in `outputs/human_annotation_data/`.
 
+Data may be missing, in which case you must run `datalad get [glob pattern]` to get this data. An example would be `datalad get datasets/png2016/annotations/eaf_2016/converted/**`.
+
 ### 10. (If Needed) Update the Manual Metadata Index
 Edit `outputs/manually_annotated_metadata.json` as described in the main instructions below.
 
@@ -252,13 +254,6 @@ Running the above script generates `outputs/human_annotation_data/human_annotati
         {
           "column": "mwu_type",
           "categorical": true,
-          "values": [
-            "nan",
-            "<NA>",
-            "1",
-            "M",
-            "1"
-          ],
           "annotated_duration_ms": 1337411,
           "duration_from_samples_ms": 22454000,
           "number_of_samples": 206,

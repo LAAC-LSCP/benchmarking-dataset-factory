@@ -1,6 +1,6 @@
 from contextvars import ContextVar
 from pathlib import Path
-from typing import Callable, Dict, List, Literal, Optional, Set, Tuple
+from typing import Dict, List, Literal, Optional, Set, Tuple
 
 import yaml
 from pydantic import BaseModel, model_validator
@@ -17,7 +17,11 @@ def get_metannots(dataset: str, set: str, datasets_dir: Path) -> Path:
     return (datasets_dir / dataset / "annotations" / set / "metannots.yml").resolve()
 
 
-def dataset_model_factory(generated_datasets: GeneratedDatasets, datasets_folder: Optional[Path] = DATASETS_FOLDER, skip_validation: bool = False):
+def dataset_model_factory(
+    generated_datasets: GeneratedDatasets,
+    datasets_folder: Optional[Path] = DATASETS_FOLDER,
+    skip_validation: bool = False,
+):
     context_dataset_name = ContextVar("name")
 
     class ManualSet(BaseModel):

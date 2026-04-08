@@ -71,7 +71,9 @@ def create_table_corpora_info(output_path: str, type: str):
     merged = merged[merged[relevant_column] == "Y"]
 
     merged = merged.drop([relevant_column, "segmentation"], axis=1)
-    new_path = output_path.parent / f"{output_path.stem}_{relevant_column}{output_path.suffix}"
+    new_path = (
+        output_path.parent / f"{output_path.stem}_{relevant_column}{output_path.suffix}"
+    )
 
     merged.to_csv(new_path, index=False)
 

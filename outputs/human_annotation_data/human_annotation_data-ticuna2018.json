@@ -7,12 +7,6 @@
         {
           "column": "speaker_type",
           "categorical": true,
-          "values": [
-            "OCH",
-            "CHI",
-            "MAL",
-            "FEM"
-          ],
           "annotated_duration_ms": 260618,
           "duration_from_samples_ms": 4140000,
           "number_of_samples": 69,
@@ -21,14 +15,6 @@
         {
           "column": "speaker_id",
           "categorical": true,
-          "values": [
-            "UC1",
-            "CHI",
-            "MA1",
-            "FA1",
-            "FA2",
-            "MA2"
-          ],
           "annotated_duration_ms": 260618,
           "duration_from_samples_ms": 4140000,
           "number_of_samples": 69,
@@ -42,12 +28,6 @@
         {
           "column": "speaker_type",
           "categorical": true,
-          "values": [
-            "CHI",
-            "FEM",
-            "OCH",
-            "MAL"
-          ],
           "annotated_duration_ms": 268101,
           "duration_from_samples_ms": 720000,
           "number_of_samples": 12,
@@ -56,14 +36,6 @@
         {
           "column": "speaker_id",
           "categorical": true,
-          "values": [
-            "CHI",
-            "FA1",
-            "UC1",
-            "FA2",
-            "UC2",
-            "MA1"
-          ],
           "annotated_duration_ms": 268101,
           "duration_from_samples_ms": 720000,
           "number_of_samples": 12,

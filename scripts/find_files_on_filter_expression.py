@@ -276,7 +276,6 @@ def get_file_paths_for_set_dataset(
     return pd.DataFrame(file_infos)
 
 
-
 def get_children_from_files(
     file_infos: pd.DataFrame, original_children_df: pd.DataFrame
 ) -> pd.DataFrame:

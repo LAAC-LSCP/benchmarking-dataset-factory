@@ -1,5 +1,5 @@
-from pathlib import Path
 import traceback
+from pathlib import Path
 from typing import List, Optional
 
 from scripts.src.steps.step import Step

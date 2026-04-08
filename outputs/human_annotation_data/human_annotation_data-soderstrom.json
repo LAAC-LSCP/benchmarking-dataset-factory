@@ -5,9 +5,40 @@
       "name": "cha",
       "columns": [
         {
+          "column": "com",
+          "categorical": false,
+          "annotated_duration_ms": 4089152,
+          "duration_from_samples_ms": 93588984,
+          "number_of_samples": 57,
+          "num_of_non_empty_segments": 1677
+        },
+        {
+          "column": "speaker_id",
+          "categorical": true,
+          "annotated_duration_ms": 59096973,
+          "duration_from_samples_ms": 93588984,
+          "number_of_samples": 57,
+          "num_of_non_empty_segments": 33679
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "annotated_duration_ms": 58784250,
+          "duration_from_samples_ms": 93588984,
+          "number_of_samples": 57,
+          "num_of_non_empty_segments": 33555
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "annotated_duration_ms": 59096973,
+          "duration_from_samples_ms": 93588984,
+          "number_of_samples": 57,
+          "num_of_non_empty_segments": 33679
+        },
+        {
           "column": "add",
           "categorical": false,
-          "values": [],
           "annotated_duration_ms": 5562672,
           "duration_from_samples_ms": 93588984,
           "number_of_samples": 57,
@@ -16,16 +47,6 @@
         {
           "column": "mor",
           "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 51798589,
-          "duration_from_samples_ms": 93588984,
-          "number_of_samples": 57,
-          "num_of_non_empty_segments": 29244
-        },
-        {
-          "column": "gra",
-          "categorical": false,
-          "values": [],
           "annotated_duration_ms": 51798589,
           "duration_from_samples_ms": 93588984,
           "number_of_samples": 57,
@@ -34,139 +55,50 @@
         {
           "column": "speaker_role",
           "categorical": true,
-          "values": [
-            "Mother",
-            "Father",
-            "Sister",
-            "Brother",
-            "Target_Child",
-            "Unidentified",
-            "Grandmother",
-            "Media"
-          ],
           "annotated_duration_ms": 59096973,
           "duration_from_samples_ms": 93588984,
           "number_of_samples": 57,
           "num_of_non_empty_segments": 33679
-        },
-        {
-          "column": "sit",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "clatter in background"
-          ],
-          "annotated_duration_ms": 755,
-          "duration_from_samples_ms": 93588984,
-          "number_of_samples": 57,
-          "num_of_non_empty_segments": 1
-        },
-        {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": 93588984,
-          "number_of_samples": 57,
-          "num_of_non_empty_segments": 33679
-        },
-        {
-          "column": "speaker_id",
-          "categorical": true,
-          "values": [
-            "MOT",
-            "FAT",
-            "SIS",
-            "BRO",
-            "CHI",
-            "UNI",
-            "GMA",
-            "TOY"
-          ],
-          "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": 93588984,
-          "number_of_samples": 57,
-          "num_of_non_empty_segments": 33679
-        },
-        {
-          "column": "words",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 59096973,
-          "duration_from_samples_ms": 93588984,
-          "number_of_samples": 57,
-          "num_of_non_empty_segments": 33679
-        },
-        {
-          "column": "act",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "opening drawers",
-            "closing window",
-            "kisses CHI",
-            "kisses CHI .",
-            "kisses CHI [?]",
-            "<bef> kisses CHI",
-            "before: knocks on door",
-            "kisses",
-            "banging toy",
-            "shakes toy",
-            "kisses CHI several times",
-            "claps",
-            "several kisses .",
-            "MOT bangs",
-            "bangs on something",
-            "mom bangs out \"twinkle twinkle\"",
-            "mom continues to bang",
-            "more banging out music",
-            "more music"
-          ],
-          "annotated_duration_ms": 78786,
-          "duration_from_samples_ms": 93588984,
-          "number_of_samples": 57,
-          "num_of_non_empty_segments": 53
         },
         {
           "column": "addressee",
           "categorical": true,
-          "values": [
-            "<NA>",
-            "A",
-            "T",
-            "C,C",
-            "C",
-            "A,C",
-            "U"
-          ],
           "annotated_duration_ms": 4735390,
           "duration_from_samples_ms": 93588984,
           "number_of_samples": 57,
           "num_of_non_empty_segments": 2590
         },
         {
-          "column": "com",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 4089152,
+          "column": "sit",
+          "categorical": true,
+          "annotated_duration_ms": 755,
           "duration_from_samples_ms": 93588984,
           "number_of_samples": 57,
-          "num_of_non_empty_segments": 1677
+          "num_of_non_empty_segments": 1
         },
         {
-          "column": "speaker_type",
-          "categorical": true,
-          "values": [
-            "FEM",
-            "MAL",
-            "OCH",
-            "CHI",
-            "<NA>"
-          ],
-          "annotated_duration_ms": 58784250,
+          "column": "words",
+          "categorical": false,
+          "annotated_duration_ms": 59096973,
           "duration_from_samples_ms": 93588984,
           "number_of_samples": 57,
-          "num_of_non_empty_segments": 33555
+          "num_of_non_empty_segments": 33679
+        },
+        {
+          "column": "gra",
+          "categorical": false,
+          "annotated_duration_ms": 51798589,
+          "duration_from_samples_ms": 93588984,
+          "number_of_samples": 57,
+          "num_of_non_empty_segments": 29244
+        },
+        {
+          "column": "act",
+          "categorical": true,
+          "annotated_duration_ms": 78786,
+          "duration_from_samples_ms": 93588984,
+          "number_of_samples": 57,
+          "num_of_non_empty_segments": 53
         }
       ]
     }

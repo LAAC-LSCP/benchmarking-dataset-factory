@@ -89,7 +89,6 @@ CATEGORICAL_CUTOFF: int = 20
 class ColumnInfo(TypedDict):
     column: str
     categorical: bool
-    values: List[Any]
     annotated_duration_ms: int
     duration_from_samples_ms: int
 
@@ -193,7 +192,7 @@ def get_column_info(
     interesting_cols = set(segments.columns) - STANDARD_COLUMNS
 
     for col in interesting_cols:
-        categorical, values = is_categorical(segments, col, 20)
+        categorical, _ = is_categorical(segments, col, 20)
 
         metannots_dict: Optional[Dict] = None
         try:

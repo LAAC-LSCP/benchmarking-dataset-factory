@@ -12,7 +12,6 @@ class DatasetType(StrEnum):
 class ColumnInfo(TypedDict):
     column: str
     categorical: bool
-    values: List[Any]
     annotation_duration_ms: int
     duration_from_samples_ms: int
 

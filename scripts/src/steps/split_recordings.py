@@ -84,7 +84,9 @@ class SplitRecordings(Step):
                     commands.append((raw, int(onset), int(offset), int(time_seek)))
                 if converted is not None:
                     logger.warning(f"Couldn't find file {converted}")
-                    commands.append((converted, int(onset), int(offset), int(time_seek)))
+                    commands.append(
+                        (converted, int(onset), int(offset), int(time_seek))
+                    )
 
             self._split_recordings(commands)
 
@@ -176,14 +178,20 @@ class SplitRecordings(Step):
         )
 
         if self.additive:
-            existing_annotations = pd.read_csv(dest_dataset / "metadata" / "annotations.csv")
+            existing_annotations = pd.read_csv(
+                dest_dataset / "metadata" / "annotations.csv"
+            )
             # At this point sets read like thomas/cha. We must be careful not to include
             # the annotations for the sets (datasets) we're currently adding
             sets_being_added = [s for s in annotations["set"].unique()]
 
-            existing_annotations = existing_annotations[~existing_annotations["set"].isin(sets_being_added)]
+            existing_annotations = existing_annotations[
+                ~existing_annotations["set"].isin(sets_being_added)
+            ]
 
-            annotations = pd.concat([annotations, existing_annotations]).drop_duplicates()
+            annotations = pd.concat(
+                [annotations, existing_annotations]
+            ).drop_duplicates()
 
         self._save_annotations_csv(dest_dataset, annotations)
 
@@ -205,21 +213,29 @@ class SplitRecordings(Step):
         recordings["experiment"] = "benchmarking"
 
         if self.additive:
-            existing_recordings = pd.read_csv(dest_dataset / "metadata" / "recordings.csv")
+            existing_recordings = pd.read_csv(
+                dest_dataset / "metadata" / "recordings.csv"
+            )
             # At this point child_ids read like thomas_thomas. We must be careful not to include
             # the recordings for the sets (datasets) we're currently adding
             children_being_added = [s for s in recordings["child_id"].unique()]
 
-            existing_recordings = existing_recordings[~existing_recordings["child_id"].isin(children_being_added)]
+            existing_recordings = existing_recordings[
+                ~existing_recordings["child_id"].isin(children_being_added)
+            ]
             recordings = pd.concat([recordings, existing_recordings]).drop_duplicates()
 
         self._save_recordings_csv(dest_dataset, recordings)
 
-    def _save_annotations_csv(self, dest_dataset: Path, annotations: pd.DataFrame) -> None:
+    def _save_annotations_csv(
+        self, dest_dataset: Path, annotations: pd.DataFrame
+    ) -> None:
         annotations.to_csv(dest_dataset / "metadata" / "annotations.csv", index=False)
         datalad_save(self.env, dest_dataset, "Updated annotations.csv")
 
-    def _save_recordings_csv(self, dest_dataset: Path, recordings: pd.DataFrame) -> None:
+    def _save_recordings_csv(
+        self, dest_dataset: Path, recordings: pd.DataFrame
+    ) -> None:
         recordings.to_csv(dest_dataset / "metadata" / "recordings.csv", index=False)
         datalad_save(self.env, dest_dataset, "Updated recordings.csv")
 
@@ -264,7 +280,9 @@ class SplitRecordings(Step):
         )
 
     @staticmethod
-    def _get_recording_paths(dest_dataset: Path, rec_name: str) -> Tuple[Path | None, Path | None]:
+    def _get_recording_paths(
+        dest_dataset: Path, rec_name: str
+    ) -> Tuple[Path | None, Path | None]:
         r_raw_path = dest_dataset / "recordings" / "raw" / rec_name
         r_converted_path = (
             dest_dataset / "recordings" / "converted" / "standard" / rec_name

@@ -5,126 +5,68 @@
       "name": "eaf/an1",
       "columns": [
         {
-          "column": "mwu_type",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "1"
-          ],
-          "annotated_duration_ms": 3316,
-          "duration_from_samples_ms": 18120000,
-          "number_of_samples": 151,
-          "num_of_non_empty_segments": 4
-        },
-        {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 7867293,
-          "duration_from_samples_ms": 18120000,
-          "number_of_samples": 151,
-          "num_of_non_empty_segments": 5383
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "N",
-            "<NA>",
-            "C",
-            "Y",
-            "L"
-          ],
-          "annotated_duration_ms": 1568399,
-          "duration_from_samples_ms": 18120000,
-          "number_of_samples": 151,
-          "num_of_non_empty_segments": 1755
-        },
-        {
           "column": "lex_type",
           "categorical": true,
-          "values": [
-            "nan",
-            "<NA>",
-            "0",
-            "W",
-            "0"
-          ],
           "annotated_duration_ms": 115817,
           "duration_from_samples_ms": 18120000,
           "number_of_samples": 151,
           "num_of_non_empty_segments": 96
         },
         {
-          "column": "words",
-          "categorical": true,
-          "values": [
-            "<NA>"
-          ],
-          "annotated_duration_ms": 0,
-          "duration_from_samples_ms": 18120000,
-          "number_of_samples": 151,
-          "num_of_non_empty_segments": 0
-        },
-        {
           "column": "speaker_id",
           "categorical": true,
-          "values": [
-            "CHI",
-            "EE1",
-            "MA1",
-            "FA1",
-            "FC1",
-            "UC1",
-            "FAE",
-            "FA2",
-            "MA2",
-            "MA3",
-            "FA3",
-            "UC2",
-            "FA4",
-            "MA4",
-            "FA5",
-            "FA6",
-            "MA5"
-          ],
           "annotated_duration_ms": 7867293,
           "duration_from_samples_ms": 18120000,
           "number_of_samples": 151,
           "num_of_non_empty_segments": 5383
         },
         {
+          "column": "transcription",
+          "categorical": false,
+          "annotated_duration_ms": 7867293,
+          "duration_from_samples_ms": 18120000,
+          "number_of_samples": 151,
+          "num_of_non_empty_segments": 5383
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "annotated_duration_ms": 5339102,
+          "duration_from_samples_ms": 18120000,
+          "number_of_samples": 151,
+          "num_of_non_empty_segments": 4771
+        },
+        {
+          "column": "words",
+          "categorical": true,
+          "annotated_duration_ms": 0,
+          "duration_from_samples_ms": 18120000,
+          "number_of_samples": 151,
+          "num_of_non_empty_segments": 0
+        },
+        {
           "column": "addressee",
           "categorical": true,
-          "values": [
-            "<NA>",
-            "A",
-            "T",
-            "O",
-            "C",
-            "B",
-            "U",
-            "P"
-          ],
           "annotated_duration_ms": 6298894,
           "duration_from_samples_ms": 18120000,
           "number_of_samples": 151,
           "num_of_non_empty_segments": 3628
         },
         {
-          "column": "speaker_type",
+          "column": "mwu_type",
           "categorical": true,
-          "values": [
-            "CHI",
-            "<NA>",
-            "MAL",
-            "FEM",
-            "OCH"
-          ],
-          "annotated_duration_ms": 5339102,
+          "annotated_duration_ms": 3316,
           "duration_from_samples_ms": 18120000,
           "number_of_samples": 151,
-          "num_of_non_empty_segments": 4771
+          "num_of_non_empty_segments": 4
+        },
+        {
+          "column": "vcm_type",
+          "categorical": true,
+          "annotated_duration_ms": 1568399,
+          "duration_from_samples_ms": 18120000,
+          "number_of_samples": 151,
+          "num_of_non_empty_segments": 1755
         }
       ]
     },
@@ -132,80 +74,44 @@
       "name": "eaf/reliability",
       "columns": [
         {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 355113,
-          "duration_from_samples_ms": 600000,
-          "number_of_samples": 10,
-          "num_of_non_empty_segments": 275
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "N",
-            "C",
-            "Y",
-            "<NA>"
-          ],
-          "annotated_duration_ms": 104742,
-          "duration_from_samples_ms": 600000,
-          "number_of_samples": 10,
-          "num_of_non_empty_segments": 86
-        },
-        {
           "column": "speaker_id",
           "categorical": true,
-          "values": [
-            "CHI",
-            "EE1",
-            "MA1",
-            "UC1",
-            "FA1",
-            "FA2",
-            "FA3",
-            "UC2",
-            "MA2",
-            "UC3",
-            "MA3"
-          ],
           "annotated_duration_ms": 355113,
           "duration_from_samples_ms": 600000,
           "number_of_samples": 10,
           "num_of_non_empty_segments": 275
+        },
+        {
+          "column": "transcription",
+          "categorical": false,
+          "annotated_duration_ms": 355113,
+          "duration_from_samples_ms": 600000,
+          "number_of_samples": 10,
+          "num_of_non_empty_segments": 275
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "annotated_duration_ms": 326750,
+          "duration_from_samples_ms": 600000,
+          "number_of_samples": 10,
+          "num_of_non_empty_segments": 268
         },
         {
           "column": "addressee",
           "categorical": true,
-          "values": [
-            "<NA>",
-            "O",
-            "C",
-            "B",
-            "T",
-            "A",
-            "U"
-          ],
           "annotated_duration_ms": 250371,
           "duration_from_samples_ms": 600000,
           "number_of_samples": 10,
           "num_of_non_empty_segments": 189
         },
         {
-          "column": "speaker_type",
+          "column": "vcm_type",
           "categorical": true,
-          "values": [
-            "CHI",
-            "<NA>",
-            "MAL",
-            "OCH",
-            "FEM"
-          ],
-          "annotated_duration_ms": 326750,
+          "annotated_duration_ms": 104742,
           "duration_from_samples_ms": 600000,
           "number_of_samples": 10,
-          "num_of_non_empty_segments": 268
+          "num_of_non_empty_segments": 86
         }
       ]
     },
@@ -213,36 +119,8 @@
       "name": "eaf_hv",
       "columns": [
         {
-          "column": "transcription",
-          "categorical": false,
-          "values": [],
-          "annotated_duration_ms": 6951532,
-          "duration_from_samples_ms": 12720000,
-          "number_of_samples": 106,
-          "num_of_non_empty_segments": 5668
-        },
-        {
-          "column": "vcm_type",
-          "categorical": true,
-          "values": [
-            "<NA>",
-            "N",
-            "C",
-            "Y",
-            "L"
-          ],
-          "annotated_duration_ms": 2000560,
-          "duration_from_samples_ms": 12720000,
-          "number_of_samples": 106,
-          "num_of_non_empty_segments": 1948
-        },
-        {
           "column": "lex_type",
           "categorical": true,
-          "values": [
-            "<NA>",
-            "0"
-          ],
           "annotated_duration_ms": 45592,
           "duration_from_samples_ms": 12720000,
           "number_of_samples": 106,
@@ -251,61 +129,42 @@
         {
           "column": "speaker_id",
           "categorical": true,
-          "values": [
-            "FA1",
-            "CHI",
-            "FA2",
-            "UC1",
-            "FA3",
-            "MAE",
-            "MA1",
-            "MC1",
-            "FC1",
-            "EE1",
-            "FAE",
-            "MA2",
-            "FC2",
-            "FC3",
-            "MC2",
-            "MA3"
-          ],
           "annotated_duration_ms": 6951532,
           "duration_from_samples_ms": 12720000,
           "number_of_samples": 106,
           "num_of_non_empty_segments": 5668
         },
         {
+          "column": "transcription",
+          "categorical": false,
+          "annotated_duration_ms": 6951532,
+          "duration_from_samples_ms": 12720000,
+          "number_of_samples": 106,
+          "num_of_non_empty_segments": 5668
+        },
+        {
+          "column": "speaker_type",
+          "categorical": true,
+          "annotated_duration_ms": 6474103,
+          "duration_from_samples_ms": 12720000,
+          "number_of_samples": 106,
+          "num_of_non_empty_segments": 5500
+        },
+        {
           "column": "addressee",
           "categorical": true,
-          "values": [
-            "T",
-            "P",
-            "<NA>",
-            "U",
-            "A",
-            "B",
-            "C",
-            "O"
-          ],
           "annotated_duration_ms": 4950972,
           "duration_from_samples_ms": 12720000,
           "number_of_samples": 106,
           "num_of_non_empty_segments": 3720
         },
         {
-          "column": "speaker_type",
+          "column": "vcm_type",
           "categorical": true,
-          "values": [
-            "FEM",
-            "CHI",
-            "OCH",
-            "<NA>",
-            "MAL"
-          ],
-          "annotated_duration_ms": 6474103,
+          "annotated_duration_ms": 2000560,
           "duration_from_samples_ms": 12720000,
           "number_of_samples": 106,
-          "num_of_non_empty_segments": 5500
+          "num_of_non_empty_segments": 1948
         }
       ]
     }

@@ -32,7 +32,9 @@ class Step(ABC):
     _env: EnvConfig
     _additive: bool
 
-    def __init__(self, name: StepName, additive: bool = False, env: Optional[EnvConfig] = None) -> None:
+    def __init__(
+        self, name: StepName, additive: bool = False, env: Optional[EnvConfig] = None
+    ) -> None:
         self._name = name
         self._additive = additive
         self._env = env or EnvConfig(conda_activation_str="")
@@ -52,11 +54,11 @@ class Step(ABC):
     @property
     def name(self) -> StepName:
         return self._name
-    
+
     @property
     def env(self) -> EnvConfig:
         return self._env
-    
+
     @property
     def additive(self) -> bool:
         return self._additive
