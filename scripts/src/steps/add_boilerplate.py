@@ -40,10 +40,10 @@ class AddBoilerplate(Step):
             self._initialise_gitignore(dest_dataset)
             logger.info("Handling .gitattributes...")
             self._initialise_gitattributes(dest_dataset)
-            logger.info("Adding README.md...")
-            self._add_readme(dest_dataset)
             logger.info("Adding scripts...")
             self._add_scripts(dest_dataset)
+            logger.info("Initialising uv...")
+            self._initialise_uv(dest_dataset)
 
             git_unannex_and_save(
                 self.env, dest_dataset, "metadata/*", "Unannexed metadata and saved"
@@ -52,14 +52,13 @@ class AddBoilerplate(Step):
                 self.env, dest_dataset, "README.md", "Unannexed README.md and saved"
             )
 
+        logger.info("Adding README.md...")
+        self._add_readme(dest_dataset)
+
         return
 
     def _initialise_childproject(self, dest_dataset: Path) -> None:
-        commands = [
-            self.env.conda_activation_str,
-            "child-project init .",
-        ]
-        shell_command = " && ".join(commands)
+        shell_command = self.env.build_command("child-project init .")
 
         logger.info(f"Running shell command: {shell_command} (cwd={dest_dataset})")
         try:
@@ -72,11 +71,7 @@ class AddBoilerplate(Step):
             raise e
 
     def _initialise_datalad(self, dest_dataset: Path) -> None:
-        commands = [
-            self.env.conda_activation_str,
-            "datalad create --force",
-        ]
-        shell_command = " && ".join(commands)
+        shell_command = self.env.build_command("datalad create --force")
 
         logger.info(f"Running shell command: {shell_command} (cwd={dest_dataset})")
         try:
@@ -136,6 +131,20 @@ class AddBoilerplate(Step):
             datalad_save(self.env, dest_dataset, "added README.md")
         except Exception as e:
             logger.error(f"Failed to copy README.md: {e}")
+
+    def _initialise_uv(self, dest_dataset: Path) -> None:
+        init_cmd = self.env.build_command("uv init --no-package --no-readme")
+        add_cmd = self.env.build_command("uv add childproject pandas click")
+
+        for shell_command in [init_cmd, add_cmd]:
+            logger.info(f"Running shell command: {shell_command} (cwd={dest_dataset})")
+            try:
+                subprocess.run(shell_command, shell=True, check=True, cwd=dest_dataset)
+            except subprocess.CalledProcessError as e:
+                logger.error(f"Subprocess failed: {e}")
+                raise e
+
+        datalad_save(self.env, dest_dataset, "added pyproject.toml and uv.lock")
 
     def _add_scripts(self, dest_dataset: Path) -> None:
         static_script = static_folder / "get_splits.py"

@@ -22,12 +22,9 @@ def fetch_files(
         if len(files) == 0:
             continue
 
-        commands = [
-            env.conda_activation_str,
-            f"datalad get {' '.join(str(src) for (src, _) in files)} \
--J {CONCURRENT_FETCHES}",
-        ]
-        shell_command = " && ".join(commands)
+        shell_command = env.build_command(
+            f"datalad get {' '.join(str(src) for (src, _) in files)} -J {CONCURRENT_FETCHES}"
+        )
         try:
             logger.info(f"Fetching {len(files)} files in {dataset}...")
             subprocess.run(
@@ -66,12 +63,9 @@ def copy_files(
         specfile.write("\n".join(spec_lines))
         specfile_path = Path(specfile.name)
 
-    commands = [
-        env.conda_activation_str,
-        f"datalad copy-file --specs-from {specfile_path} -d . \
--m 'Copied {len(file_pairs)} files'",
-    ]
-    shell_command = " && ".join(commands)
+    shell_command = env.build_command(
+        f"datalad copy-file --specs-from {specfile_path} -d . -m 'Copied {len(file_pairs)} files'"
+    )
     try:
         subprocess.run(shell_command, shell=True, check=True, cwd=dataset)
         logger.info(f"Copied files using specfile in dataset {dataset}")
@@ -85,11 +79,7 @@ def copy_files(
 
 
 def datalad_save(env: EnvConfig, dest_dataset: Path, message: str) -> None:
-    commands = [
-        env.conda_activation_str,
-        f"datalad save -m '{message}'",
-    ]
-    shell_command = " && ".join(commands)
+    shell_command = env.build_command(f"datalad save -m '{message}'")
 
     logger.info(f"Running shell command: {shell_command}")
     try:
@@ -106,12 +96,10 @@ def datalad_save(env: EnvConfig, dest_dataset: Path, message: str) -> None:
 def git_unannex_and_save(
     env: EnvConfig, dest_dataset: Path, unannex_match: str, message: str
 ) -> None:
-    commands = [
-        env.conda_activation_str,
+    shell_command = env.build_command(
         f"git annex unannex {unannex_match}",
         f"datalad save -m '{message}'",
-    ]
-    shell_command = " && ".join(commands)
+    )
 
     logger.info(f"Running shell command: {shell_command}")
     try:

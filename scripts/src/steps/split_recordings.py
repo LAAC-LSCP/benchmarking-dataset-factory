@@ -59,34 +59,18 @@ class SplitRecordings(Step):
         if "discard" in annotations.columns:
             annotations = annotations[annotations["discard"] != True]
 
-        unique_annots = annotations[
-            [
-                "recording_filename",
-                "original_recording_filename",
-                "range_onset",
-                "range_offset",
-                "time_seek",
-                "original_annotation_filename",
-            ]
-        ].drop_duplicates()
-
-        logger.info(f"Splitting a maximum of {len(unique_annots) * 2} times...")
-        for batch in batched(unique_annots.iterrows(), 20):
-            commands: List[Tuple[Path, int, int, int]] = []
+        logger.info(f"Splitting a maximum of {len(recordings) * 2} times...")
+        for batch in batched(recordings.iterrows(), 20):
+            commands: List[Tuple[Path, int, int]] = []
             for _, row in batch:  # type: ignore
-                _, original_rec_name, onset, offset, time_seek, _ = row
                 raw, converted = SplitRecordings._get_recording_paths(
-                    dest_dataset, original_rec_name
+                    dest_dataset, row["recording_filename"]
                 )
 
                 if raw is not None:
-                    logger.warning(f"Couldn't find file {raw}")
-                    commands.append((raw, int(onset), int(offset), int(time_seek)))
+                    commands.append((raw, int(row["start"]), int(row["end"])))
                 if converted is not None:
-                    logger.warning(f"Couldn't find file {converted}")
-                    commands.append(
-                        (converted, int(onset), int(offset), int(time_seek))
-                    )
+                    commands.append((converted, int(row["start"]), int(row["end"])))
 
             self._split_recordings(commands)
 
@@ -129,31 +113,31 @@ class SplitRecordings(Step):
 
     def _split_recordings(
         self,
-        jobs: List[Tuple[Path, int, int, int]],
+        jobs: List[Tuple[Path, int, int]],
     ) -> None:
         sox_commands = []
-        for rec, onset_ms, offset_ms, time_seek_ms in jobs:
+        for rec, onset_ms, offset_ms in jobs:
             onset_s = onset_ms / 1000
             offset_s = offset_ms / 1000
             duration = offset_s - onset_s
-            time_seek_s = time_seek_ms / 1000
 
             output_rec = SplitRecordings._get_final_rec_path(
-                rec, onset_ms, offset_ms, time_seek_s
+                rec, onset_ms, offset_ms, 0
             )
 
             if output_rec.exists():
                 continue
 
-            sox_commands.append(f"sox {rec!s} {output_rec!s} trim \
-{(onset_s + time_seek_s)!s} {duration!s}")
+            sox_commands.append(
+                f"sox {rec!s} {output_rec!s} trim {onset_s!s} {duration!s}"
+            )
 
         if not sox_commands:
             return
 
-        shell_commands = [
-            self._env.conda_activation_str,
-        ]
+        shell_commands = (
+            [self._env.conda_activation_str] if self._env.conda_activation_str else []
+        )
         shell_commands.extend(sox_commands)
         shell_command = " && ".join(shell_commands)
 
@@ -251,13 +235,9 @@ class SplitRecordings(Step):
         # Join all file paths into a single string for the shell command
         files_str = " ".join(files)
 
-        commands = [
-            self._env.conda_activation_str,
-            # f"datalad drop {files_str} --reckless kill",
-            f"datalad remove {files_str} --reckless kill --drop all -m \
-'removed {len(files)} recordings'",
-        ]
-        shell_command = " && ".join(commands)
+        shell_command = self._env.build_command(
+            f"datalad remove {files_str} --reckless kill --drop all -m 'removed {len(files)} recordings'"
+        )
 
         try:
             subprocess.run(shell_command, shell=True, check=True, cwd=dest_dataset)

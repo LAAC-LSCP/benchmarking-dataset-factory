@@ -107,7 +107,7 @@ def create_dataset(
         output_path, type, step, datasets_folder
     )
 
-    activation_str = get_from_env("CONDA_ACTIVATION_STR")
+    activation_str = os.getenv("CONDA_ACTIVATION_STR", "")
 
     try:
         logger.info(
@@ -294,15 +294,6 @@ def validate(
         steps,
         Path(datasets_folder) if datasets_folder else DATASETS_FOLDER,
     )
-
-
-def get_from_env(key: str) -> str:
-    value = os.getenv(key)
-
-    if not value:
-        raise ValueError(f"env var with key '{key}' not set")
-
-    return value
 
 
 def get_file_paths(

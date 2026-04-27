@@ -12,7 +12,12 @@ logger = get_logger(__name__)
 
 @dataclass
 class EnvConfig:
-    conda_activation_str: str
+    conda_activation_str: str = ""
+
+    def build_command(self, *commands: str) -> str:
+        """Join shell commands with &&, omitting the activation prefix if empty."""
+        all_cmds = [self.conda_activation_str, *commands]
+        return " && ".join(c for c in all_cmds if c)
 
 
 class StepName(StrEnum):
