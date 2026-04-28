@@ -166,13 +166,17 @@ Using the output from the step 4.2 as a guide, open the annotation files for you
 
 If in doubt, open the annotation CSV files directly and read the column values — that is the only reliable way to know what a column represents.
 
-> **Access rights reminder:** If you do not have access to all datasets, make sure to remove the inaccessible ones from `outputs/manually_annotated_metadata.json` at this point if you haven't already.
-
 ### Step 4.4 — Validate the Manual Metadata Index _(optional, needed when adding a new dataset)_
 Because the index is hand-written, it must be validated before use:
 
 ```bash
 uv run -m scripts.validate_manual_metadata
+```
+
+Note, if you do not have access rights to all the datasets, or don't want to use all of them, this will throw an error. In this case, use the `-d` option to check through datasets that you have available or those you specifically wish to use to generate a new dataset.
+
+```bash
+uv run -m scripts.validate_manual_metadata -d dataset_1 -d dataset_2
 ```
 
 This checks that column names are not misspelled and that referenced sets actually exist in the annotation files. Fix any errors and re-run until it passes cleanly.
