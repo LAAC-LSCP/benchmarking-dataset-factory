@@ -1,14 +1,19 @@
-.PHONY: get_annotations drop_annotations
+.PHONY: get_annotations drop_annotations drop_recordings
 
 get_annotations:
-	datalad get -n datasets/* -J 5;
-	datalad get datasets/*/annotations/*eaf*/*/converted/** -J 5;
-	datalad get datasets/*/annotations/*eaf*/converted/** -J 5;
-	datalad get datasets/*/annotations/*cha*/*/converted/** -J 5;
-	datalad get datasets/*/annotations/*cha*/converted/** -J 5;
-	datalad get datasets/*/annotations/*textgrid*/*/converted/** -J 5;
-	datalad get datasets/*/annotations/*solis*/*/converted/** -J 5;
-	datalad get datasets/*/annotations/**/*.yml -J 5;
+	-datalad get -n datasets/* -J 5;
+	-datalad get datalad/*/metadata/*.csv -J 5;
+	-datalad get datasets/*/annotations/*eaf*/*/converted/** -J 5;
+	-datalad get datasets/*/annotations/*eaf*/converted/** -J 5;
+	-datalad get datasets/*/annotations/*cha*/*/converted/** -J 5;
+	-datalad get datasets/*/annotations/*cha*/converted/** -J 5;
+	-datalad get datasets/*/annotations/*textgrid*/*/converted/** -J 5;
+	-datalad get datasets/*/annotations/*solis*/*/converted/** -J 5;
+	-datalad get datasets/*/annotations/**/*.yml -J 5;
+	-datalad get datasets/*/annotations/**/*/*.yml -J 5;
 
 drop_annotations:
 	datalad drop datasets/**;
+
+drop_recordings:
+	datalad drop datasets/*/recordings/**;
