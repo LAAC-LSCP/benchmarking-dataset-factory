@@ -22,12 +22,20 @@ class AudioSplitter:
     _annotations: pd.DataFrame
     _padding_ms: int
 
+    # If True, ignore time_seek (set to 0 for all annotations)
+    _ignore_time_seek: bool
+
     def __init__(
-        self, recordings: pd.DataFrame, annotations: pd.DataFrame, padding_ms: int = 0
+        self, recordings: pd.DataFrame, annotations: pd.DataFrame, padding_ms: int = 0, ignore_time_seek: bool = False
     ):
         self._recordings = recordings
         self._annotations = annotations
         self._padding_ms = padding_ms
+        self._ignore_time_seek = ignore_time_seek
+
+        # For converted recordings, time_seek can be ignored (set to 0)
+        if self._ignore_time_seek and "time_seek" in self._annotations.columns:
+            self._annotations["time_seek"] = 0
 
     def set_annotation_from_split_recordings(
         self, annotation: pd.Series, split_recordings: pd.DataFrame
