@@ -129,8 +129,8 @@ class AddBoilerplate(Step):
             shutil.copyfile(static_readme, dest_readme)
             logger.info(f"Copied {static_readme} to {dest_readme}")
             datalad_save(self.env, dest_dataset, "added README.md")
-        except Exception as e:
-            logger.error(f"Failed to copy README.md: {e}")
+        except Exception:
+            logger.exception(f"Failed to copy README.md")
 
     def _initialise_uv(self, dest_dataset: Path) -> None:
         init_cmd = self.env.build_command("uv init --no-package --no-readme")
@@ -142,6 +142,8 @@ class AddBoilerplate(Step):
                 subprocess.run(shell_command, shell=True, check=True, cwd=dest_dataset)
             except subprocess.CalledProcessError as e:
                 logger.error(f"Subprocess failed: {e}")
+                logger.error(f"Subprocess stdout: {e.stdout}")
+                logger.error(f"Subprocess stderr: {e.stderr}")
                 raise e
 
         datalad_save(self.env, dest_dataset, "added pyproject.toml and uv.lock")
@@ -157,4 +159,4 @@ class AddBoilerplate(Step):
             logger.info(f"Copied {static_script} to {dest_script}")
             datalad_save(self.env, dest_dataset, "added scripts/get_splits.py")
         except Exception as e:
-            logger.error(f"Failed to copy get_splits.py: {e}")
+            logger.exception(f"Failed to copy get_splits.py")

@@ -99,9 +99,9 @@ def find_files(
     if metannots_filter_expr is not None:
         try:
             metannots_df = metannots_df.query(metannots_filter_expr)
-        except Exception as e:
+        except Exception:
             logger.exception(f"problem using the filter expression on \
-metannots dataframe: {e}")
+metannots dataframe")
             logger.info("using no filter at all...")
 
             metannots_filter_expr = ""
@@ -109,9 +109,9 @@ metannots dataframe: {e}")
     if children_filter_expr is not None:
         try:
             children_df = children_df.query(children_filter_expr)
-        except Exception as e:
+        except Exception:
             logger.exception(f"problem using the filter expression on \
-children dataframe: {e}")
+children dataframe")
             logger.info("using no filter at all...")
 
             children_filter_expr = ""

@@ -38,6 +38,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+file_handler = logging.FileHandler("errors.log")
+file_handler.setLevel(logging.WARNING)
+file_handler.setFormatter(
+    logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+)
+logger.addHandler(file_handler)
+
 
 @click.command()
 @click.option(
@@ -183,8 +190,8 @@ def create_dataset(
         )
 
         pipeline.run()
-    except Exception as e:
-        logger.error(f"Error during dataset creation: {e}")
+    except Exception:
+        logger.exception(f"Error during dataset creation")
         raise
 
     logger.info("Done!")

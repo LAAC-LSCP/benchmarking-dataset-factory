@@ -26,7 +26,11 @@ class AudioSplitter:
     _ignore_time_seek: bool
 
     def __init__(
-        self, recordings: pd.DataFrame, annotations: pd.DataFrame, padding_ms: int = 0, ignore_time_seek: bool = False
+        self,
+        recordings: pd.DataFrame,
+        annotations: pd.DataFrame,
+        padding_ms: int = 0,
+        ignore_time_seek: bool = False,
     ):
         self._recordings = recordings
         self._annotations = annotations

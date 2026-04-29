@@ -40,7 +40,7 @@ def get_dataset_info(
         if "method" in sets_metadata:
             sets_metadata = sets_metadata[sets_metadata["method"] == "manual"]
         elif print_info:
-            logger.info(f"No 'method' column in sets metadata for \
+            logger.warning(f"No 'method' column in sets metadata for \
 dataset {ds.name}. Assuming all sets are manual")
 
         manual_sets: List[str] = [s for s in sets_metadata.index]

@@ -40,7 +40,7 @@ def filter_metannots(filter_expr: str | None, no_info_output: bool) -> pd.DataFr
         except Exception as e:
             if not no_info_output:
                 logger.exception(f"problem using the filter expression on \
-metannots dataframe: {e}")
+metannots dataframe")
                 logger.info("Using no filter at all...")
 
             filter_expr = ""

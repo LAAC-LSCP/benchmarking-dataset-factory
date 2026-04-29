@@ -41,7 +41,9 @@ class SplitRecordings(Step):
         annotations = self._annotations
         recordings = self._recordings
 
-        splitter = AudioSplitter(recordings, annotations, padding_ms=0, ignore_time_seek=True)
+        splitter = AudioSplitter(
+            recordings, annotations, padding_ms=0, ignore_time_seek=True
+        )
         recordings = splitter.get_recording_splits()
         recordings["new_recording_filename"] = recordings.apply(
             lambda row: SplitRecordings._get_final_rec_path(
