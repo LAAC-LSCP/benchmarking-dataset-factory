@@ -100,6 +100,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "childproject" },
     { name = "datalad" },
+    { name = "git-annex" },
     { name = "pandas" },
     { name = "pyannote-core" },
     { name = "pydantic" },
@@ -115,6 +116,7 @@ dev = [
 requires-dist = [
     { name = "childproject", specifier = ">=0.4.3" },
     { name = "datalad", specifier = ">=1.4.1" },
+    { name = "git-annex", specifier = ">=10.20260316" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pyannote-core", specifier = ">=6.0.1" },
     { name = "pydantic", specifier = ">=2.12.5" },
@@ -591,6 +593,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a7/b2/4140c69c6a66432916b26158687e821ba631a4c9273c474343badf84d3ba/future-1.0.0.tar.gz", hash = "sha256:bd2968309307861edae1458a4f8a4f3598c03be43b97521076aebf5d94c07b05", size = 1228490, upload-time = "2024-02-21T11:52:38.461Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/da/71/ae30dadffc90b9006d77af76b393cb9dfbfc9629f339fc1574a1c52e6806/future-1.0.0-py3-none-any.whl", hash = "sha256:929292d34f5872e70396626ef385ec22355a1fae8ad29e1a734c3e43f9fbc216", size = 491326, upload-time = "2024-02-21T11:52:35.956Z" },
+]
+
+[[package]]
+name = "git-annex"
+version = "10.20260316"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/09/8a6fe029eae7c86ef36e123aa01e849245feac95d5088a34d7136fee8d9c/git_annex-10.20260316-py3-none-macosx_14_0_arm64.whl", hash = "sha256:171e0e096b7551cbedf7dc04eb5254721dbcdf9d18706fc7e926443afba777dc", size = 36279485, upload-time = "2026-03-17T17:33:31.127Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/a4/f69d1f801d8d5a8fc03392718f737cfe1850706ad053eb06234ddf3cfd7a/git_annex-10.20260316-py3-none-macosx_15_0_x86_64.whl", hash = "sha256:21fc91c6fb31abe38890d774ed5b39436cfd3fe589e38772be519f5e633d71b8", size = 14231272, upload-time = "2026-03-17T17:51:37.648Z" },
+    { url = "https://files.pythonhosted.org/packages/25/e1/04428018a0716a95f714fc0ce1a081e56c7796273ca3a959638d5b01643a/git_annex-10.20260316-py3-none-manylinux_2_34_aarch64.whl", hash = "sha256:9ddc96a077283df17c02b287fc07874546fc9cd32dc3904d996bc841ac04cdf7", size = 26247156, upload-time = "2026-03-17T17:24:28.34Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/36/b5f70dade258ce23ac0a7b33e4c8184be3dadb5a9fbad0bb773927ae1248/git_annex-10.20260316-py3-none-manylinux_2_34_x86_64.whl", hash = "sha256:157ec16270aa3cd6fd45f16de8963d9f9c298c260ec0fd460c92a2a52ea5a789", size = 21888939, upload-time = "2026-03-17T17:27:02.262Z" },
+    { url = "https://files.pythonhosted.org/packages/a7/12/9689ee50c88d5632e612703505b104ae41a3f2d8b9a1fd27cb2f4744c3ae/git_annex-10.20260316-py3-none-win_amd64.whl", hash = "sha256:8bc63486ee1beffd7200f4e7e3323123641dd146067b104547bd85209b00b9b6", size = 27056643, upload-time = "2026-03-17T17:31:17.57Z" },
 ]
 
 [[package]]
