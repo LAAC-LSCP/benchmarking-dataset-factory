@@ -238,7 +238,7 @@ You can pass a filter expression into `create_dataset`, that filters on the Chil
 Reverting changes is somewhat supported via the fact that each step creates a series of commits in the generated dataset. You can therefore use git features, such as `git log` to explore changes, and `git reset --hard [commit SHA]` to reset to a previous commit. This, in combination with the above-mentioned `-d` and `-s` options, let you revert to and continue on at any previous point in the pipeline. These options are rather advanced and better avoided—understand in any case that the normal order of operations is dataset by dataset, and step by step for each dataset.
 
 ### Example Usage of `create_dataset.py`
-Suppose I ran all the steps before step 5. Now I wish to generate a dataset with cougar, forrester, fausey-trio. There are two ways
+Suppose I ran all the steps before step 5. Now I wish to generate a dataset with cougar, forrester, fausey-trio. Below are three ways to do this:
 
 Files fetched from remote, all datasets in one go:
 ```bash
@@ -255,9 +255,9 @@ uv run -m scripts.create_dataset --output-path ~/Desktop/my_vtc_dataset --datase
 Files available locally in a folder, one dataset at a time:
 ```bash
 # in your environment i.e., with `uv sync` run
-uv run -m scripts.create_dataset --output-path ~/Desktop/my_vtc_dataset --type vtc -d cougar;
-uv run -m scripts.create_dataset --output-path ~/Desktop/my_vtc_dataset --type vtc -d forrester --additive;
-uv run -m scripts.create_dataset --output-path ~/Desktop/my_vtc_dataset --type vtc -d fausey-trio --additive;
+uv run -m scripts.create_dataset --datasets-folder ~/Desktop/my_datasets_folder --output-path ~/Desktop/my_vtc_dataset --type vtc -d cougar;
+uv run -m scripts.create_dataset --datasets-folder ~/Desktop/my_datasets_folder --output-path ~/Desktop/my_vtc_dataset --type vtc -d forrester --additive;
+uv run -m scripts.create_dataset --datasets-folder ~/Desktop/my_datasets_folder --output-path ~/Desktop/my_vtc_dataset --type vtc -d fausey-trio --additive;
 ```
 
 ### Troubleshooting
