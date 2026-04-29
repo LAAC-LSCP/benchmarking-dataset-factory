@@ -19,8 +19,17 @@ Install `uv` by following the [installation instructions](https://docs.astral.sh
 Then install DataLad and git-annex:
 
 ```bash
-uv tool install datalad
-uv tool install git-annex
+uv tool install datalad git-annex
+```
+
+Install `sox`, which is required for the audio splitting step:
+
+```bash
+# macOS
+brew install sox
+
+# Linux (Debian/Ubuntu)
+apt install sox
 ```
 
 ### Step 2 — Clone the Repository
@@ -45,16 +54,6 @@ uv sync
 
 ```bash
 source .venv/bin/activate
-```
-
-Install `sox`, which is required for the audio splitting step:
-
-```bash
-# macOS
-brew install sox
-
-# Linux (Debian/Ubuntu)
-apt install sox
 ```
 
 ### Step 4 — Fetch Human Annotations
@@ -215,16 +214,20 @@ uv run -m scripts.create_dataset \
 **It is recommended to build composite datasets one dataset at a time — changes are more manageable.**
 
 ### Using a Different Dataset Folder
+> Note that any modification in the pointed-to dataset folder will modify the content of your original data
+
 If you're logged into a cluster or cloud storage device, it's likely you already have a folder with all your subdatasets on your filesystem. You may wish to use that folder instead of having to fetch your files again and again with DataLad. It is possible to point the command to use that datasets folder instead with the `--datasets-folder` option, thus circumventing the need to fetch files or pollute your filesystem with copies.
 
 ```bash
 uv run -m scripts.create_dataset \
   --output-path [output path] \
   --type vtc \
-  --fetch-files \
   -d my_added_dataset \
+  -d my_other_dataset \
   --datasets-folder [path to datasets folder]
 ```
+
+And that is it!
 
 ### Advanced Info:
 #### More info about `create_dataset`
@@ -252,7 +255,7 @@ Files available locally in a folder, all datasets in one go:
 uv run -m scripts.create_dataset --output-path ~/Desktop/my_vtc_dataset --datasets-folder ~/Desktop/my_datasets_folder --type vtc -d cougar -d forrester -d fausey-trio
 ```
 
-Files available locally in a folder, one dataset at a time:
+Files available locally in a folder, incrementally adding one dataset at a time:
 ```bash
 # in your environment i.e., with `uv sync` run
 uv run -m scripts.create_dataset --datasets-folder ~/Desktop/my_datasets_folder --output-path ~/Desktop/my_vtc_dataset --type vtc -d cougar;
